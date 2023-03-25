@@ -4,6 +4,11 @@ build-backend = "maturin"
 
 [project]
 name = "pyuuid"
+description = "Drop-in replacement for Python UUID in Rust"
+authors = [
+  { name = "Amin Alaee", email = "me@aminalaee.dev" },
+]
+keywords = ["rust", "uuid"]
 requires-python = ">=3.7"
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -18,9 +23,24 @@ classifiers = [
     "Programming Language :: Rust",
 ]
 
+[project.urls]
+Documentation = "https://github.com/aminalaee/pyuuid"
+Issues = "https://github.com/aminalaee/pyuuid/issues"
+Source = "https://github.com/aminalaee/pyuuid"
+
 dynamic = [
     'version'
 ]
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+
+[tool.mypy]
+disallow_untyped_defs = true
+ignore_missing_imports = true
+show_error_codes = true
+no_implicit_optional = true
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true

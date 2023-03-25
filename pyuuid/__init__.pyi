@@ -1,6 +1,7 @@
 import sys
-from _typeshed import Unused
 from enum import Enum
+
+from _typeshed import Unused
 from typing_extensions import TypeAlias
 
 # Because UUID has properties called int and bytes we need to rename these temporarily.
@@ -93,7 +94,8 @@ def uuid5(namespace: UUID, name: str) -> UUID:
 
 def uuid6(node: _Int, timestamp: _Int | None = None) -> UUID:
     """Generate a version 6 UUID using the given timestamp and a host ID.
-    This is similar to version 1 UUIDs, except that it is lexicographically sortable by timestamp.
+    This is similar to version 1 UUIDs,
+    except that it is lexicographically sortable by timestamp.
     """
     ...
 
