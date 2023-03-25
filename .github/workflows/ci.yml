@@ -50,7 +50,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release -i python${{ matrix.python-version }} --out dist --find-interpreter
+          args: --release -i python${{ matrix.python-version }} --out dist
           sccache: "true"
           manylinux: auto
       - name: Install uuid_utils
@@ -94,65 +94,65 @@ jobs:
           name: wheels
           path: dist
 
-  # macos:
-  #   name: "MacOS: ${{ matrix.target }} Python: ${{ matrix.python-version }}"
-  #   runs-on: macos-latest
-  #   strategy:
-  #     matrix:
-  #       target: [x86_64, aarch64]
-  #       python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-python@v4
-  #       with:
-  #         python-version: "${{ matrix.python-version }}"
-  #     - name: Install dependencies
-  #       run: pip install -r requirements.txt
-  #     - name: Build wheels
-  #       uses: PyO3/maturin-action@v1
-  #       with:
-  #         target: ${{ matrix.target }}
-  #         args: --release --out dist --find-interpreter
-  #         sccache: "true"
-  #     - name: Install uuid_utils
-  #       run: pip install uuid_utils --no-index --find-links dist --force-reinstall
-  #     - name: Run tests
-  #       run: pytest -v .
-  #     - name: Upload wheels
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: wheels
-  #         path: dist
+  macos:
+    name: "MacOS: ${{ matrix.target }} Python: ${{ matrix.python-version }}"
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        target: [x86_64, aarch64]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist --find-interpreter
+          sccache: "true"
+      - name: Install uuid_utils
+        run: pip install uuid_utils --no-index --find-links dist --force-reinstall
+      - name: Run tests
+        run: pytest -v .
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
 
-  # sdist:
-  #   name: Source Distribution
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Build sdist
-  #       uses: PyO3/maturin-action@v1
-  #       with:
-  #         command: sdist
-  #         args: --out dist
-  #     - name: Upload sdist
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: wheels
-  #         path: dist
+  sdist:
+    name: Source Distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build sdist
+        uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist
+      - name: Upload sdist
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
 
-  # release:
-  #   name: Release
-  #   runs-on: ubuntu-latest
-  #   if: "startsWith(github.ref, 'refs/tags/')"
-  #   needs: [lint, linux, windows, macos, sdist]
-  #   steps:
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: wheels
-  #     - name: Publish to PyPI
-  #       uses: PyO3/maturin-action@v1
-  #       env:
-  #         PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-  #       with:
-  #         command: upload
-  #         args: --skip-existing *
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    if: "startsWith(github.ref, 'refs/tags/')"
+    needs: [lint, linux, windows, macos, sdist]
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: wheels
+      - name: Publish to PyPI
+        uses: PyO3/maturin-action@v1
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        with:
+          command: upload
+          args: --skip-existing *
