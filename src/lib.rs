@@ -12,6 +12,19 @@ struct UUID {
 
 #[pymethods]
 impl UUID {
+    pub const NAMESPACE_DNS: UUID = UUID {
+        uuid: Uuid::NAMESPACE_DNS,
+    };
+    pub const NAMESPACE_URL: UUID = UUID {
+        uuid: Uuid::NAMESPACE_URL,
+    };
+    pub const NAMESPACE_OID: UUID = UUID {
+        uuid: Uuid::NAMESPACE_OID,
+    };
+    pub const NAMESPACE_X500: UUID = UUID {
+        uuid: Uuid::NAMESPACE_X500,
+    };
+
     #[new]
     fn new(
         hex: Option<&str>,
@@ -150,10 +163,66 @@ fn uuid4() -> PyResult<UUID> {
     })
 }
 
+#[pyfunction]
+fn uuid5(namespace: &UUID, name: &str) -> PyResult<UUID> {
+    Ok(UUID {
+        uuid: Uuid::new_v5(&namespace.uuid, name.as_bytes()),
+    })
+}
+
+#[pyfunction]
+fn uuid6(node: u128, timestamp: Option<u64>) -> PyResult<UUID> {
+    let node = node.to_ne_bytes();
+    let node = &[node[0], node[1], node[2], node[3], node[4], node[5]];
+
+    let uuid = match timestamp {
+        Some(timestamp) => {
+            let timestamp = Timestamp::from_unix(&Context::new_random(), timestamp, 0);
+            return Ok(UUID {
+                uuid: Uuid::new_v6(timestamp, node),
+            });
+        }
+        None => Uuid::now_v6(node),
+    };
+    Ok(UUID { uuid })
+}
+
+#[pyfunction]
+fn uuid7(timestamp: Option<u64>) -> PyResult<UUID> {
+    let uuid = match timestamp {
+        Some(timestamp) => {
+            let timestamp = Timestamp::from_unix(&Context::new_random(), timestamp, 0);
+            return Ok(UUID {
+                uuid: Uuid::new_v7(timestamp),
+            });
+        }
+        None => Uuid::now_v7(),
+    };
+    Ok(UUID { uuid })
+}
+
+#[pyfunction]
+fn uuid8(bytes: &PyBytes) -> PyResult<UUID> {
+    let bytes: Bytes = bytes.extract()?;
+    Ok(UUID {
+        uuid: Uuid::new_v8(bytes),
+    })
+}
+
 #[pymodule]
 fn _pyuuid(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<UUID>()?;
+
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;
     m.add_function(wrap_pyfunction!(uuid4, m)?)?;
+    m.add_function(wrap_pyfunction!(uuid5, m)?)?;
+    m.add_function(wrap_pyfunction!(uuid6, m)?)?;
+    m.add_function(wrap_pyfunction!(uuid7, m)?)?;
+    m.add_function(wrap_pyfunction!(uuid8, m)?)?;
+
+    m.add("NAMESPACE_DNS", UUID::NAMESPACE_DNS)?;
+    m.add("NAMESPACE_URL", UUID::NAMESPACE_URL)?;
+    m.add("NAMESPACE_OID", UUID::NAMESPACE_OID)?;
+    m.add("NAMESPACE_X500", UUID::NAMESPACE_X500)?;
     Ok(())
 }
