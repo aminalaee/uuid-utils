@@ -23,14 +23,12 @@ classifiers = [
     "Programming Language :: Rust",
 ]
 
+dynamic = ["version"]
+
 [project.urls]
 Documentation = "https://github.com/aminalaee/pyuuid"
 Issues = "https://github.com/aminalaee/pyuuid/issues"
 Source = "https://github.com/aminalaee/pyuuid"
-
-dynamic = [
-    'version'
-]
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
