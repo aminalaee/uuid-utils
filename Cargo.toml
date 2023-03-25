@@ -4,11 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "_uuid_utils"
+name = "uuid_utils"
 crate-type = ["cdylib"]
-
-[package.metadata.maturin]
-name = "uuid_utils._uuid_utils"
 
 [dependencies]
 pyo3 = { version = "0.18.1", features = ["extension-module"] }
