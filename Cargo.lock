@@ -224,14 +224,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pyuuid"
-version = "0.1.0"
-dependencies = [
- "pyo3",
- "uuid",
-]
-
-[[package]]
 name = "quote"
 version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -343,6 +335,14 @@ dependencies = [
  "md-5",
  "rand",
  "sha1_smol",
+]
+
+[[package]]
+name = "uuid-utils"
+version = "0.1.0"
+dependencies = [
+ "pyo3",
+ "uuid",
 ]
 
 [[package]]

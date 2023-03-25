@@ -210,7 +210,7 @@ fn uuid8(bytes: &PyBytes) -> PyResult<UUID> {
 }
 
 #[pymodule]
-fn _pyuuid(_py: Python, m: &PyModule) -> PyResult<()> {
+fn _uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<UUID>()?;
 
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;
