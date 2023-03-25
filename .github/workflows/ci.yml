@@ -7,7 +7,6 @@ on:
     tags:
       - "*"
   pull_request:
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -33,24 +32,23 @@ jobs:
           mypy .
           ruff .
   linux:
-    name: "Linux: ${{ matrix.target }} Python: ${{ matrix.python-version }}"
+    name: "Linux: ${{ matrix.target }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [x86_64]
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        target: [x86_64, i686]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "${{ matrix.python-version }}"
+          python-version: "3.11"
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release -i python${{ matrix.python-version }} --out dist
+          args: --release --out dist --find-interpreter
           sccache: "true"
           manylinux: auto
       - name: Install uuid_utils
@@ -64,17 +62,16 @@ jobs:
           path: dist
 
   windows:
-    name: "Windows: ${{ matrix.target }} Python: ${{ matrix.python-version }}"
+    name: "Windows: ${{ matrix.target }}"
     runs-on: windows-latest
     strategy:
       matrix:
         target: [x64, x86]
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "${{ matrix.python-version }}"
+          python-version: "3.11"
           architecture: ${{ matrix.target }}
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -95,25 +92,29 @@ jobs:
           path: dist
 
   macos:
-    name: "MacOS: ${{ matrix.target }} Python: ${{ matrix.python-version }}"
+    name: "MacOS"
     runs-on: macos-latest
     strategy:
       matrix:
         target: [x86_64, aarch64]
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "${{ matrix.python-version }}"
+          python-version: "3.11"
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Build wheels
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build wheels - x86_64
         uses: PyO3/maturin-action@v1
         with:
-          target: ${{ matrix.target }}
+          target: x86_64
           args: --release --out dist --find-interpreter
           sccache: "true"
+      - name: Build wheels - universal2
+        uses: PyO3/maturin-action@v1
+        with:
+          args: --release --out dist --find-interpreter --universal2
       - name: Install uuid_utils
         run: pip install uuid_utils --no-index --find-links dist --force-reinstall
       - name: Run tests
