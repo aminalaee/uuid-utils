@@ -211,8 +211,9 @@ fn uuid8(bytes: &PyBytes) -> PyResult<UUID> {
 
 #[pymodule]
 fn uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_class::<UUID>()?;
+    m.add("__version__", env!("CARGO_PKG_VERSION"))?;
 
+    m.add_class::<UUID>()?;
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;
     m.add_function(wrap_pyfunction!(uuid4, m)?)?;
     m.add_function(wrap_pyfunction!(uuid5, m)?)?;
