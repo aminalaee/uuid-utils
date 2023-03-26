@@ -1,7 +1,8 @@
 from uuid import getnode
-import uuid_utils
 
 import pytest
+
+import uuid_utils
 
 
 def test_uuid_str() -> None:
@@ -51,7 +52,7 @@ def test_uuid_setattr() -> None:
     uuid = uuid_utils.UUID(int=223359875637754765292326297443183672862)
 
     with pytest.raises(TypeError):
-        uuid.int = 123
+        uuid.int = 123  # type: ignore
 
 
 def test_uuid1() -> None:
