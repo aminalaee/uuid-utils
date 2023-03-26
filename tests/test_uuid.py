@@ -92,3 +92,23 @@ def test_uuid7() -> None:
 def test_uuid8() -> None:
     uuid = uuid_utils.uuid8(b"1234567812345678")
     assert isinstance(uuid, uuid_utils.UUID)
+
+
+def test_uuid_comparisons() -> None:
+    uuid_1 = uuid_utils.uuid8(b"1234567812345678")
+    uuid_2 = uuid_utils.uuid8(b"1234567812345679")
+
+    assert uuid_1 < uuid_2
+    assert uuid_1 <= uuid_2
+
+    uuid_1 = uuid_utils.uuid8(b"1234567812345678")
+    uuid_2 = uuid_utils.uuid8(b"1234567812345678")
+
+    assert uuid_1 == uuid_2
+    assert not uuid_1 != uuid_2
+
+    uuid_1 = uuid_utils.uuid8(b"1234567812345678")
+    uuid_2 = uuid_utils.uuid8(b"1234567812345677")
+
+    assert uuid_1 > uuid_2
+    assert uuid_1 >= uuid_2

@@ -1,11 +1,13 @@
 use pyo3::{
     exceptions::{PyTypeError, PyValueError},
     prelude::*,
+    pyclass::CompareOp,
     types::{PyBytes, PyTuple},
 };
 use uuid::{Bytes, Context, Timestamp, Uuid};
 
 #[pyclass(subclass)]
+#[derive(Clone, Debug)]
 struct UUID {
     uuid: Uuid,
 }
@@ -69,6 +71,17 @@ impl UUID {
 
     fn __repr__(&self) -> String {
         format!("UUID('{}')", self.__str__())
+    }
+
+    fn __richcmp__(&self, other: UUID, op: CompareOp) -> PyResult<bool> {
+        match op {
+            CompareOp::Lt => Ok(self.uuid < other.uuid),
+            CompareOp::Le => Ok(self.uuid <= other.uuid),
+            CompareOp::Eq => Ok(self.uuid == other.uuid),
+            CompareOp::Ne => Ok(self.uuid != other.uuid),
+            CompareOp::Gt => Ok(self.uuid > other.uuid),
+            CompareOp::Ge => Ok(self.uuid >= other.uuid),
+        }
     }
 
     #[allow(unused_variables)]
