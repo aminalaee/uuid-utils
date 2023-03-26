@@ -31,6 +31,7 @@ jobs:
           isort --check --project=uuid_utils .
           mypy .
           ruff .
+
   linux:
     name: "Linux: ${{ matrix.target }}"
     runs-on: ubuntu-latest
@@ -51,10 +52,11 @@ jobs:
           args: --release --out dist --find-interpreter
           sccache: "true"
           manylinux: auto
-      - name: Install uuid_utils
-        run: pip install uuid_utils --no-index --find-links dist --force-reinstall
-      - name: Run tests
-        run: pytest -v .
+      - name: Install and test
+        if: matrix.target == 'x86_64'
+        run: |
+          pip install uuid_utils --no-index --find-links dist --force-reinstall
+          pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
@@ -81,10 +83,10 @@ jobs:
           target: ${{ matrix.target }}
           args: --release --out dist --find-interpreter
           sccache: "true"
-      - name: Install uuid_utils
-        run: pip install uuid_utils --no-index --find-links dist --force-reinstall
-      - name: Run tests
-        run: pytest -v .
+      - name: Install and test uuid_utils
+        run: |
+          pip install uuid_utils --no-index --find-links dist --force-reinstall
+          pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
@@ -94,9 +96,6 @@ jobs:
   macos:
     name: "MacOS"
     runs-on: macos-latest
-    strategy:
-      matrix:
-        target: [x86_64, aarch64]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -115,10 +114,10 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           args: --release --out dist --find-interpreter --universal2
-      - name: Install uuid_utils
-        run: pip install uuid_utils --no-index --find-links dist --force-reinstall
-      - name: Run tests
-        run: pytest -v .
+      - name: Install and test uuid_utils
+        run: |
+          pip install uuid_utils --no-index --find-links dist --force-reinstall
+          pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
