@@ -9,6 +9,8 @@ _Int: TypeAlias = int
 _Bytes: TypeAlias = bytes
 _FieldsType: TypeAlias = tuple[int, int, int, int, int, int]
 
+__version__: str
+
 class SafeUUID(Enum):
     safe: int
     unsafe: int
