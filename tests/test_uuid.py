@@ -105,6 +105,7 @@ def test_uuid_comparisons() -> None:
     uuid_2 = uuid_utils.uuid8(b"1234567812345678")
 
     assert uuid_1 == uuid_2
+    assert hash(uuid_1) == hash(uuid_2)
     assert not uuid_1 != uuid_2
 
     uuid_1 = uuid_utils.uuid8(b"1234567812345678")

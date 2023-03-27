@@ -5,6 +5,9 @@ use pyo3::{
     types::{PyBytes, PyTuple},
 };
 use uuid::{Bytes, Context, Timestamp, Uuid};
+use std::{collections::hash_map::DefaultHasher, hash::Hash};
+use std::hash::Hasher;
+
 
 #[pyclass(subclass)]
 #[derive(Clone, Debug)]
@@ -82,6 +85,12 @@ impl UUID {
             CompareOp::Gt => Ok(self.uuid > other.uuid),
             CompareOp::Ge => Ok(self.uuid >= other.uuid),
         }
+    }
+
+    fn __hash__(&self) -> PyResult<isize> {
+        let mut hasher = DefaultHasher::new();
+        self.uuid.hash(&mut hasher);
+        Ok(hasher.finish() as isize)
     }
 
     #[allow(unused_variables)]
