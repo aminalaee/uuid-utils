@@ -1,5 +1,16 @@
 # Python UUID Utils
 
+<p align="center">
+<a href="https://pypi.org/project/uuid-utils/">
+    <img src="https://badge.fury.io/py/uuid-utils.svg" alt="Package version">
+</a>
+<a href="https://pypi.org/project/uuid-utils" target="_blank">
+    <img src="https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058" alt="Supported Python versions">
+</a>
+</p>
+
+---
+
 Python UUID implementation using Rust's UUID library.
 This will make `uuid4` function around 10x faster.
 
@@ -17,7 +28,13 @@ Avaialble UUID versions:
 - `uuid7` - Version 7 UUIDs using a Unix timestamp ordered by time.
 - `uuid8` - Version 8 UUIDs using user-defined data.
 
-**Please note that UUID versions 6, 7 and 8 are still in draft RFC.**
+<sup>Please note that UUID versions 6, 7 and 8 are still in draft RFC.</sup><br>
+
+## Installation
+
+```console
+pip install uuid-utils
+```
 
 ## Example
 
@@ -55,4 +72,5 @@ UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 ## Limitations
 
 - The `getnode` function is not available.
-- The `uuid1` and `uuid6` take `node` argument as mandatory. 
+- The `uuid1` and `uuid6` take `node` argument as mandatory.
+- The `uuid3` function is not available.
