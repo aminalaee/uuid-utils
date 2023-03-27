@@ -4,10 +4,14 @@ use pyo3::{
     pyclass::CompareOp,
     types::{PyBytes, PyTuple},
 };
-use uuid::{Bytes, Context, Timestamp, Uuid, Version, Builder};
-use std::{collections::hash_map::DefaultHasher, hash::Hash};
 use std::hash::Hasher;
+use std::{collections::hash_map::DefaultHasher, hash::Hash};
+use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
 
+pub const RESERVED_NCS: &str = "reserved for NCS compatibility";
+pub const RFC_4122: &str = "specified in RFC 4122";
+pub const RESERVED_MICROSOFT: &str = "reserved for Microsoft compatibility";
+pub const RESERVED_FUTURE: &str = "reserved for future definition";
 
 #[pyclass(subclass)]
 #[derive(Clone, Debug)]
@@ -101,7 +105,9 @@ impl UUID {
         let mut builder = Builder::from_u128(self.uuid.as_u128());
         builder.set_version(version);
 
-        Ok(UUID{ uuid: builder.into_uuid()})
+        Ok(UUID {
+            uuid: builder.into_uuid(),
+        })
     }
 
     #[allow(unused_variables)]
@@ -135,8 +141,24 @@ impl UUID {
     }
 
     #[getter]
+    fn urn(&self) -> PyResult<String> {
+        Ok(self.uuid.urn().to_string())
+    }
+
+    #[getter]
     fn version(&self) -> usize {
         self.uuid.get_version_num()
+    }
+
+    #[getter]
+    fn variant(&self) -> &str {
+        match self.uuid.get_variant() {
+            Variant::NCS => RESERVED_NCS,
+            Variant::RFC4122 => RFC_4122,
+            Variant::Microsoft => RESERVED_MICROSOFT,
+            Variant::Future => RESERVED_FUTURE,
+            _ => RESERVED_FUTURE,
+        }
     }
 
     #[staticmethod]
@@ -261,5 +283,9 @@ fn uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add("NAMESPACE_URL", UUID::NAMESPACE_URL)?;
     m.add("NAMESPACE_OID", UUID::NAMESPACE_OID)?;
     m.add("NAMESPACE_X500", UUID::NAMESPACE_X500)?;
+    m.add("RESERVED_NCS", RESERVED_NCS)?;
+    m.add("RFC_4122", RFC_4122)?;
+    m.add("RESERVED_MICROSOFT", RESERVED_MICROSOFT)?;
+    m.add("RESERVED_FUTURE", RESERVED_FUTURE)?;
     Ok(())
 }
