@@ -1,11 +1,16 @@
 use pyo3::{
     exceptions::{PyTypeError, PyValueError},
     prelude::*,
+    pyclass::CompareOp,
     types::{PyBytes, PyTuple},
 };
 use uuid::{Bytes, Context, Timestamp, Uuid};
+use std::{collections::hash_map::DefaultHasher, hash::Hash};
+use std::hash::Hasher;
+
 
 #[pyclass(subclass)]
+#[derive(Clone, Debug)]
 struct UUID {
     uuid: Uuid,
 }
@@ -69,6 +74,23 @@ impl UUID {
 
     fn __repr__(&self) -> String {
         format!("UUID('{}')", self.__str__())
+    }
+
+    fn __richcmp__(&self, other: UUID, op: CompareOp) -> PyResult<bool> {
+        match op {
+            CompareOp::Lt => Ok(self.uuid < other.uuid),
+            CompareOp::Le => Ok(self.uuid <= other.uuid),
+            CompareOp::Eq => Ok(self.uuid == other.uuid),
+            CompareOp::Ne => Ok(self.uuid != other.uuid),
+            CompareOp::Gt => Ok(self.uuid > other.uuid),
+            CompareOp::Ge => Ok(self.uuid >= other.uuid),
+        }
+    }
+
+    fn __hash__(&self) -> PyResult<isize> {
+        let mut hasher = DefaultHasher::new();
+        self.uuid.hash(&mut hasher);
+        Ok(hasher.finish() as isize)
     }
 
     #[allow(unused_variables)]
