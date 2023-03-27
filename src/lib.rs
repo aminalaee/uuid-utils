@@ -211,15 +211,14 @@ fn uuid8(bytes: &PyBytes) -> PyResult<UUID> {
 
 #[pymodule]
 fn uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
+    m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<UUID>()?;
-
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;
     m.add_function(wrap_pyfunction!(uuid4, m)?)?;
     m.add_function(wrap_pyfunction!(uuid5, m)?)?;
     m.add_function(wrap_pyfunction!(uuid6, m)?)?;
     m.add_function(wrap_pyfunction!(uuid7, m)?)?;
     m.add_function(wrap_pyfunction!(uuid8, m)?)?;
-
     m.add("NAMESPACE_DNS", UUID::NAMESPACE_DNS)?;
     m.add("NAMESPACE_URL", UUID::NAMESPACE_URL)?;
     m.add("NAMESPACE_OID", UUID::NAMESPACE_OID)?;
