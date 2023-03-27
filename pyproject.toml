@@ -21,9 +21,12 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Rust",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
 ]
 
-dynamic = ["version"]
+dynamic = ["license", "version"]
 
 [project.urls]
 Documentation = "https://github.com/aminalaee/uuid-utils"
