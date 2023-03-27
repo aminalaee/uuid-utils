@@ -4,7 +4,7 @@ use pyo3::{
     pyclass::CompareOp,
     types::{PyBytes, PyTuple},
 };
-use uuid::{Bytes, Context, Timestamp, Uuid};
+use uuid::{Bytes, Context, Timestamp, Uuid, Version, Builder};
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
 use std::hash::Hasher;
 
@@ -37,9 +37,9 @@ impl UUID {
         bytes_le: Option<&PyBytes>,
         fields: Option<&PyTuple>,
         int: Option<u128>,
-        _version: Option<u8>,
+        version: Option<u8>,
     ) -> PyResult<Self> {
-        match (hex, bytes, bytes_le, fields, int) {
+        let result = match (hex, bytes, bytes_le, fields, int) {
             (Some(hex), None, None, None, None) => Self::from_hex(hex),
             (None, Some(bytes), None, None, None) => Self::from_bytes(bytes),
             (None, None, Some(bytes_le), None, None) => Self::from_bytes_le(bytes_le),
@@ -48,20 +48,12 @@ impl UUID {
             _ => Err(PyTypeError::new_err(
                 "one of the hex, bytes, bytes_le, fields, or int arguments must be given",
             )),
+        };
+
+        match version {
+            Some(v) => result.unwrap().set_version(v),
+            None => result,
         }
-        // let version = match version {
-        //     Some(0) => Ok(Some(Version::Nil)),
-        //     Some(1) => Ok(Some(Version::Mac)),
-        //     Some(2) => Ok(Some(Version::Dce)),
-        //     Some(3) => Ok(Some(Version::Md5)),
-        //     Some(4) => Ok(Some(Version::Random)),
-        //     Some(5) => Ok(Some(Version::Sha1)),
-        //     Some(6) => Ok(Some(Version::SortMac)),
-        //     Some(7) => Ok(Some(Version::SortRand)),
-        //     Some(8) => Ok(Some(Version::Custom)),
-        //     None => Ok(None),
-        //     _ => Err(PyErr::new::<PyValueError, &str>("illegal version number.")),
-        // }?;
     }
 
     fn __int__(&self) -> u128 {
@@ -93,6 +85,25 @@ impl UUID {
         Ok(hasher.finish() as isize)
     }
 
+    fn set_version(&self, version: u8) -> PyResult<UUID> {
+        let version = match version {
+            1 => Version::Mac,
+            2 => Version::Dce,
+            3 => Version::Md5,
+            4 => Version::Random,
+            5 => Version::Sha1,
+            6 => Version::SortMac,
+            7 => Version::SortRand,
+            8 => Version::Custom,
+            _ => return Err(PyErr::new::<PyValueError, &str>("illegal version number.")),
+        };
+
+        let mut builder = Builder::from_u128(self.uuid.as_u128());
+        builder.set_version(version);
+
+        Ok(UUID{ uuid: builder.into_uuid()})
+    }
+
     #[allow(unused_variables)]
     fn __setattr__(&self, name: &str, value: PyObject) -> PyResult<()> {
         Err(PyTypeError::new_err("UUID objects are immutable"))
@@ -121,6 +132,11 @@ impl UUID {
     #[getter]
     fn int(&self) -> u128 {
         self.uuid.as_u128()
+    }
+
+    #[getter]
+    fn version(&self) -> usize {
+        self.uuid.get_version_num()
     }
 
     #[staticmethod]

@@ -15,6 +15,11 @@ def test_uuid_repr() -> None:
     assert repr(uuid) == "UUID('a8098c1a-f86e-11da-bd1a-00112444be1e')"
 
 
+def test_uuid_constructor() -> None:
+    with pytest.raises(TypeError):
+        uuid_utils.UUID()
+
+
 def test_uuid_from_hex() -> None:
     uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
     assert uuid.hex == "a8098c1af86e11dabd1a00112444be1e"
@@ -113,3 +118,15 @@ def test_uuid_comparisons() -> None:
 
     assert uuid_1 > uuid_2
     assert uuid_1 >= uuid_2
+
+
+@pytest.mark.parametrize("version", [1, 2, 3, 4, 5, 7, 8])
+def test_uuid_version(version: int) -> None:
+    uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=version)
+    assert uuid.version == version
+
+
+def test_uuid_illegal_version() -> None:
+    with pytest.raises(ValueError):
+        uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=0)
+        uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=9)
