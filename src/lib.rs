@@ -193,22 +193,27 @@ impl UUID {
 
     #[getter]
     fn clock_seq(&self) -> u128 {
-        ((self.clock_seq_hi_variant() & 0x3f) << 8) |
-                self.clock_seq_low()
+        ((self.clock_seq_hi_variant() & 0x3f).wrapping_shl(8)) | self.clock_seq_low()
     }
 
     #[getter]
     fn time(&self) -> u128 {
-        ((self.time_hi_version() & 0x0fff) << 48) |
-                (self.time_mid() << 32) | self.time_low()
+        ((self.time_hi_version() & 0x0fff).wrapping_shl(48))
+            | (self.time_mid().wrapping_shl(32))
+            | self.time_low()
     }
 
     #[getter]
-    fn fields(&self) -> PyResult<(u128, u128, u128, u128, u128, u128)>{
-        Ok((self.time_low(), self.time_mid(), self.time_hi_version(),
-            self.clock_seq_hi_variant(), self.clock_seq_low(), self.node()))
+    fn fields(&self) -> PyResult<(u128, u128, u128, u128, u128, u128)> {
+        Ok((
+            self.time_low(),
+            self.time_mid(),
+            self.time_hi_version(),
+            self.clock_seq_hi_variant(),
+            self.clock_seq_low(),
+            self.node(),
+        ))
     }
-
 
     #[staticmethod]
     fn from_hex(hex: &str) -> PyResult<UUID> {
