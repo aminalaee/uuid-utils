@@ -1,4 +1,4 @@
-from uuid import getnode
+from uuid import UUID, getnode
 
 import pytest
 
@@ -133,11 +133,22 @@ def test_uuid_illegal_version() -> None:
 
 
 def test_uuid_properties() -> None:
-    uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+    uuid_1 = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+    uuid_2 = UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
-    assert uuid.bytes == b"\xa8\t\x8c\x1a\xf8n\x11\xda\xbd\x1a\x00\x11$D\xbe\x1e"
-    assert uuid.bytes_le == b"\x1a\x8c\t\xa8n\xf8\xda\x11\xbd\x1a\x00\x11$D\xbe\x1e"
-    assert uuid.hex == "a8098c1af86e11dabd1a00112444be1e"
-    assert uuid.int == 223359875637754765292326297443183672862
-    assert uuid.urn == "urn:uuid:a8098c1a-f86e-11da-bd1a-00112444be1e"
-    assert uuid.variant == uuid_utils.RFC_4122
+    assert uuid_1.bytes == uuid_2.bytes
+    assert uuid_1.bytes_le == uuid_2.bytes_le
+    assert uuid_1.clock_seq_hi_variant == uuid_2.clock_seq_hi_variant
+    assert uuid_1.clock_seq_low == uuid_2.clock_seq_low
+    assert uuid_1.clock_seq == uuid_2.clock_seq
+    assert uuid_1.fields == uuid_2.fields
+    assert uuid_1.hex == uuid_2.hex
+    assert uuid_1.int == uuid_2.int
+    assert uuid_1.node == uuid_2.node
+    assert uuid_1.time == uuid_2.time
+    assert uuid_1.time_low == uuid_2.time_low
+    assert uuid_1.time_mid == uuid_2.time_mid
+    assert uuid_1.time_hi_version == uuid_2.time_hi_version
+    assert uuid_1.urn == uuid_2.urn
+    assert uuid_1.variant == uuid_2.variant
+    assert uuid_1.version == uuid_2.version
