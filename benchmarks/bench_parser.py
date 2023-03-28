@@ -3,32 +3,32 @@ import uuid
 import uuid_utils
 
 
-def uuid_from_hex():
+def uuid_from_hex() -> None:
     for _ in range(10_000):
         uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
-def uuid_utils_from_hex():
+def uuid_utils_from_hex() -> None:
     for _ in range(10_000):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
-def uuid_from_bytes():
+def uuid_from_bytes() -> None:
     for _ in range(10_000):
         uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
-def uuid_utils_from_bytes():
+def uuid_utils_from_bytes() -> None:
     for _ in range(10_000):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
-def uuid_from_int():
+def uuid_from_int() -> None:
     for _ in range(10_000):
         uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
-def uuid_utils_from_int():
+def uuid_utils_from_int() -> None:
     for _ in range(10_000):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
