@@ -7,7 +7,7 @@ import uuid_utils
 
 def test_uuid_str() -> None:
     uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
-    assert uuid.hex == "a8098c1af86e11dabd1a00112444be1e"
+    assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
 
 def test_uuid_repr() -> None:
@@ -130,3 +130,14 @@ def test_uuid_illegal_version() -> None:
     with pytest.raises(ValueError):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=0)
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=9)
+
+
+def test_uuid_properties() -> None:
+    uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+
+    assert uuid.bytes == b"\xa8\t\x8c\x1a\xf8n\x11\xda\xbd\x1a\x00\x11$D\xbe\x1e"
+    assert uuid.bytes_le == b"\x1a\x8c\t\xa8n\xf8\xda\x11\xbd\x1a\x00\x11$D\xbe\x1e"
+    assert uuid.hex == "a8098c1af86e11dabd1a00112444be1e"
+    assert uuid.int == 223359875637754765292326297443183672862
+    assert uuid.urn == "urn:uuid:a8098c1a-f86e-11da-bd1a-00112444be1e"
+    assert uuid.variant == uuid_utils.RFC_4122
