@@ -108,12 +108,12 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist --find-interpreter
+          args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 pypy3.8 pypy3.9
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
-          args: --release --out dist --find-interpreter --universal2
+          args: --release --out dist --universal2 -i 3.8 3.9 3.10 3.11 pypy3.8 pypy3.9
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
