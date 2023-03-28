@@ -13,7 +13,7 @@ pub const RFC_4122: &str = "specified in RFC 4122";
 pub const RESERVED_MICROSOFT: &str = "reserved for Microsoft compatibility";
 pub const RESERVED_FUTURE: &str = "reserved for future definition";
 
-#[pyclass(subclass)]
+#[pyclass(subclass, module="uuid_utils._uuid_utils")]
 #[derive(Clone, Debug)]
 struct UUID {
     uuid: Uuid,
@@ -324,7 +324,7 @@ fn uuid8(bytes: &PyBytes) -> PyResult<UUID> {
 }
 
 #[pymodule]
-fn uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
+fn _uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<UUID>()?;
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;
