@@ -161,6 +161,60 @@ impl UUID {
         }
     }
 
+    #[getter]
+    fn node(&self) -> u128 {
+        self.int() & 0xffffffffffff
+    }
+
+    #[getter]
+    fn time_low(&self) -> u128 {
+        self.int().wrapping_shr(96)
+    }
+
+    #[getter]
+    fn time_mid(&self) -> u128 {
+        (self.int().wrapping_shr(80)) & 0xffff
+    }
+
+    #[getter]
+    fn time_hi_version(&self) -> u128 {
+        (self.int().wrapping_shr(64)) & 0xffff
+    }
+
+    #[getter]
+    fn clock_seq_hi_variant(&self) -> u128 {
+        (self.int().wrapping_shr(56)) & 0xff
+    }
+
+    #[getter]
+    fn clock_seq_low(&self) -> u128 {
+        (self.int().wrapping_shr(48)) & 0xff
+    }
+
+    #[getter]
+    fn clock_seq(&self) -> u128 {
+        ((self.clock_seq_hi_variant() & 0x3f).wrapping_shl(8)) | self.clock_seq_low()
+    }
+
+    #[getter]
+    fn time(&self) -> u128 {
+        ((self.time_hi_version() & 0x0fff).wrapping_shl(48))
+            | (self.time_mid().wrapping_shl(32))
+            | self.time_low()
+    }
+
+    #[getter]
+    fn fields(&self) -> PyResult<(u128, u128, u128, u128, u128, u128)> {
+        Ok((
+            self.time_low(),
+            self.time_mid(),
+            self.time_hi_version(),
+            self.clock_seq_hi_variant(),
+            self.clock_seq_low(),
+            self.node(),
+        ))
+    }
+
     #[staticmethod]
     fn from_hex(hex: &str) -> PyResult<UUID> {
         match Uuid::parse_str(hex) {
