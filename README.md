@@ -32,8 +32,8 @@ Avaialble UUID versions:
 
 ## Installation
 
-```console
-pip install uuid-utils
+```shell
+$ pip install uuid-utils
 ```
 
 ## Example
