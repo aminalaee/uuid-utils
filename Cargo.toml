@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "uuid_utils"
+name = "_uuid_utils"
 crate-type = ["cdylib"]
 
 [dependencies]
