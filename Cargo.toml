@@ -5,7 +5,7 @@ edition = "2021"
 
 [lib]
 name = "uuid_utils"
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 pyo3 = { version = "0.18.1", features = ["extension-module"] }
