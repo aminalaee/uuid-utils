@@ -13,7 +13,7 @@ pub const RFC_4122: &str = "specified in RFC 4122";
 pub const RESERVED_MICROSOFT: &str = "reserved for Microsoft compatibility";
 pub const RESERVED_FUTURE: &str = "reserved for future definition";
 
-#[pyclass(subclass, module="uuid_utils._uuid_utils")]
+#[pyclass(subclass, module="uuid_utils")]
 #[derive(Clone, Debug)]
 struct UUID {
     uuid: Uuid,
