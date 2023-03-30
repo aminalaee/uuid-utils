@@ -32,7 +32,6 @@ def test_uuid_from_bytes() -> None:
     uuid = uuid_utils.UUID(
         bytes=b"\xa8\t\x8c\x1a\xf8n\x11\xda\xbd\x1a\x00\x11$D\xbe\x1e"
     )
-
     assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
     with pytest.raises(ValueError):
@@ -48,7 +47,11 @@ def test_uuid_from_bytes_le() -> None:
 
 def test_uuid_from_int() -> None:
     uuid = uuid_utils.UUID(int=223359875637754765292326297443183672862)
+    assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
+
+def test_uuid_from_fields() -> None:
+    uuid = uuid_utils.UUID(fields=(2819197978, 63598, 4570, 189, 26, 73622928926))
     assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
 

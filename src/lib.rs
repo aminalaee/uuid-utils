@@ -2,7 +2,7 @@ use pyo3::{
     exceptions::{PyTypeError, PyValueError},
     prelude::*,
     pyclass::CompareOp,
-    types::{PyBytes, PyTuple},
+    types::PyBytes,
 };
 use std::hash::Hasher;
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
@@ -39,7 +39,7 @@ impl UUID {
         hex: Option<&str>,
         bytes: Option<&PyBytes>,
         bytes_le: Option<&PyBytes>,
-        fields: Option<&PyTuple>,
+        fields: Option<(u32, u16, u16, u8, u8, u64)>,
         int: Option<u128>,
         version: Option<u8>,
     ) -> PyResult<Self> {
@@ -47,7 +47,7 @@ impl UUID {
             (Some(hex), None, None, None, None) => Self::from_hex(hex),
             (None, Some(bytes), None, None, None) => Self::from_bytes(bytes),
             (None, None, Some(bytes_le), None, None) => Self::from_bytes_le(bytes_le),
-            // (None, None, None, Some(fields), None) => Self::from_fields(fields),
+            (None, None, None, Some(fields), None) => Self::from_fields(fields),
             (None, None, None, None, Some(int)) => Self::from_int(int),
             _ => Err(PyTypeError::new_err(
                 "one of the hex, bytes, bytes_le, fields, or int arguments must be given",
@@ -162,49 +162,50 @@ impl UUID {
     }
 
     #[getter]
-    fn node(&self) -> u128 {
-        self.int() & 0xffffffffffff
+    fn node(&self) -> u64 {
+        (self.int() & 0xffffffffffff) as u64
     }
 
     #[getter]
-    fn time_low(&self) -> u128 {
-        self.int().wrapping_shr(96)
+    fn time_low(&self) -> u32 {
+        self.int().wrapping_shr(96) as u32
     }
 
     #[getter]
-    fn time_mid(&self) -> u128 {
-        (self.int().wrapping_shr(80)) & 0xffff
+    fn time_mid(&self) -> u16 {
+        ((self.int().wrapping_shr(80)) & 0xffff) as u16
     }
 
     #[getter]
-    fn time_hi_version(&self) -> u128 {
-        (self.int().wrapping_shr(64)) & 0xffff
+    fn time_hi_version(&self) -> u16 {
+        ((self.int().wrapping_shr(64)) & 0xffff) as u16
     }
 
     #[getter]
-    fn clock_seq_hi_variant(&self) -> u128 {
-        (self.int().wrapping_shr(56)) & 0xff
+    fn clock_seq_hi_variant(&self) -> u8 {
+        ((self.int().wrapping_shr(56)) & 0xff) as u8
     }
 
     #[getter]
-    fn clock_seq_low(&self) -> u128 {
-        (self.int().wrapping_shr(48)) & 0xff
+    fn clock_seq_low(&self) -> u8 {
+        ((self.int().wrapping_shr(48)) & 0xff) as u8
     }
 
     #[getter]
-    fn clock_seq(&self) -> u128 {
-        ((self.clock_seq_hi_variant() & 0x3f).wrapping_shl(8)) | self.clock_seq_low()
+    fn clock_seq(&self) -> u16 {
+        let high = (self.clock_seq_hi_variant()) as u16 & 0x3f;
+        high.wrapping_shl(8) | self.clock_seq_low() as u16
     }
 
     #[getter]
-    fn time(&self) -> u128 {
-        ((self.time_hi_version() & 0x0fff).wrapping_shl(48))
-            | (self.time_mid().wrapping_shl(32))
-            | self.time_low()
+    fn time(&self) -> u64 {
+        let high = self.time_hi_version() as u64 & 0x0fff;
+        let mid = (self.time_mid()) as u64;
+        high.wrapping_shl(48) | mid.wrapping_shl(32) | self.time_low() as u64
     }
 
     #[getter]
-    fn fields(&self) -> PyResult<(u128, u128, u128, u128, u128, u128)> {
+    fn fields(&self) -> PyResult<(u32, u16, u16, u8, u8, u64)> {
         Ok((
             self.time_low(),
             self.time_mid(),
@@ -241,12 +242,26 @@ impl UUID {
         })
     }
 
-    // #[staticmethod]
-    // fn from_fields(fields: &PyTuple) -> PyResult<UUID> {
-    //     Ok(UUID {
-    //         uuid: Uuid::new_v4(),
-    //     })
-    // }
+    #[staticmethod]
+    fn from_fields(fields: (u32, u16, u16, u8, u8, u64)) -> PyResult<UUID> {
+        let time_low = fields.0 as u128;
+        let time_mid = fields.1 as u128;
+        let time_hi_version = fields.2 as u128;
+        let clock_seq_hi_variant = fields.3 as u128;
+        let clock_seq_low = fields.4 as u128;
+        let node = fields.5 as u128;
+        let clock_seq = clock_seq_hi_variant.wrapping_shl(8) | clock_seq_low;
+
+        let value = time_low.wrapping_shl(96)
+            | time_mid.wrapping_shl(80)
+            | time_hi_version.wrapping_shl(64)
+            | clock_seq.wrapping_shl(48)
+            | node;
+
+        Ok(UUID {
+            uuid: Uuid::from_u128(value),
+        })
+    }
 
     #[staticmethod]
     fn from_int(int: u128) -> PyResult<UUID> {
