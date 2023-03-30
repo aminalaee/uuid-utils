@@ -35,6 +35,7 @@ Source = "https://github.com/aminalaee/uuid-utils"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+python-source = "python"
 
 [tool.mypy]
 disallow_untyped_defs = true
