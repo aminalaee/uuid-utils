@@ -22,7 +22,7 @@ def test_uuid_constructor() -> None:
 
 def test_uuid_from_hex() -> None:
     uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
-    assert uuid.hex == "a8098c1af86e11dabd1a00112444be1e"
+    assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
     with pytest.raises(ValueError):
         uuid_utils.UUID("0-0-0-0-0")
@@ -33,7 +33,7 @@ def test_uuid_from_bytes() -> None:
         bytes=b"\xa8\t\x8c\x1a\xf8n\x11\xda\xbd\x1a\x00\x11$D\xbe\x1e"
     )
 
-    assert uuid.bytes == b"\xa8\t\x8c\x1a\xf8n\x11\xda\xbd\x1a\x00\x11$D\xbe\x1e"
+    assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
     with pytest.raises(ValueError):
         uuid_utils.UUID(bytes=b"\xa8\t\x8c\x1a\xf8n\x11")
@@ -43,14 +43,13 @@ def test_uuid_from_bytes_le() -> None:
     uuid = uuid_utils.UUID(
         bytes_le=b"\x1a\x8c\t\xa8n\xf8\xda\x11\xbd\x1a\x00\x11$D\xbe\x1e"
     )
-    assert uuid.bytes_le == b"\x1a\x8c\t\xa8n\xf8\xda\x11\xbd\x1a\x00\x11$D\xbe\x1e"
+    assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
 
 def test_uuid_from_int() -> None:
     uuid = uuid_utils.UUID(int=223359875637754765292326297443183672862)
 
-    assert uuid.int == 223359875637754765292326297443183672862
-    assert uuid.__int__() == 223359875637754765292326297443183672862
+    assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
 
 def test_uuid_setattr() -> None:
@@ -65,6 +64,11 @@ def test_uuid1() -> None:
     assert isinstance(uuid, uuid_utils.UUID)
 
     uuid = uuid_utils.uuid1(node=8155362240700, clock_seq=123)
+    assert isinstance(uuid, uuid_utils.UUID)
+
+
+def test_uuid3() -> None:
+    uuid = uuid_utils.uuid3(namespace=uuid_utils.NAMESPACE_DNS, name="python.org")
     assert isinstance(uuid, uuid_utils.UUID)
 
 
@@ -144,6 +148,7 @@ def test_uuid_properties() -> None:
     assert uuid_1.fields == uuid_2.fields
     assert uuid_1.hex == uuid_2.hex
     assert uuid_1.int == uuid_2.int
+    assert uuid_1.__int__() == uuid_1.__int__()
     assert uuid_1.node == uuid_2.node
     assert uuid_1.time == uuid_2.time
     assert uuid_1.time_low == uuid_2.time_low
