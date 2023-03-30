@@ -271,6 +271,13 @@ fn uuid1(node: u128, clock_seq: Option<u64>) -> PyResult<UUID> {
 }
 
 #[pyfunction]
+fn uuid3(namespace: UUID, name: &str) -> PyResult<UUID> {
+    Ok(UUID {
+        uuid: Uuid::new_v3(&namespace.uuid, name.as_bytes()),
+    })
+}
+
+#[pyfunction]
 fn uuid4() -> PyResult<UUID> {
     Ok(UUID {
         uuid: Uuid::new_v4(),
@@ -328,6 +335,7 @@ fn uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<UUID>()?;
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;
+    m.add_function(wrap_pyfunction!(uuid3, m)?)?;
     m.add_function(wrap_pyfunction!(uuid4, m)?)?;
     m.add_function(wrap_pyfunction!(uuid5, m)?)?;
     m.add_function(wrap_pyfunction!(uuid6, m)?)?;
