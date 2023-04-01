@@ -1,6 +1,6 @@
 [package]
 name = "uuid-utils"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 
 [lib]
@@ -8,5 +8,5 @@ name = "uuid_utils"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.18.1", features = ["extension-module"] }
+pyo3 = { version = "0.18.2", features = ["extension-module"] }
 uuid = { version = "1.3.0", features = ["v1", "v3", "v4", "v5", "v6", "v7", "v8", "fast-rng"]}
