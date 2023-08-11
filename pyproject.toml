@@ -5,25 +5,23 @@ build-backend = "maturin"
 [project]
 name = "uuid_utils"
 description = "Drop-in replacement for Python UUID in Rust"
-authors = [
-  { name = "Amin Alaee", email = "me@aminalaee.dev" },
-]
+authors = [{ name = "Amin Alaee", email = "me@aminalaee.dev" }]
 keywords = ["rust", "uuid"]
 requires-python = ">=3.7"
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Rust",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
-    "Operating System :: OS Independent",
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Rust",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
 ]
 
 dynamic = ["license", "version"]
@@ -36,6 +34,7 @@ Source = "https://github.com/aminalaee/uuid-utils"
 [tool.maturin]
 features = ["pyo3/extension-module"]
 python-source = "python"
+module-name = "uuid_utils._uuid_utils"
 
 [tool.mypy]
 disallow_untyped_defs = true
