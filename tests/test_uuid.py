@@ -160,3 +160,11 @@ def test_uuid_properties() -> None:
     assert uuid_1.urn == uuid_2.urn
     assert uuid_1.variant == uuid_2.variant
     assert uuid_1.version == uuid_2.version
+
+
+def test_uuid_timestamp() -> None:
+    uuid = uuid_utils.uuid7(1679665408)
+    assert uuid.timestamp == 1679665408000
+
+    with pytest.raises(ValueError):
+        uuid_utils.uuid4().timestamp
