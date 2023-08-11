@@ -1,4 +1,4 @@
-from .uuid_utils import (
+from ._uuid_utils import (
     NAMESPACE_DNS,
     NAMESPACE_OID,
     NAMESPACE_URL,
