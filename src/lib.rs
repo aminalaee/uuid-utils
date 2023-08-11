@@ -205,6 +205,21 @@ impl UUID {
     }
 
     #[getter]
+    fn timestamp(&self) -> PyResult<u64> {
+        match self.uuid.get_timestamp() {
+            Some(timestamp) => {
+                let (secs, nanos) = timestamp.to_unix();
+                Ok(secs * 1_000 + nanos as u64 / 1_000 / 1_000)
+            }
+            _ => {
+                return Err(PyErr::new::<PyValueError, &str>(
+                    "UUID version should be one of (v1, v6 or v7).",
+                ))
+            }
+        }
+    }
+
+    #[getter]
     fn fields(&self) -> PyResult<(u32, u16, u16, u8, u8, u64)> {
         Ok((
             self.time_low(),
