@@ -1,3 +1,4 @@
+import pickle
 from uuid import UUID, getnode
 
 import pytest
@@ -168,3 +169,10 @@ def test_uuid_timestamp() -> None:
 
     with pytest.raises(ValueError):
         uuid_utils.uuid4().timestamp
+
+
+def test_pickle() -> None:
+    uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+    uuid_pickle = pickle.dumps(uuid)
+    uuid_unpickle = pickle.loads(uuid_pickle)
+    assert uuid_unpickle == uuid
