@@ -1,7 +1,6 @@
 use pyo3::{exceptions::{PyTypeError, PyValueError}, prelude::*, pyclass::CompareOp, types::PyBytes};
 use std::hash::Hasher;
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
-use pyo3::types::PyTuple;
 use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
 
 pub const RESERVED_NCS: &str = "reserved for NCS compatibility";
@@ -109,6 +108,10 @@ impl UUID {
     #[allow(unused_variables)]
     fn __setattr__(&self, name: &str, value: PyObject) -> PyResult<()> {
         Err(PyTypeError::new_err("UUID objects are immutable"))
+    }
+
+    fn __getnewargs__(&self) -> (String,) {
+        (self.__str__(),)
     }
 
     #[getter]
@@ -279,10 +282,6 @@ impl UUID {
         Ok(UUID {
             uuid: Uuid::from_u128(int),
         })
-    }
-
-    fn __getnewargs__<'a>(&self, py: Python<'a>) -> PyResult<&'a PyTuple> {
-        return Ok(PyTuple::new(py, [self.uuid.to_string()]))
     }
 }
 
