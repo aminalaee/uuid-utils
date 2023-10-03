@@ -115,6 +115,10 @@ impl UUID {
         Err(PyTypeError::new_err("UUID objects are immutable"))
     }
 
+    fn __getnewargs__(&self) -> (String,) {
+        (self.__str__(),)
+    }
+
     #[getter]
     fn hex(&self) -> PyResult<String> {
         Ok(self.uuid.simple().to_string())
