@@ -76,7 +76,7 @@ UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 - The `getnode` function is not available.
 - The `uuid1` and `uuid6` take `node` argument as mandatory.
 
-## How to develo
+## How to develop locally
 
 ```shell
 $ make build
