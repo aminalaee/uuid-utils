@@ -1,3 +1,4 @@
+import copy
 import pickle
 from uuid import UUID, getnode
 
@@ -176,3 +177,9 @@ def test_pickle() -> None:
     uuid_pickle = pickle.dumps(uuid)
     uuid_unpickle = pickle.loads(uuid_pickle)
     assert uuid_unpickle == uuid
+
+
+def test_copy() -> None:
+    uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+    assert copy.copy(uuid) == uuid
+    assert copy.deepcopy(uuid) == uuid

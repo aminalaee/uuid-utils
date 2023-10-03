@@ -2,7 +2,7 @@ use pyo3::{
     exceptions::{PyTypeError, PyValueError},
     prelude::*,
     pyclass::CompareOp,
-    types::PyBytes,
+    types::{PyBytes, PyDict},
 };
 use std::hash::Hasher;
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
@@ -117,6 +117,10 @@ impl UUID {
 
     fn __getnewargs__(&self) -> (String,) {
         (self.__str__(),)
+    }
+
+    pub fn __deepcopy__(&self, py: Python, _memo: &PyDict) -> Py<PyAny> {
+        self.clone().into_py(py)
     }
 
     #[getter]
