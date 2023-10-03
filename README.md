@@ -79,5 +79,5 @@ UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 ## How to build
 
 ```bash
-RUSTFLAGS="--cfg uuid_unstable" maturin build --release
+RUSTFLAGS="--cfg uuid_unstable" maturin develop
 ```
