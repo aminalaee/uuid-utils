@@ -1,4 +1,9 @@
-use pyo3::{exceptions::{PyTypeError, PyValueError}, prelude::*, pyclass::CompareOp, types::PyBytes};
+use pyo3::{
+    exceptions::{PyTypeError, PyValueError},
+    prelude::*,
+    pyclass::CompareOp,
+    types::PyBytes,
+};
 use std::hash::Hasher;
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
 use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
