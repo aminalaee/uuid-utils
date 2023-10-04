@@ -47,7 +47,7 @@ UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 
 >>> # make a random UUID using a Unix timestamp which is time-ordered.
 >>> uuid.uuid7()
-UUID('16ada4b8-b7b1-7e6c-b857-012bc678552b')
+UUID('018afa4a-0d21-7e6c-b857-012bc678552b')
 
 >>> # make a UUID using a SHA-1 hash of a namespace UUID and a name
 >>> uuid.uuid5(uuid.NAMESPACE_DNS, 'python.org')
