@@ -6,8 +6,8 @@ build:
 
 .PHONY: format
 format:
-	black python/
 	ruff --fix python/
+	black python/
 	cargo fmt
 
 .PHONY: lint

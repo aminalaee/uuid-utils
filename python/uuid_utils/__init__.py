@@ -9,6 +9,7 @@ from ._uuid_utils import (
     RFC_4122,
     UUID,
     __version__,
+    getnode,
     uuid1,
     uuid3,
     uuid4,
@@ -16,7 +17,6 @@ from ._uuid_utils import (
     uuid6,
     uuid7,
     uuid8,
-    getnode,
 )
 
 __all__ = [
@@ -30,6 +30,7 @@ __all__ = [
     "RFC_4122",
     "UUID",
     "__version__",
+    "getnode",
     "uuid1",
     "uuid3",
     "uuid4",
@@ -37,5 +38,4 @@ __all__ = [
     "uuid6",
     "uuid7",
     "uuid8",
-    "getnode",
 ]
