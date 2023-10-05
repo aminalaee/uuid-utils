@@ -183,3 +183,7 @@ def test_copy() -> None:
     uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
     assert copy.copy(uuid) == uuid
     assert copy.deepcopy(uuid) == uuid
+
+
+def test_getnode() -> None:
+    assert uuid_utils.getnode() == getnode()

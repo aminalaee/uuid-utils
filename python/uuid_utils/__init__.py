@@ -16,6 +16,7 @@ from ._uuid_utils import (
     uuid6,
     uuid7,
     uuid8,
+    getnode,
 )
 
 __all__ = [
@@ -36,4 +37,5 @@ __all__ = [
     "uuid6",
     "uuid7",
     "uuid8",
+    "getnode",
 ]

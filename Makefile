@@ -2,7 +2,7 @@
 
 .PHONY: build
 build:
-	RUSTFLAGS="--cfg uuid_unstable" maturin develop
+	RUSTFLAGS="--cfg uuid_unstable" maturin develop --release
 
 .PHONY: format
 format:
@@ -19,6 +19,11 @@ lint:
 .PHONY: test
 test:
 	pytest tests -vvv
+
+
+.PHONY: bench
+bench:
+	richbench benchmarks/
 
 .PHONY: all
 all: format build lint test
