@@ -1,9 +1,11 @@
+use mac_address::get_mac_address;
 use pyo3::{
     exceptions::{PyTypeError, PyValueError},
     prelude::*,
     pyclass::CompareOp,
     types::{PyBytes, PyDict},
 };
+use rand::RngCore;
 use std::hash::Hasher;
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
 use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
@@ -368,6 +370,29 @@ fn uuid8(bytes: &PyBytes) -> PyResult<UUID> {
     })
 }
 
+fn _getnode() -> u64 {
+    let bytes = match get_mac_address() {
+        Ok(Some(mac_address)) => mac_address.bytes(),
+        _ => {
+            let mut bytes = [0u8; 6];
+            rand::thread_rng().fill_bytes(&mut bytes);
+            bytes[0] = bytes[0] | 0x01;
+            bytes
+        }
+    };
+    ((bytes[0] as u64).wrapping_shl(40))
+        + ((bytes[1] as u64).wrapping_shl(32))
+        + ((bytes[2] as u64).wrapping_shl(24))
+        + ((bytes[3] as u64).wrapping_shl(16))
+        + ((bytes[4] as u64).wrapping_shl(8))
+        + (bytes[5] as u64)
+}
+
+#[pyfunction]
+fn getnode() -> PyResult<u64> {
+    Ok(_getnode())
+}
+
 #[pymodule]
 fn _uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
@@ -379,6 +404,7 @@ fn _uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(uuid6, m)?)?;
     m.add_function(wrap_pyfunction!(uuid7, m)?)?;
     m.add_function(wrap_pyfunction!(uuid8, m)?)?;
+    m.add_function(wrap_pyfunction!(getnode, m)?)?;
     m.add("NAMESPACE_DNS", UUID::NAMESPACE_DNS)?;
     m.add("NAMESPACE_URL", UUID::NAMESPACE_URL)?;
     m.add("NAMESPACE_OID", UUID::NAMESPACE_OID)?;

@@ -8,5 +8,7 @@ name = "uuid_utils"
 crate-type = ["cdylib"]
 
 [dependencies]
+mac_address = "1.1.5"
 pyo3 = { version = "0.19.2", features = ["extension-module", "generate-import-lib"] }
+rand = "0.8.5"
 uuid = { version = "1.4.1", features = ["v1", "v3", "v4", "v5", "v6", "v7", "v8", "fast-rng"]}
