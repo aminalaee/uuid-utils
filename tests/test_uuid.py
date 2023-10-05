@@ -1,5 +1,6 @@
 import copy
 import pickle
+import sys
 from uuid import UUID, getnode
 
 import pytest
@@ -183,3 +184,8 @@ def test_copy() -> None:
     uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
     assert copy.copy(uuid) == uuid
     assert copy.deepcopy(uuid) == uuid
+
+
+@pytest.mark.xfail(sys.platform == "linux", reason="Only in Github Actions")
+def test_getnode() -> None:
+    assert uuid_utils.getnode() == getnode()
