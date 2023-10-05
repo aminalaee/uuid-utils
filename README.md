@@ -85,6 +85,6 @@ $ make test
 
 Or:
 
-```bash
-$ RUSTFLAGS="--cfg uuid_unstable" maturin develop
+```shell
+$ RUSTFLAGS="--cfg uuid_unstable" maturin develop --release
 ```
