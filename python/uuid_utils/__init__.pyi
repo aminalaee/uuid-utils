@@ -131,7 +131,7 @@ if sys.version_info >= (3, 9):
 else:
     def getnode(*, getters: Unused = None) -> int: ...  # undocumented
 
-def uuid1(node: _Int, clock_seq: _Int | None = None) -> UUID:
+def uuid1(node: _Int | None = None, clock_seq: _Int | None = None) -> UUID:
     """Generate a UUID from a host ID, sequence number, and the current time.
     If 'node' is not given, getnode() is used to obtain the hardware
     address.  If 'clock_seq' is given, it is used as the sequence number;
@@ -150,7 +150,7 @@ def uuid5(namespace: UUID, name: str) -> UUID:
     """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
     ...
 
-def uuid6(node: _Int, timestamp: _Int | None = None) -> UUID:
+def uuid6(node: _Int | None = None, timestamp: _Int | None = None) -> UUID:
     """Generate a version 6 UUID using the given timestamp and a host ID.
     This is similar to version 1 UUIDs,
     except that it is lexicographically sortable by timestamp.

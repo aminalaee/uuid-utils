@@ -7,8 +7,11 @@ use pyo3::{
 };
 use rand::RngCore;
 use std::hash::Hasher;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
 use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
+
+static NODE: AtomicU64 = AtomicU64::new(0);
 
 pub const RESERVED_NCS: &str = "reserved for NCS compatibility";
 pub const RFC_4122: &str = "specified in RFC 4122";
@@ -297,8 +300,11 @@ impl UUID {
 }
 
 #[pyfunction]
-fn uuid1(node: u128, clock_seq: Option<u64>) -> PyResult<UUID> {
-    let node = node.to_ne_bytes();
+fn uuid1(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
+    let node = match node {
+        Some(node) => node.to_ne_bytes(),
+        None => _getnode().to_ne_bytes(),
+    };
     let node = &[node[0], node[1], node[2], node[3], node[4], node[5]];
     let uuid = match clock_seq {
         Some(clock_seq) => {
@@ -332,8 +338,11 @@ fn uuid5(namespace: &UUID, name: &str) -> PyResult<UUID> {
 }
 
 #[pyfunction]
-fn uuid6(node: u128, timestamp: Option<u64>) -> PyResult<UUID> {
-    let node = node.to_ne_bytes();
+fn uuid6(node: Option<u64>, timestamp: Option<u64>) -> PyResult<UUID> {
+    let node = match node {
+        Some(node) => node.to_ne_bytes(),
+        None => _getnode().to_ne_bytes(),
+    };
     let node = &[node[0], node[1], node[2], node[3], node[4], node[5]];
 
     let uuid = match timestamp {
@@ -371,6 +380,10 @@ fn uuid8(bytes: &PyBytes) -> PyResult<UUID> {
 }
 
 fn _getnode() -> u64 {
+    let cached_node = NODE.load(Ordering::Relaxed);
+    if cached_node != 0 {
+        return cached_node;
+    }
     let bytes = match get_mac_address() {
         Ok(Some(mac_address)) => mac_address.bytes(),
         _ => {
@@ -380,12 +393,16 @@ fn _getnode() -> u64 {
             bytes
         }
     };
-    ((bytes[0] as u64).wrapping_shl(40))
+
+    let node = ((bytes[0] as u64).wrapping_shl(40))
         + ((bytes[1] as u64).wrapping_shl(32))
         + ((bytes[2] as u64).wrapping_shl(24))
         + ((bytes[3] as u64).wrapping_shl(16))
         + ((bytes[4] as u64).wrapping_shl(8))
-        + (bytes[5] as u64)
+        + (bytes[5] as u64);
+
+    NODE.store(node, Ordering::Relaxed);
+    node
 }
 
 #[pyfunction]
