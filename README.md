@@ -71,11 +71,6 @@ UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 |   UUID from int | 0.024   | 0.025   | 0.024   | 0.004 (6.6x)    | 0.004 (6.7x)    | 0.004 (6.6x)    |
 | UUID from fields | 0.028   | 0.028   | 0.028   | 0.009 (3.1x)    | 0.009 (3.1x)    | 0.009 (3.1x)    |
 
-## Limitations
-
-- The `getnode` function is not available.
-- The `uuid1` and `uuid6` take `node` argument as mandatory.
-
 ## How to develop locally
 
 ```shell

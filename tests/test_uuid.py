@@ -66,7 +66,7 @@ def test_uuid_setattr() -> None:
 
 
 def test_uuid1() -> None:
-    uuid = uuid_utils.uuid1(node=8155362240700)
+    uuid = uuid_utils.uuid1()
     assert isinstance(uuid, uuid_utils.UUID)
 
     uuid = uuid_utils.uuid1(node=8155362240700, clock_seq=123)
@@ -92,7 +92,7 @@ def test_uuid6() -> None:
     uuid = uuid_utils.uuid6(getnode(), 1679665408)
     assert isinstance(uuid, uuid_utils.UUID)
 
-    uuid = uuid_utils.uuid6(getnode())
+    uuid = uuid_utils.uuid6()
     assert isinstance(uuid, uuid_utils.UUID)
 
 
@@ -186,6 +186,6 @@ def test_copy() -> None:
     assert copy.deepcopy(uuid) == uuid
 
 
-@pytest.mark.xfail(sys.platform == "linux", reason="Only in Github Actions")
+@pytest.mark.xfail(sys.platform == "linux", reason="Might fail in Github Actions")
 def test_getnode() -> None:
     assert uuid_utils.getnode() == getnode()
