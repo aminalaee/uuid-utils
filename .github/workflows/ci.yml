@@ -228,7 +228,8 @@ jobs:
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
-          args: --release --out dist --universal2 -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+          target: universal2-apple-darwin
+          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
