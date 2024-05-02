@@ -164,10 +164,9 @@ jobs:
           arch: ${{ matrix.platform.arch }}
           distro: alpine_latest
           githubToken: ${{ github.token }}
-          install: |
+          run: |
             apk add py3-pip
             pip3 install -U pip pytest
-          run: |
             pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall --break-system-packages
             python3 -c "import uuid_utils"
       - name: Upload wheels
