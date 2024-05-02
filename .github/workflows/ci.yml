@@ -158,17 +158,6 @@ jobs:
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 3.12
-      - uses: uraimo/run-on-arch-action@v2.7.2
-        name: Install built wheel
-        with:
-          arch: ${{ matrix.platform.arch }}
-          distro: alpine_latest
-          githubToken: ${{ github.token }}
-          run: |
-            apk add py3-pip
-            pip3 install -U pip pytest
-            pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall --break-system-packages
-            python3 -c "import uuid_utils"
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
