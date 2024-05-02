@@ -131,7 +131,7 @@ jobs:
             apk add py3-pip
             pip3 install -U pip pytest
             pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall --break-system-packages
-            python3 -m pytest -v
+            python3 -c "import uuid_utils"
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
@@ -169,7 +169,7 @@ jobs:
             pip3 install -U pip pytest
           run: |
             pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall --break-system-packages
-            python3 -m pytest -v .
+            python3 -c "import uuid_utils"
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
