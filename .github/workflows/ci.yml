@@ -130,7 +130,7 @@ jobs:
           run: |
             apk add py3-pip
             pip3 install -U pip pytest
-            pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall
+            pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall --break-system-packages
             python3 -m pytest -v
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -168,7 +168,7 @@ jobs:
             apk add py3-pip
             pip3 install -U pip pytest
           run: |
-            pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall
+            pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall --break-system-packages
             python3 -m pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v3
