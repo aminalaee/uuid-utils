@@ -80,7 +80,7 @@ jobs:
           target: ${{ matrix.target }}
           manylinux: auto
           args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
-      - uses: uraimo/run-on-arch-action@v2.3.0
+      - uses: uraimo/run-on-arch-action@v2.7.2
         if: matrix.target != 'ppc64'
         name: Install built wheel
         with:
@@ -130,8 +130,6 @@ jobs:
           run: |
             apk add py3-pip
             pip3 install -U pip pytest
-            python3 -m venv venv
-            . venv/bin/activate
             pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall
             python3 -m pytest -v
       - name: Upload wheels
@@ -160,7 +158,7 @@ jobs:
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 3.12
-      - uses: uraimo/run-on-arch-action@v2.3.0
+      - uses: uraimo/run-on-arch-action@v2.7.2
         name: Install built wheel
         with:
           arch: ${{ matrix.platform.arch }}
