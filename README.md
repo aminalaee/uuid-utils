@@ -58,6 +58,21 @@ UUID('886313e1-3b8a-5372-9b90-0c9aee199e5d')
 UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 ```
 
+## Compat module
+
+In some cases you might need `UUID` instances to be returned
+from the standrad-library `uuid`, not a custom `UUID` class.
+In that case you can use the `uuid_utils.compat` which comes with a performance penalty
+in comparison with the `uuid_utils` default behaviour, but still faster than the standard-library.
+
+```py
+>>> import uuid_utils.compat as uuid
+
+>>> # make a random UUID
+>>> uuid.uuid4()
+UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
+```
+
 ## Benchmarks
 
 |       Benchmark | Min     | Max     | Mean    | Min (+)         | Max (+)         | Mean (+)        |
