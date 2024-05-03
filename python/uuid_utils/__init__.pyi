@@ -112,6 +112,7 @@ class UUID:
         """Get UUID timestamp milliseconds since epoch.
         Only works for UUID versions 1, 6 and 7, otherwise raises ValueError."""
         ...
+
     @property
     def urn(self) -> str: ...
     @property
