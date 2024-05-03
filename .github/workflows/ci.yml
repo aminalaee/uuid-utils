@@ -47,7 +47,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
           sccache: "true"
           manylinux: auto
       - name: Install and test
@@ -79,7 +79,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
       - uses: uraimo/run-on-arch-action@v2.7.2
         if: matrix.target != 'ppc64'
         name: Install built wheel
@@ -120,7 +120,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 3.12
+          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12
       - name: Install built wheel
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: addnab/docker-run-action@v3
@@ -157,7 +157,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 3.12
+          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
@@ -171,9 +171,9 @@ jobs:
       matrix:
         platform:
           - target: x64
-            interpreter: 3.7 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+            interpreter: 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
           - target: x86
-            interpreter: 3.7 3.8 3.9 3.10 3.11
+            interpreter: 3.8 3.9 3.10 3.11
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -211,7 +211,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i 3.7 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1

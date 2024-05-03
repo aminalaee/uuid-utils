@@ -42,8 +42,8 @@ impl UUID {
     #[new]
     fn new(
         hex: Option<&str>,
-        bytes: Option<&PyBytes>,
-        bytes_le: Option<&PyBytes>,
+        bytes: Option<&Bound<'_, PyBytes>>,
+        bytes_le: Option<&Bound<'_, PyBytes>>,
         fields: Option<(u32, u16, u16, u8, u8, u64)>,
         int: Option<u128>,
         version: Option<u8>,
@@ -124,7 +124,7 @@ impl UUID {
         (self.__str__(),)
     }
 
-    pub fn __deepcopy__(&self, py: Python, _memo: &PyDict) -> Py<PyAny> {
+    pub fn __deepcopy__(&self, py: Python, _memo: &Bound<'_, PyDict>) -> Py<PyAny> {
         self.clone().into_py(py)
     }
 
@@ -139,13 +139,13 @@ impl UUID {
     }
 
     #[getter]
-    fn bytes_le<'py>(&self, py: Python<'py>) -> &'py PyBytes {
+    fn bytes_le<'py>(&self, py: Python<'py>) -> Bound<'py, PyBytes> {
         let bytes = *self.uuid.as_bytes();
         let bytes = [
             bytes[3], bytes[2], bytes[1], bytes[0], bytes[5], bytes[4], bytes[7], bytes[6],
             bytes[8], bytes[9], bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15],
         ];
-        PyBytes::new(py, &bytes)
+        PyBytes::new_bound(py, &bytes)
     }
 
     #[getter]
@@ -255,7 +255,7 @@ impl UUID {
     }
 
     #[staticmethod]
-    fn from_bytes(bytes: &PyBytes) -> PyResult<UUID> {
+    fn from_bytes(bytes: &Bound<'_, PyBytes>) -> PyResult<UUID> {
         let bytes: Bytes = bytes.extract()?;
         Ok(UUID {
             uuid: Uuid::from_bytes(bytes),
@@ -263,7 +263,7 @@ impl UUID {
     }
 
     #[staticmethod]
-    fn from_bytes_le(bytes: &PyBytes) -> PyResult<UUID> {
+    fn from_bytes_le(bytes: &Bound<'_, PyBytes>) -> PyResult<UUID> {
         let bytes: Bytes = bytes.extract()?;
         Ok(UUID {
             uuid: Uuid::from_bytes_le(bytes),
@@ -372,7 +372,7 @@ fn uuid7(timestamp: Option<u64>) -> PyResult<UUID> {
 }
 
 #[pyfunction]
-fn uuid8(bytes: &PyBytes) -> PyResult<UUID> {
+fn uuid8(bytes: &Bound<'_, PyBytes>) -> PyResult<UUID> {
     let bytes: Bytes = bytes.extract()?;
     Ok(UUID {
         uuid: Uuid::new_v8(bytes),
@@ -411,7 +411,7 @@ fn getnode() -> PyResult<u64> {
 }
 
 #[pymodule]
-fn _uuid_utils(_py: Python, m: &PyModule) -> PyResult<()> {
+fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<UUID>()?;
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;
