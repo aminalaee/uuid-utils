@@ -31,9 +31,14 @@ Avaialble UUID versions:
 <sup>Please note that UUID versions 6, 7 and 8 are still in draft RFC.</sup><br>
 
 ## Installation
-
+Using `pip`:
 ```shell
 $ pip install uuid-utils
+```
+or, using `conda`:
+
+```shell
+$ conda install -c conda-forge uuid-utils
 ```
 
 ## Example
