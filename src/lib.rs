@@ -338,7 +338,7 @@ fn uuid5(namespace: &UUID, name: &str) -> PyResult<UUID> {
 }
 
 #[pyfunction]
-fn uuid6(node: Option<u64>, timestamp: Option<u64>) -> PyResult<UUID> {
+fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
     let node = match node {
         Some(node) => node.to_ne_bytes(),
         None => _getnode().to_ne_bytes(),
@@ -347,7 +347,7 @@ fn uuid6(node: Option<u64>, timestamp: Option<u64>) -> PyResult<UUID> {
 
     let uuid = match timestamp {
         Some(timestamp) => {
-            let timestamp = Timestamp::from_unix(&Context::new_random(), timestamp, 0);
+            let timestamp = Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
             return Ok(UUID {
                 uuid: Uuid::new_v6(timestamp, node),
             });
@@ -358,10 +358,10 @@ fn uuid6(node: Option<u64>, timestamp: Option<u64>) -> PyResult<UUID> {
 }
 
 #[pyfunction]
-fn uuid7(timestamp: Option<u64>) -> PyResult<UUID> {
+fn uuid7(timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
     let uuid = match timestamp {
         Some(timestamp) => {
-            let timestamp = Timestamp::from_unix(&Context::new_random(), timestamp, 0);
+            let timestamp = Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
             return Ok(UUID {
                 uuid: Uuid::new_v7(timestamp),
             });
