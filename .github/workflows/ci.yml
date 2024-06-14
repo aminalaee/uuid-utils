@@ -27,10 +27,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Check code
         run: |
-          black --check --diff .
-          isort --check --project=uuid_utils .
-          mypy .
-          ruff .
+          make lint
 
   linux:
     name: "Linux: ${{ matrix.target }}"

@@ -42,6 +42,12 @@ ignore_missing_imports = true
 show_error_codes = true
 no_implicit_optional = true
 
-[tool.isort]
-profile = "black"
-combine_as_imports = true
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "C4",
+    "UP",
+]
