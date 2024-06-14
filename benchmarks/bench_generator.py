@@ -46,8 +46,8 @@ def uuid_utils_uuid5() -> None:
 
 
 __benchmarks__ = [
-    (uuid_uuid1, uuid_utils_uuid1, "UUID V1"),
-    (uuid_uuid3, uuid_utils_uuid3, "UUID V3"),
-    (uuid_uuid4, uuid_utils_uuid4, "UUID V4"),
-    (uuid_uuid5, uuid_utils_uuid5, "UUID V5"),
+    (uuid_uuid1, uuid_utils_uuid1, "UUID v1"),
+    (uuid_uuid3, uuid_utils_uuid3, "UUID v3"),
+    (uuid_uuid4, uuid_utils_uuid4, "UUID v4"),
+    (uuid_uuid5, uuid_utils_uuid5, "UUID v5"),
 ]

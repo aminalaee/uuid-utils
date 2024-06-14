@@ -60,12 +60,15 @@ class UUID:
         variant     the UUID variant (one of the constants RESERVED_NCS,
                     RFC_4122, RESERVED_MICROSOFT, or RESERVED_FUTURE)
 
-        version     the UUID version number (1 through 5, meaningful only
-                    when the variant is RFC_4122)
+        version     the UUID version number
 
         is_safe     An enum indicating whether the UUID has been generated in
                     a way that is safe for multiprocessing applications, via
                     uuid_generate_time_safe(3).
+
+        timestamp   The timestamp of the UUID in milliseconds since epoch.
+                    Only works for UUID versions 1, 6 and 7,
+                    otherwise raises ValueError.
     """
 
     def __init__(
@@ -165,7 +168,7 @@ def uuid7(timestamp: _Int | None = None, nanos: _Int | None = None) -> UUID:
     ...
 
 def uuid8(bytes: _Bytes) -> UUID:
-    """Generate a custom UUID comprised almost entirely of user-supplied bytes.."""
+    """Generate a custom UUID comprised almost entirely of user-supplied bytes."""
     ...
 
 NAMESPACE_DNS: UUID
