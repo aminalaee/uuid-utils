@@ -5,7 +5,6 @@ from datetime import datetime
 from uuid import UUID, getnode
 
 import pytest
-
 import uuid_utils
 
 

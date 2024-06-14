@@ -6,14 +6,14 @@ build:
 
 .PHONY: format
 format:
-	ruff --fix python/ tests/
-	black python/ tests/
+	ruff check --fix python/ tests/
+	ruff format python/ tests/
 	cargo fmt
 
 .PHONY: lint
 lint:
-	ruff python/ tests/
-	black --check --diff python/ tests/
+	ruff check python/ tests/
+	ruff format --check --diff python/ tests/
 	mypy python/ tests/
 .PHONY: test
 test:
