@@ -1,7 +1,7 @@
 import copy
-from datetime import datetime
 import pickle
 import sys
+from datetime import datetime
 from uuid import UUID, getnode
 
 import pytest
@@ -110,10 +110,11 @@ def test_uuid7() -> None:
     uuid = uuid_utils.uuid7()
     assert isinstance(uuid, uuid_utils.UUID)
 
-    ts = datetime(year=2024, month=1, day=2, hour=3, minute=4, second=5, microsecond=123000)
+    ts = datetime(
+        year=2024, month=1, day=2, hour=3, minute=4, second=5, microsecond=123000
+    )
     uuid = uuid_utils.uuid7(int(ts.timestamp()), ts.microsecond * 1_000)
-    recreated_ts = datetime.fromtimestamp(int.from_bytes(uuid.bytes[:6], "big") / 1000)
-    assert recreated_ts == ts
+    assert uuid.timestamp == int(ts.timestamp() * 1000)
 
 
 def test_uuid8() -> None:
