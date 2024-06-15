@@ -1,3 +1,4 @@
+import sys
 from uuid import UUID
 
 from typing_extensions import TypeAlias
@@ -13,17 +14,28 @@ def uuid1(node: _Int | None = None, clock_seq: _Int | None = None) -> UUID:
     otherwise a random 14-bit sequence number is chosen."""
     ...
 
-def uuid3(namespace: UUID, name: str) -> UUID:
-    """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
-    ...
+if sys.version_info >= (3, 12):
+    def uuid3(namespace: UUID, name: str | bytes) -> UUID:
+        """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
+        ...
+
+else:
+    def uuid3(namespace: UUID, name: str) -> UUID:
+        """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
+        ...
 
 def uuid4() -> UUID:
     """Generate a random UUID."""
     ...
 
-def uuid5(namespace: UUID, name: str) -> UUID:
-    """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
-    ...
+if sys.version_info >= (3, 12):
+    def uuid5(namespace: UUID, name: str | bytes) -> UUID:
+        """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
+        ...
+else:
+    def uuid5(namespace: UUID, name: str) -> UUID:
+        """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
+        ...
 
 def uuid6(node: _Int | None = None, timestamp: _Int | None = None) -> UUID:
     """Generate a version 6 UUID using the given timestamp and a host ID.

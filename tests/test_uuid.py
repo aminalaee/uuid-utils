@@ -77,6 +77,9 @@ def test_uuid3() -> None:
     uuid = uuid_utils.uuid3(namespace=uuid_utils.NAMESPACE_DNS, name="python.org")
     assert isinstance(uuid, uuid_utils.UUID)
 
+    uuid = uuid_utils.uuid3(namespace=uuid_utils.NAMESPACE_DNS, name=b"python.org")
+    assert isinstance(uuid, uuid_utils.UUID)
+
 
 def test_uuid4() -> None:
     uuid = uuid_utils.uuid4()
@@ -85,6 +88,9 @@ def test_uuid4() -> None:
 
 def test_uuid5() -> None:
     uuid = uuid_utils.uuid5(namespace=uuid_utils.NAMESPACE_DNS, name="python.org")
+    assert isinstance(uuid, uuid_utils.UUID)
+
+    uuid = uuid_utils.uuid5(namespace=uuid_utils.NAMESPACE_DNS, name=b"python.org")
     assert isinstance(uuid, uuid_utils.UUID)
 
 
