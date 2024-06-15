@@ -16,16 +16,13 @@ env:
 
 jobs:
   lint:
-    name: "Check code quality Python ${{ matrix.python-version }}"
+    name: Check code quality
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "${{ matrix.python-version }}"
+          python-version: "3.10"
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Check code
