@@ -16,13 +16,16 @@ env:
 
 jobs:
   lint:
-    name: Check code quality
+    name: "Check code quality Python ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "${{ matrix.python-version }}"
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Check code
@@ -31,16 +34,17 @@ jobs:
         run: make docs_build
 
   linux:
-    name: "Linux: ${{ matrix.target }}"
+    name: "Linux: ${{ matrix.target }} Python ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         target: [x86_64, i686]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "${{ matrix.python-version }}"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
