@@ -73,8 +73,9 @@ def test_uuid1() -> None:
     assert isinstance(uuid, uuid_utils.UUID)
 
 
-def test_uuid3() -> None:
-    uuid = uuid_utils.uuid3(namespace=uuid_utils.NAMESPACE_DNS, name="python.org")
+@pytest.mark.parametrize("name", ["python.org", b"python.org"])
+def test_uuid3(name: str) -> None:
+    uuid = uuid_utils.uuid3(namespace=uuid_utils.NAMESPACE_DNS, name=name)
     assert isinstance(uuid, uuid_utils.UUID)
 
 
@@ -83,8 +84,9 @@ def test_uuid4() -> None:
     assert isinstance(uuid, uuid_utils.UUID)
 
 
-def test_uuid5() -> None:
-    uuid = uuid_utils.uuid5(namespace=uuid_utils.NAMESPACE_DNS, name="python.org")
+@pytest.mark.parametrize("name", ["python.org", b"python.org"])
+def test_uuid5(name: str) -> None:
+    uuid = uuid_utils.uuid5(namespace=uuid_utils.NAMESPACE_DNS, name=name)
     assert isinstance(uuid, uuid_utils.UUID)
 
 

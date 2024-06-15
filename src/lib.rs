@@ -18,6 +18,14 @@ pub const RFC_4122: &str = "specified in RFC 4122";
 pub const RESERVED_MICROSOFT: &str = "reserved for Microsoft compatibility";
 pub const RESERVED_FUTURE: &str = "reserved for future definition";
 
+#[derive(FromPyObject)]
+enum StringOrBytes {
+    #[pyo3(transparent, annotation = "str")]
+    String(String),
+    #[pyo3(transparent, annotation = "bytes")]
+    Bytes(Vec<u8>),
+}
+
 #[pyclass(subclass, module = "uuid_utils")]
 #[derive(Clone, Debug)]
 struct UUID {
@@ -317,10 +325,15 @@ fn uuid1(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
 }
 
 #[pyfunction]
-fn uuid3(namespace: UUID, name: &str) -> PyResult<UUID> {
-    Ok(UUID {
-        uuid: Uuid::new_v3(&namespace.uuid, name.as_bytes()),
-    })
+fn uuid3(namespace: UUID, name: StringOrBytes) -> PyResult<UUID> {
+    match name {
+        StringOrBytes::String(name) => Ok(UUID {
+            uuid: Uuid::new_v3(&namespace.uuid, name.as_bytes()),
+        }),
+        StringOrBytes::Bytes(name) => Ok(UUID {
+            uuid: Uuid::new_v3(&namespace.uuid, &name),
+        }),
+    }
 }
 
 #[pyfunction]
@@ -331,10 +344,15 @@ fn uuid4() -> PyResult<UUID> {
 }
 
 #[pyfunction]
-fn uuid5(namespace: &UUID, name: &str) -> PyResult<UUID> {
-    Ok(UUID {
-        uuid: Uuid::new_v5(&namespace.uuid, name.as_bytes()),
-    })
+fn uuid5(namespace: &UUID, name: StringOrBytes) -> PyResult<UUID> {
+    match name {
+        StringOrBytes::String(name) => Ok(UUID {
+            uuid: Uuid::new_v5(&namespace.uuid, name.as_bytes()),
+        }),
+        StringOrBytes::Bytes(name) => Ok(UUID {
+            uuid: Uuid::new_v5(&namespace.uuid, &name),
+        }),
+    }
 }
 
 #[pyfunction]
@@ -347,7 +365,8 @@ fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyRes
 
     let uuid = match timestamp {
         Some(timestamp) => {
-            let timestamp = Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
+            let timestamp =
+                Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
             return Ok(UUID {
                 uuid: Uuid::new_v6(timestamp, node),
             });
@@ -361,7 +380,8 @@ fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyRes
 fn uuid7(timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
     let uuid = match timestamp {
         Some(timestamp) => {
-            let timestamp = Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
+            let timestamp =
+                Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
             return Ok(UUID {
                 uuid: Uuid::new_v7(timestamp),
             });
