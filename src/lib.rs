@@ -48,6 +48,7 @@ impl UUID {
     };
 
     #[new]
+    #[pyo3(signature = (hex=None, bytes=None, bytes_le=None, fields=None, int=None, version=None))]
     fn new(
         hex: Option<&str>,
         bytes: Option<&Bound<'_, PyBytes>>,
@@ -308,6 +309,7 @@ impl UUID {
 }
 
 #[pyfunction]
+#[pyo3(signature = (node=None, clock_seq=None))]
 fn uuid1(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
     let node = match node {
         Some(node) => node.to_ne_bytes(),
@@ -356,6 +358,7 @@ fn uuid5(namespace: &UUID, name: StringOrBytes) -> PyResult<UUID> {
 }
 
 #[pyfunction]
+#[pyo3(signature = (node=None, timestamp=None, nanos=None))]
 fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
     let node = match node {
         Some(node) => node.to_ne_bytes(),
@@ -377,6 +380,7 @@ fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyRes
 }
 
 #[pyfunction]
+#[pyo3(signature = (timestamp=None, nanos=None))]
 fn uuid7(timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
     let uuid = match timestamp {
         Some(timestamp) => {
