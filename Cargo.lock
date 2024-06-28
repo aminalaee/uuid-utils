@@ -4,9 +4,12 @@ version = 3
 
 [[package]]
 name = "atomic"
-version = "0.5.3"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c59bdb34bc650a32731b31bd8f0829cc15d24a708ee31559e0bb34f2bc320cba"
+checksum = "8d818003e740b63afc82337e3160717f4f63078720a810b7b903e70a5d1d2994"
+dependencies = [
+ "bytemuck",
+]
 
 [[package]]
 name = "autocfg"
@@ -34,6 +37,12 @@ checksum = "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71"
 dependencies = [
  "generic-array",
 ]
+
+[[package]]
+name = "bytemuck"
+version = "1.16.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b236fc92302c97ed75b38da1f4917b5cdda4984745740f153a5d3059e48d725e"
 
 [[package]]
 name = "cc"
@@ -127,9 +136,9 @@ dependencies = [
 
 [[package]]
 name = "mac_address"
-version = "1.1.6"
+version = "1.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5aa12182b93606fff55b70a5cfe6130eaf7407c2ea4f2c2bcc8b113b67c9928f"
+checksum = "8836fae9d0d4be2c8b4efcdd79e828a2faa058a90d005abf42f91cac5493a08e"
 dependencies = [
  "nix",
  "winapi",
@@ -393,9 +402,9 @@ checksum = "c7de7d73e1754487cb58364ee906a499937a0dfabd86bcb980fa99ec8c8fa2ce"
 
 [[package]]
 name = "uuid"
-version = "1.8.0"
+version = "1.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0"
+checksum = "5de17fd2f7da591098415cff336e12965a28061ddace43b59cb3c430179c9439"
 dependencies = [
  "atomic",
  "getrandom",
@@ -406,7 +415,7 @@ dependencies = [
 
 [[package]]
 name = "uuid-utils"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "mac_address",
  "pyo3",
