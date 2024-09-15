@@ -317,7 +317,7 @@ impl UUID {
                     .unwrap()
                     .bind(py)
                     .clone(),
-                None => py.None().bind(py).clone(),
+                None => panic!("SafeUUID not found"),
             }
         }
     }
