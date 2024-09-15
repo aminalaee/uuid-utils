@@ -1,6 +1,7 @@
 use mac_address::get_mac_address;
 use pyo3::{
     exceptions::{PyTypeError, PyValueError},
+    ffi,
     prelude::*,
     pyclass::CompareOp,
     types::{PyBytes, PyDict},
@@ -306,6 +307,20 @@ impl UUID {
             uuid: Uuid::from_u128(int),
         })
     }
+
+    #[getter]
+    fn is_safe<'py>(&self, py: Python<'py>) -> Bound<'py, PyAny> {
+        unsafe {
+            match SAFE_UUID {
+                Some(safe_uuid) => Py::<PyAny>::from_owned_ptr(py, safe_uuid)
+                    .getattr(py, "safe")
+                    .unwrap()
+                    .bind(py)
+                    .clone(),
+                None => py.None().bind(py).clone(),
+            }
+        }
+    }
 }
 
 #[pyfunction]
@@ -429,6 +444,8 @@ fn _getnode() -> u64 {
     node
 }
 
+static mut SAFE_UUID: Option<*mut ffi::PyObject> = None;
+
 #[pyfunction]
 fn getnode() -> PyResult<u64> {
     Ok(_getnode())
@@ -436,6 +453,18 @@ fn getnode() -> PyResult<u64> {
 
 #[pymodule]
 fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    let x = Python::with_gil(|py| {
+        PyModule::import_bound(py, "uuid")
+            .unwrap()
+            .getattr("SafeUUID")
+            .unwrap()
+            .unbind()
+    });
+
+    unsafe {
+        SAFE_UUID = Some(x.as_ptr());
+    }
+
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<UUID>()?;
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;

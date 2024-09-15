@@ -199,6 +199,10 @@ def test_copy() -> None:
     assert copy.copy(uuid) == uuid
     assert copy.deepcopy(uuid) == uuid
 
+def test_is_safe() -> None:
+    uuid = uuid_utils.uuid7()
+    assert uuid.is_safe.name == 'safe'
+
 
 @pytest.mark.xfail(sys.platform == "linux", reason="Might fail in Github Actions")
 def test_getnode() -> None:
