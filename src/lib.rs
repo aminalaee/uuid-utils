@@ -313,8 +313,6 @@ impl UUID {
         unsafe {
             match SAFE_UUID {
                 Some(safe_uuid) => Py::<PyAny>::from_owned_ptr(py, safe_uuid)
-                    .getattr(py, "safe")
-                    .unwrap()
                     .bind(py)
                     .clone(),
                 None => panic!("SafeUUID not found"),
@@ -457,6 +455,8 @@ fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
         PyModule::import_bound(py, "uuid")
             .unwrap()
             .getattr("SafeUUID")
+            .unwrap()
+            .getattr("safe")
             .unwrap()
             .unbind()
     });

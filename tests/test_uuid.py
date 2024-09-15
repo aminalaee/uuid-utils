@@ -201,7 +201,7 @@ def test_copy() -> None:
 
 def test_is_safe() -> None:
     uuid = uuid_utils.uuid7()
-    assert uuid.is_safe.name is SafeUUID.safe
+    assert uuid.is_safe is SafeUUID.safe
 
 
 @pytest.mark.xfail(sys.platform == "linux", reason="Might fail in Github Actions")
