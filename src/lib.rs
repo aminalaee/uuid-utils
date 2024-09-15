@@ -438,6 +438,7 @@ fn _getnode() -> u64 {
     node
 }
 
+// ptr to python stdlib uuid.SafeUUID.safe
 static SAFE_UUID: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
 
 #[pyfunction]
