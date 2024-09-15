@@ -309,14 +309,9 @@ impl UUID {
     }
 
     #[getter]
-    fn is_safe<'py>(&self, py: Python<'py>) -> Bound<'py, PyAny> {
+    fn is_safe(&self) -> *mut ffi::PyObject {
         unsafe {
-            match SAFE_UUID {
-                Some(safe_uuid) => Py::<PyAny>::from_owned_ptr(py, safe_uuid)
-                    .bind(py)
-                    .clone(),
-                None => panic!("SafeUUID not found"),
-            }
+            return SAFE_UUID.unwrap();
         }
     }
 }
