@@ -199,6 +199,7 @@ def test_copy() -> None:
     assert copy.copy(uuid) == uuid
     assert copy.deepcopy(uuid) == uuid
 
+
 def test_is_safe() -> None:
     uuid = uuid_utils.uuid7()
     assert uuid.is_safe is SafeUUID.safe
