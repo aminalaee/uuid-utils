@@ -7,9 +7,12 @@ use pyo3::{
     types::{PyBytes, PyDict},
 };
 use rand::RngCore;
-use std::hash::Hasher;
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
+use std::{hash::Hasher, sync::atomic::AtomicPtr};
+use std::{
+    ptr::null_mut,
+    sync::atomic::{AtomicU64, Ordering},
+};
 use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
 
 static NODE: AtomicU64 = AtomicU64::new(0);
@@ -310,9 +313,7 @@ impl UUID {
 
     #[getter]
     fn is_safe(&self) -> *mut ffi::PyObject {
-        unsafe {
-            return SAFE_UUID.unwrap();
-        }
+        return SAFE_UUID.load(Ordering::Relaxed);
     }
 }
 
@@ -437,7 +438,7 @@ fn _getnode() -> u64 {
     node
 }
 
-static mut SAFE_UUID: Option<*mut ffi::PyObject> = None;
+static SAFE_UUID: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
 
 #[pyfunction]
 fn getnode() -> PyResult<u64> {
@@ -456,9 +457,7 @@ fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
             .unbind()
     });
 
-    unsafe {
-        SAFE_UUID = Some(x.as_ptr());
-    }
+    SAFE_UUID.store(x.into_ptr(), Ordering::Relaxed);
 
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<UUID>()?;
