@@ -183,3 +183,25 @@ RESERVED_NCS: str
 RFC_4122: str
 RESERVED_MICROSOFT: str
 RESERVED_FUTURE: str
+
+__all__ = [
+    "NAMESPACE_DNS",
+    "NAMESPACE_OID",
+    "NAMESPACE_URL",
+    "NAMESPACE_X500",
+    "RESERVED_FUTURE",
+    "RESERVED_MICROSOFT",
+    "RESERVED_NCS",
+    "RFC_4122",
+    "UUID",
+    "SafeUUID",
+    "__version__",
+    "getnode",
+    "uuid1",
+    "uuid3",
+    "uuid4",
+    "uuid5",
+    "uuid6",
+    "uuid7",
+    "uuid8",
+]
