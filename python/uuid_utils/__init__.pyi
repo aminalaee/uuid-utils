@@ -1,6 +1,6 @@
 import builtins
 import sys
-from enum import Enum
+from uuid import SafeUUID
 
 from _typeshed import Unused
 from typing_extensions import TypeAlias
@@ -9,11 +9,6 @@ from typing_extensions import TypeAlias
 _FieldsType: TypeAlias = tuple[int, int, int, int, int, int]
 
 __version__: str
-
-class SafeUUID(Enum):
-    safe: int
-    unsafe: int
-    unknown: None
 
 class UUID:
     """Instances of the UUID class represent UUIDs as specified in RFC 4122.
@@ -188,3 +183,25 @@ RESERVED_NCS: str
 RFC_4122: str
 RESERVED_MICROSOFT: str
 RESERVED_FUTURE: str
+
+__all__ = [
+    "NAMESPACE_DNS",
+    "NAMESPACE_OID",
+    "NAMESPACE_URL",
+    "NAMESPACE_X500",
+    "RESERVED_FUTURE",
+    "RESERVED_MICROSOFT",
+    "RESERVED_NCS",
+    "RFC_4122",
+    "UUID",
+    "SafeUUID",
+    "__version__",
+    "getnode",
+    "uuid1",
+    "uuid3",
+    "uuid4",
+    "uuid5",
+    "uuid6",
+    "uuid7",
+    "uuid8",
+]
