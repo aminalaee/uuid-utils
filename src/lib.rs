@@ -313,7 +313,11 @@ impl UUID {
 
     #[getter]
     fn is_safe(&self) -> *mut ffi::PyObject {
-        return SAFE_UUID.load(Ordering::Relaxed);
+        match self.uuid.get_version_num() {
+            3 | 5 => SAFE_UUID_SAFE.load(Ordering::Relaxed),
+            1 | 2 | 4 | 6 | 7 => SAFE_UUID_UNSAFE.load(Ordering::Relaxed),
+            _ => SAFE_UUID_UNKNOWN.load(Ordering::Relaxed),
+        }
     }
 }
 
@@ -439,7 +443,9 @@ fn _getnode() -> u64 {
 }
 
 // ptr to python stdlib uuid.SafeUUID.safe
-static SAFE_UUID: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
+static SAFE_UUID_SAFE: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
+static SAFE_UUID_UNSAFE: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
+static SAFE_UUID_UNKNOWN: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
 
 #[pyfunction]
 fn getnode() -> PyResult<u64> {
@@ -448,17 +454,25 @@ fn getnode() -> PyResult<u64> {
 
 #[pymodule]
 fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    let x = Python::with_gil(|py| {
+    let safe_uuid = Python::with_gil(|py| {
         PyModule::import_bound(py, "uuid")
             .unwrap()
             .getattr("SafeUUID")
             .unwrap()
-            .getattr("safe")
-            .unwrap()
             .unbind()
     });
 
-    SAFE_UUID.store(x.into_ptr(), Ordering::Relaxed);
+    let (safe_uuid_safe, safe_uuid_unsafe, safe_uuid_unknown) = Python::with_gil(|py| {
+        return (
+            safe_uuid.bind(py).getattr("safe").unwrap().unbind(),
+            safe_uuid.bind(py).getattr("unsafe").unwrap().unbind(),
+            safe_uuid.bind(py).getattr("unknown").unwrap().unbind(),
+        );
+    });
+
+    SAFE_UUID_SAFE.store(safe_uuid_safe.into_ptr(), Ordering::Relaxed);
+    SAFE_UUID_UNSAFE.store(safe_uuid_unsafe.into_ptr(), Ordering::Relaxed);
+    SAFE_UUID_UNKNOWN.store(safe_uuid_unknown.into_ptr(), Ordering::Relaxed);
 
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<UUID>()?;
