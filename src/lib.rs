@@ -438,7 +438,8 @@ fn _getnode() -> u64 {
     node
 }
 
-// ptr to python stdlib uuid.SafeUUID.safe
+// ptr to python stdlib uuid.SafeUUID.unknown
+// see https://github.com/aminalaee/uuid-utils/pull/70 for more details
 static SAFE_UUID_UNKNOWN: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
 
 #[pyfunction]
