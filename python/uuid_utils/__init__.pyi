@@ -2,7 +2,6 @@ import builtins
 import sys
 from enum import Enum
 
-from _typeshed import Unused
 from typing_extensions import TypeAlias
 
 # Because UUID has properties called int and bytes we need to rename these temporarily.
