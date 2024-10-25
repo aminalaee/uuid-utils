@@ -7,17 +7,17 @@ name = "uuid_utils"
 description = "Drop-in replacement for Python UUID in Rust"
 authors = [{ name = "Amin Alaee", email = "me@aminalaee.dev" }]
 keywords = ["rust", "uuid"]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Rust",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: BSD License",
