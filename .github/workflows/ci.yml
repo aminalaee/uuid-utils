@@ -91,7 +91,7 @@ jobs:
             pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: dist
@@ -129,7 +129,7 @@ jobs:
             pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall --break-system-packages
             python3 -c "import uuid_utils"
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: dist
@@ -155,7 +155,7 @@ jobs:
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: dist
@@ -189,7 +189,7 @@ jobs:
           pip install pytest
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: dist
@@ -220,7 +220,7 @@ jobs:
           pip install pytest
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: dist
@@ -236,7 +236,7 @@ jobs:
           command: sdist
           args: --out dist
       - name: Upload sdist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: dist
