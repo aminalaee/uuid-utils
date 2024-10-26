@@ -53,9 +53,9 @@ jobs:
           pip install pytest
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-${{ strategy.job-index }}
           path: dist
 
   linux-cross:
@@ -91,9 +91,9 @@ jobs:
             pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-${{ strategy.job-index }}
           path: dist
 
   musllinux:
@@ -129,9 +129,9 @@ jobs:
             pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall --break-system-packages
             python3 -c "import uuid_utils"
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-${{ strategy.job-index }}
           path: dist
 
   musllinux-cross:
@@ -155,9 +155,9 @@ jobs:
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-${{ strategy.job-index }}
           path: dist
 
   windows:
@@ -189,9 +189,9 @@ jobs:
           pip install pytest
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-${{ strategy.job-index }}
           path: dist
 
   macos:
@@ -220,9 +220,9 @@ jobs:
           pip install pytest
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-macos
           path: dist
 
   sdist:
@@ -236,9 +236,9 @@ jobs:
           command: sdist
           args: --out dist
       - name: Upload sdist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-sdist
           path: dist
 
   release:
@@ -249,7 +249,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4.1.8
         with:
-          name: wheels
+          pattern: wheels-*
+          merge-multiple: true
       - name: Publish to PyPI
         uses: PyO3/maturin-action@v1
         env:
