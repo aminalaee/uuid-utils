@@ -55,7 +55,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ strategy.job-index }}
+          name: wheels-linux-${{ strategy.job-index }}
           path: dist
 
   linux-cross:
@@ -93,7 +93,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ strategy.job-index }}
+          name: wheels-linux-cross-${{ strategy.job-index }}
           path: dist
 
   musllinux:
@@ -131,7 +131,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ strategy.job-index }}
+          name: wheels-musllinux-${{ strategy.job-index }}
           path: dist
 
   musllinux-cross:
@@ -157,7 +157,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ strategy.job-index }}
+          name: wheels-musllinux-cross-${{ strategy.job-index }}
           path: dist
 
   windows:
@@ -191,7 +191,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ strategy.job-index }}
+          name: wheels-windows-${{ strategy.job-index }}
           path: dist
 
   macos:
