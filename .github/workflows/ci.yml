@@ -16,10 +16,10 @@ jobs:
     name: Check code quality
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.12"
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Check code
@@ -33,17 +33,17 @@ jobs:
     strategy:
       matrix:
         target: [x86_64, i686]
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
           sccache: "true"
           manylinux: auto
       - name: Install and test
@@ -53,9 +53,9 @@ jobs:
           pip install pytest
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-linux-${{ strategy.job-index }}
           path: dist
 
   linux-cross:
@@ -65,23 +65,23 @@ jobs:
       matrix:
         target: [aarch64, armv7, ppc64le]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
-      - uses: uraimo/run-on-arch-action@v2.7.2
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
+      - uses: uraimo/run-on-arch-action@v2.8.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
         with:
           arch: ${{ matrix.target }}
-          distro: ubuntu20.04
+          distro: ubuntu22.04
           githubToken: ${{ github.token }}
           install: |
             apt-get update
@@ -91,9 +91,9 @@ jobs:
             pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-linux-cross-${{ strategy.job-index }}
           path: dist
 
   musllinux:
@@ -105,10 +105,10 @@ jobs:
           - x86_64-unknown-linux-musl
           - i686-unknown-linux-musl
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
           architecture: x64
       - name: Build wheels
         uses: PyO3/maturin-action@v1
@@ -116,7 +116,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Install built wheel
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: addnab/docker-run-action@v3
@@ -129,9 +129,9 @@ jobs:
             pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall --break-system-packages
             python3 -c "import uuid_utils"
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-musllinux-${{ strategy.job-index }}
           path: dist
 
   musllinux-cross:
@@ -143,21 +143,21 @@ jobs:
           - target: aarch64-unknown-linux-musl
             arch: aarch64
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           rust-toolchain: stable
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-musllinux-cross-${{ strategy.job-index }}
           path: dist
 
   windows:
@@ -167,14 +167,14 @@ jobs:
       matrix:
         platform:
           - target: x64
-            interpreter: 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+            interpreter: 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
           - target: x86
-            interpreter: 3.8 3.9 3.10 3.11
+            interpreter: 3.9 3.10 3.11 3.12
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
           architecture: ${{ matrix.platform.target }}
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels
@@ -189,56 +189,56 @@ jobs:
           pip install pytest
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-windows-${{ strategy.job-index }}
           path: dist
 
   macos:
     name: "MacOS"
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels - x86_64
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release --out dist -i 3.8 3.9 3.10 3.11 3.12 pypy3.8 pypy3.9
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
           pip install pytest
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-macos
           path: dist
 
   sdist:
     name: Source Distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:
           command: sdist
           args: --out dist
       - name: Upload sdist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-sdist
           path: dist
 
   release:
@@ -247,9 +247,10 @@ jobs:
     if: "startsWith(github.ref, 'refs/tags/')"
     needs: [lint, linux, linux-cross, musllinux, musllinux-cross, windows, macos, sdist]
     steps:
-      - uses: actions/download-artifact@v4.1.7
+      - uses: actions/download-artifact@v4.1.8
         with:
-          name: wheels
+          pattern: wheels-*
+          merge-multiple: true
       - name: Publish to PyPI
         uses: PyO3/maturin-action@v1
         env:
@@ -264,7 +265,7 @@ jobs:
     if: "startsWith(github.ref, 'refs/tags/')"
     needs: [release]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build and publish docs
         run: |
           pip install -r requirements.txt
