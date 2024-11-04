@@ -2,7 +2,6 @@ import builtins
 import sys
 from uuid import SafeUUID
 
-from _typeshed import Unused
 from typing_extensions import TypeAlias
 
 # Because UUID has properties called int and bytes we need to rename these temporarily.
@@ -123,12 +122,7 @@ class UUID:
     def __gt__(self, other: UUID) -> bool: ...
     def __ge__(self, other: UUID) -> bool: ...
 
-if sys.version_info >= (3, 9):
-    def getnode() -> int: ...
-
-else:
-    def getnode(*, getters: Unused = None) -> int: ...  # undocumented
-
+def getnode() -> int: ...
 def uuid1(node: int | None = None, clock_seq: int | None = None) -> UUID:
     """Generate a UUID from a host ID, sequence number, and the current time.
     If 'node' is not given, getnode() is used to obtain the hardware
