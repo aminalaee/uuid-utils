@@ -2,7 +2,7 @@ import copy
 import pickle
 import sys
 from datetime import datetime
-from uuid import UUID, getnode
+from uuid import UUID, SafeUUID, getnode
 
 import pytest
 import uuid_utils
@@ -198,6 +198,11 @@ def test_copy() -> None:
     uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
     assert copy.copy(uuid) == uuid
     assert copy.deepcopy(uuid) == uuid
+
+
+def test_is_safe() -> None:
+    assert uuid_utils.uuid1().is_safe is SafeUUID.unknown
+    assert uuid_utils.uuid4().is_safe is SafeUUID.unknown
 
 
 @pytest.mark.xfail(sys.platform == "linux", reason="Might fail in Github Actions")
