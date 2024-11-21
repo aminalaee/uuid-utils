@@ -138,7 +138,7 @@ impl UUID {
     }
 
     pub fn __deepcopy__(&self, py: Python, _memo: &Bound<'_, PyDict>) -> Py<PyAny> {
-        self.clone().into_py(py)
+        self.clone().into_pyobject(py).unwrap().into_any().unbind()
     }
 
     #[getter]
@@ -158,7 +158,7 @@ impl UUID {
             bytes[3], bytes[2], bytes[1], bytes[0], bytes[5], bytes[4], bytes[7], bytes[6],
             bytes[8], bytes[9], bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15],
         ];
-        PyBytes::new_bound(py, &bytes)
+        PyBytes::new(py, &bytes)
     }
 
     #[getter]
@@ -449,7 +449,7 @@ fn getnode() -> PyResult<u64> {
 #[pymodule]
 fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
     let safe_uuid_unknown = Python::with_gil(|py| {
-        return PyModule::import_bound(py, "uuid")
+        return PyModule::import(py, "uuid")
             .unwrap()
             .getattr("SafeUUID")
             .unwrap()
