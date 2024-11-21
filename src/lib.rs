@@ -1,14 +1,18 @@
 use mac_address::get_mac_address;
 use pyo3::{
     exceptions::{PyTypeError, PyValueError},
+    ffi,
     prelude::*,
     pyclass::CompareOp,
     types::{PyBytes, PyDict},
 };
 use rand::RngCore;
-use std::hash::Hasher;
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::{collections::hash_map::DefaultHasher, hash::Hash};
+use std::{hash::Hasher, sync::atomic::AtomicPtr};
+use std::{
+    ptr::null_mut,
+    sync::atomic::{AtomicU64, Ordering},
+};
 use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
 
 static NODE: AtomicU64 = AtomicU64::new(0);
@@ -306,6 +310,11 @@ impl UUID {
             uuid: Uuid::from_u128(int),
         })
     }
+
+    #[getter]
+    fn is_safe(&self) -> *mut ffi::PyObject {
+        return SAFE_UUID_UNKNOWN.load(Ordering::Relaxed);
+    }
 }
 
 #[pyfunction]
@@ -429,6 +438,9 @@ fn _getnode() -> u64 {
     node
 }
 
+// ptr to python stdlib uuid.SafeUUID.unknown
+static SAFE_UUID_UNKNOWN: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
+
 #[pyfunction]
 fn getnode() -> PyResult<u64> {
     Ok(_getnode())
@@ -436,6 +448,18 @@ fn getnode() -> PyResult<u64> {
 
 #[pymodule]
 fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    let safe_uuid_unknown = Python::with_gil(|py| {
+        return PyModule::import_bound(py, "uuid")
+            .unwrap()
+            .getattr("SafeUUID")
+            .unwrap()
+            .getattr("unknown")
+            .unwrap()
+            .unbind();
+    });
+
+    SAFE_UUID_UNKNOWN.store(safe_uuid_unknown.into_ptr(), Ordering::Relaxed);
+
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<UUID>()?;
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;

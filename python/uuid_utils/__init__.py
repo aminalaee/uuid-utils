@@ -1,3 +1,5 @@
+from uuid import SafeUUID
+
 from ._uuid_utils import (
     NAMESPACE_DNS,
     NAMESPACE_OID,
@@ -29,6 +31,7 @@ __all__ = [
     "RESERVED_NCS",
     "RFC_4122",
     "UUID",
+    "SafeUUID",
     "__version__",
     "getnode",
     "uuid1",
