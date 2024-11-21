@@ -439,7 +439,6 @@ fn _getnode() -> u64 {
 }
 
 // ptr to python stdlib uuid.SafeUUID.unknown
-// see https://github.com/aminalaee/uuid-utils/pull/70 for more details
 static SAFE_UUID_UNKNOWN: AtomicPtr<ffi::PyObject> = AtomicPtr::new(null_mut());
 
 #[pyfunction]
@@ -454,8 +453,6 @@ fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
             .unwrap()
             .getattr("SafeUUID")
             .unwrap()
-            .unbind()
-            .bind(py)
             .getattr("unknown")
             .unwrap()
             .unbind();
