@@ -9,6 +9,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 mac_address = "1.1.7"
-pyo3 = { version = "0.22.5", features = ["extension-module", "generate-import-lib", 'abi3-py39'] }
+pyo3 = { version = "0.23.1", features = ["extension-module", "generate-import-lib", 'abi3-py39'] }
 rand = "0.8.5"
 uuid = { version = "1.11.0", features = ["v1", "v3", "v4", "v5", "v6", "v7", "v8", "fast-rng"]}
