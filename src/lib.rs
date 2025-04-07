@@ -421,7 +421,7 @@ fn _getnode() -> u64 {
         Ok(Some(mac_address)) => mac_address.bytes(),
         _ => {
             let mut bytes = [0u8; 6];
-            rand::thread_rng().fill_bytes(&mut bytes);
+            rand::rng().fill_bytes(&mut bytes);
             bytes[0] = bytes[0] | 0x01;
             bytes
         }
