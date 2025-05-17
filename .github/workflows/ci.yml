@@ -222,19 +222,19 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "${{ matrix.py.i }}"
+          python-version: "${{ matrix.py.py }}"
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels - x86_64
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i ${{ matrix.py.py }}
+          args: --release --out dist -i ${{ matrix.py.i }}
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release --out dist -i ${{ matrix.py.py }}
+          args: --release --out dist -i ${{ matrix.py.i }}
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
