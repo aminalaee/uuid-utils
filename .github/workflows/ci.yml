@@ -185,6 +185,7 @@ jobs:
           python-version: "3.13"
           architecture: ${{ matrix.platform.py_arch }}
       - uses: dtolnay/rust-toolchain@stable
+      - run: python -m venv .venv
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
