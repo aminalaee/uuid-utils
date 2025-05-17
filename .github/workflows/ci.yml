@@ -162,14 +162,19 @@ jobs:
 
   windows:
     name: "Windows: ${{ matrix.platform.target }}"
-    runs-on: windows-latest
+    runs-on: '${{ matrix.platform.os }}'
     strategy:
       matrix:
         platform:
           - target: x64
+            os: windows-latest
             interpreter: 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
           - target: x86
+            os: windows-latest
             interpreter: 3.9 3.10 3.11 3.12
+          - target: aarch64
+            os: windows-11-arm
+            interpreter: '3.10 3.11 3.12'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
