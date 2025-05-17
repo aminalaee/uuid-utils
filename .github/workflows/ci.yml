@@ -166,14 +166,14 @@ jobs:
     strategy:
       matrix:
         platform:
-          - target: x64
-            os: windows-latest
-            py_arch: "x64"
-            interpreter: "pypy3.10"
-          - target: x64
-            os: windows-latest
-            py_arch: "x64"
-            interpreter: "pypy3.9"
+          # - target: x64
+          #   os: windows-latest
+          #   py_arch: "x64"
+          #   interpreter: "pypy3.10"
+          # - target: x64
+          #   os: windows-latest
+          #   py_arch: "x64"
+          #   interpreter: "pypy3.9"
           - target: x64
             os: windows-latest
             py_arch: "x64"
