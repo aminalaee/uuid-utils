@@ -168,11 +168,14 @@ jobs:
         platform:
           - target: x64
             os: windows-latest
+            py_arch: 'x64'
             interpreter: 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
           - target: x86
+            py_arch: 'x86'
             os: windows-latest
             interpreter: 3.10 3.11 3.12
           - target: aarch64
+            py_arch: 'arm64'
             os: windows-11-arm
             interpreter: '3.10 3.11 3.12'
     steps:
@@ -180,7 +183,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-          architecture: ${{ matrix.platform.target == 'aarch64' || 'arm64' && matrix.platform.target }}
+          architecture: ${{ matrix.platform.py_arch }}
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels
         uses: PyO3/maturin-action@v1
