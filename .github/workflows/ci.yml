@@ -169,11 +169,11 @@ jobs:
           - target: x64
             os: windows-latest
             py_arch: 'x64'
-            interpreter: 3.13 pypy3.9 pypy3.10
+            interpreter: '3.13'
           - target: x86
             py_arch: 'x86'
             os: windows-latest
-            interpreter: 3.12
+            interpreter: '3.13'
           - target: aarch64
             py_arch: 'arm64'
             os: windows-11-arm
@@ -185,7 +185,6 @@ jobs:
           python-version: "3.13"
           architecture: ${{ matrix.platform.py_arch }}
       - uses: dtolnay/rust-toolchain@stable
-      - run: python -m venv .venv
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
