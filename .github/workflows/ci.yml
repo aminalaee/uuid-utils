@@ -216,25 +216,25 @@ jobs:
     strategy:
       matrix:
         py:
-          - 3.9 3.10 3.11 3.12 3.13
-          - pypy3.9 pypy3.10
+          - { i: "3.9 3.10 3.11 3.12 3.13", py: "3.9" }
+          - { i: "pypy3.9 pypy3.10", py: "pypy3.10" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "${{ matrix.py.i }}"
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels - x86_64
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i ${{ matrix.py }}
+          args: --release --out dist -i ${{ matrix.py.py }}
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release --out dist -i ${{ matrix.py }}
+          args: --release --out dist -i ${{ matrix.py.py }}
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
