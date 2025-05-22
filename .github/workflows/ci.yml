@@ -162,20 +162,28 @@ jobs:
 
   windows:
     name: "Windows: ${{ matrix.platform.target }}"
-    runs-on: windows-latest
+    runs-on: "${{ matrix.platform.os }}"
     strategy:
       matrix:
         platform:
           - target: x64
-            interpreter: 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
+            os: windows-latest
+            py_arch: "x64"
+            interpreter: "3.13"
           - target: x86
-            interpreter: 3.9 3.10 3.11 3.12
+            py_arch: "x86"
+            os: windows-latest
+            interpreter: "3.13"
+          - target: aarch64
+            py_arch: "arm64"
+            os: windows-11-arm
+            interpreter: "3.13"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-          architecture: ${{ matrix.platform.target }}
+          python-version: "${{ matrix.platform.interpreter }}"
+          architecture: ${{ matrix.platform.py_arch }}
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels
         uses: PyO3/maturin-action@v1
@@ -197,23 +205,28 @@ jobs:
   macos:
     name: "MacOS"
     runs-on: macos-latest
+    strategy:
+      matrix:
+        py:
+          - { i: "3.9 3.10 3.11 3.12 3.13", py: "3.9" }
+          - { i: "pypy3.9 pypy3.10", py: "pypy3.10" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "${{ matrix.py.py }}"
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels - x86_64
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
+          args: --release --out dist -i ${{ matrix.py.i }}
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
+          args: --release --out dist -i ${{ matrix.py.i }}
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
@@ -222,7 +235,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-macos
+          name: wheels-macos-${{ strategy.job-index }}
           path: dist
 
   sdist:
