@@ -1,6 +1,6 @@
 site_name: UUID-Utils
 site_description: Python bindings to Rust UUID
-site_url: https://aminalaee.dev/uuid-utils
+site_url: https://aminalaee.github.io/uuid-utils
 
 theme:
   name: "material"
