@@ -14,10 +14,6 @@
 Python UUID implementation using Rust's UUID library.
 This will make `uuid4` function around 10x faster.
 
-This package can be a drop-in replacement to the standard library UUID
-which implements existing UUID versions like v4 in Rust
-and also adds draft UUID versions like v6.
-
 Avaialble UUID versions:
 
 - `uuid1` - Version 1 UUIDs using a timestamp and monotonic counter.
@@ -27,8 +23,6 @@ Avaialble UUID versions:
 - `uuid6` - Version 6 UUIDs using a timestamp and monotonic counter.
 - `uuid7` - Version 7 UUIDs using a Unix timestamp ordered by time.
 - `uuid8` - Version 8 UUIDs using user-defined data.
-
-<sup>Please note that UUID versions 6, 7 and 8 are still in draft RFC.</sup><br>
 
 ## Installation
 Using `pip`:
