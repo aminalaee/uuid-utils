@@ -31,7 +31,7 @@ Port of `uuid.uuid1()`. Generates a UUID from a host ID, sequence number, and th
 
 | Parameter   | Type  | Description                                                                              |
 | ----------- | ----- | ---------------------------------------------------------------------------------------- |
-| `node`      | `int` | Defines the host ID. If undefined, host ID will be derived from `uuid.getnode()`.        |
+| `node`      | `int` | Defines the host ID. If undefined, host ID will be derived from `getnode()`.        |
 | `clock_seq` | `int` | Defines the sequence number. If undefined, a random 14-bit number sequence will be used. |
 
 ### `function` **`uuid3 (namespace, name)`**
