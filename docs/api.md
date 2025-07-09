@@ -62,13 +62,13 @@ Generates a lexicographically sortable UUID from a host ID, and a timestamp. Sup
 | `timestamp` | `int` | ...         |
 | `nanos`     | `int` | ...         |
 
-### `function` **`uuid7(seconds=None, milliseconds=None)`**
+### `function` **`uuid7(seconds=None, microseconds=None)`**
 Generates a lexicographically sortable random UUID from a timestamp.
 
 | Parameter      | Type  | Description                                                                                                                          |
 | -------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `seconds`      | `int` | A 10-digit integer defining the seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.      |
-| `milliseconds` | `int` | A 10-digit integer defining the milliseconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock. |
+| `microseconds` | `int` | A 10-digit integer defining the microseconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock. |
 
 ### `function` **`uuid8(bytes)`**
 Generates a UUID of a custom format from user-supplied bytes which may or may not be compliant to any specification.
