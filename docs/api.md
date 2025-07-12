@@ -26,51 +26,51 @@
 | `uuid8`   | Generate a custom UUID comprised almost entirely of user-supplied bytes.                                                                                                                                                                                             |
 | `getnode` | Get the hardware address as a 48-bit positive integer.                                                                                                                                                                                                               |
 
-### `function` **`uuid1 (node=None, clock_seq=None)`**
+### `function` **`uuid1(node: int = None, clock_seq: int = None)`**
 Port of `uuid.uuid1()`. Generates a UUID from a host ID, sequence number, and the current time. Superceded by `uuid6()`.
 
-| Parameter   | Type  | Description                                                                              |
-| ----------- | ----- | ---------------------------------------------------------------------------------------- |
-| `node`      | `int` | Defines the host ID. If undefined, host ID will be derived from `getnode()`.        |
-| `clock_seq` | `int` | Defines the sequence number. If undefined, a random 14-bit number sequence will be used. |
+| Parameter   | Type  | Description                                                                                |
+| ----------- | ----- | ------------------------------------------------------------------------------------------ |
+| `node`      | `int` | Defines the host ID. If undefined, host ID will be derived from the result of `getnode()`. |
+| `clock_seq` | `int` | Defines the sequence number. If undefined, a random 14-bit number sequence will be used.   |
 
-### `function` **`uuid3 (namespace, name)`**
-Port of `uuid.uuid3()`. Generates a UUID from the MD5 hash of a namespace UUID, and a name. Superceded by `uuid5()`.
+### `function` **`uuid3(namespace: UUID, name: str | bytes)`**
+Port of `uuid.uuid3()`. Generates a UUID from the MD5 hash of a namespace UUID, and a name. Superceded by `uuid5()`. Both parameters must be met.
 
-| Parameter   | Type          | Description |
-| ----------- | ------------- | ----------- |
-| `namespace` | `UUID`        | ...         |
-| `name`      | `str` `bytes` | ...         |
+| Parameter   | Type          | Description                                                         |
+| ----------- | ------------- | ------------------------------------------------------------------- |
+| `namespace` | `UUID`        | Defines the UUID to be hashed.                                      |
+| `name`      | `str` `bytes` | A bytes or string object. No upper limit on bytes or string length. |
 
 ### `function` `uuid4()`
 Port of `uuid.uuid4()`. Generates an entirely random UUID.
 
-### `function` `uuid5(namespace, name)`
-Port of `uuid.uuid5()`. Generates a UUID from the SHA-1 hash of a namespace UUID, and a name. Supercedes `uuid3()`.
+### `function` `uuid5(namespace: UUID, name: str | bytes)`
+Port of `uuid.uuid5()`. Generates a UUID from the SHA-1 hash of a namespace UUID, and a name. Supercedes `uuid3()`. Both parameters must be met.
 
-| Parameter   | Type          | Description |
-| ----------- | ------------- | ----------- |
-| `namespace` | `UUID`        | ...         |
-| `name`      | `str` `bytes` | ...         |
+| Parameter   | Type          | Description                                                         |
+| ----------- | ------------- | ------------------------------------------------------------------- |
+| `namespace` | `UUID`        | Defines the UUID to be hashed.                                      |
+| `name`      | `str` `bytes` | A bytes or string object. No upper limit on bytes or string length. |
 
-### `function` `uuid6(node=None, timestamp=None, nanos=None)`
+### `function` `uuid6(node: int = None, timestamp: int = None, nanos: int = None)`
 Generates a lexicographically sortable UUID from a host ID, and a timestamp. Supercedes `uuid1()`.
 
-| Parameter   | Type  | Description |
-| ----------- | ----- | ----------- |
-| `node`      | `int` | ...         |
-| `timestamp` | `int` | ...         |
-| `nanos`     | `int` | ...         |
+| Parameter   | Type  | Description                                                                                                                             |
+| ----------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `node`      | `int` | Defines the host ID. If undefined, host ID will be derived from the result of `getnode()`.                                              |
+| `timestamp` | `int` | A 10-digit integer defining the seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.         |
+| `nanos`     | `int` | A 10-digit integer defining the sub-seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.     |
 
-### `function` **`uuid7(seconds=None, microseconds=None)`**
+### `function` **`uuid7(timestamp: int = None, nanos: int = None)`**
 Generates a lexicographically sortable random UUID from a timestamp.
 
 | Parameter      | Type  | Description                                                                                                                          |
 | -------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `seconds`      | `int` | A 10-digit integer defining the seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.      |
-| `microseconds` | `int` | A 10-digit integer defining the microseconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock. |
+| `timestamp`    | `int` | A 10-digit integer defining the seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.      |
+| `nanos`        | `int` | A 10-digit integer defining the sub-seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.  |
 
-### `function` **`uuid8(bytes)`**
+### `function` **`uuid8(bytes: bytes)`**
 Generates a UUID of a custom format from user-supplied bytes which may or may not be compliant to any specification.
 
 | Parameter | Type    | Description                                                         |
