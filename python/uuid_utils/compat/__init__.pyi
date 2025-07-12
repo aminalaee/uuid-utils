@@ -70,7 +70,7 @@ def uuid6(node: _Int | None = None, timestamp: _Int | None = None) -> UUID:
     """
     ...
 
-def uuid7(timestamp: _Int | None = None) -> UUID:
+def uuid7(timestamp: _Int | None = None, nanos: _Int | None = None) -> UUID:
     """Generate a version 7 UUID using a time value and random bytes."""
     ...
 
