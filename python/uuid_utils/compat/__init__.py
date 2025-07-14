@@ -67,9 +67,9 @@ def uuid6(node=None, timestamp=None):
     return UUID(int=uuid_utils.uuid6(node, timestamp).int)
 
 
-def uuid7(timestamp=None):
+def uuid7(timestamp=None, nanos=None):
     """Generate a version 7 UUID using a time value and random bytes."""
-    return UUID(int=uuid_utils.uuid7(timestamp).int)
+    return UUID(int=uuid_utils.uuid7(timestamp, nanos).int)
 
 
 def uuid8(bytes):
