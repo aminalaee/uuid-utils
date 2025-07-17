@@ -1,6 +1,6 @@
 [package]
 name = "uuid-utils"
-version = "0.11.0"
+version = "0.11.1"
 edition = "2021"
 
 [lib]
@@ -9,6 +9,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 mac_address = "1.1.8"
-pyo3 = { version = "0.25.0", features = ["extension-module", "generate-import-lib", 'abi3-py39'] }
+pyo3 = { version = "0.25.1", features = ["extension-module", "generate-import-lib", 'abi3-py39'] }
 rand = "0.9.1"
-uuid = { version = "1.16.0", features = ["v1", "v3", "v4", "v5", "v6", "v7", "v8", "fast-rng"]}
+uuid = { version = "1.17.0", features = ["v1", "v3", "v4", "v5", "v6", "v7", "v8", "fast-rng"]}
