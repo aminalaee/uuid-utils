@@ -44,7 +44,7 @@ jobs:
         with:
           target: ${{ matrix.target }}
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
-          sccache: "true"
+          sccache: "false"
           manylinux: auto
       - name: Install and test
         if: matrix.target == 'x86_64'
@@ -190,7 +190,7 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           args: --release --out dist -i ${{ matrix.platform.interpreter }}
-          sccache: "true"
+          sccache: "false"
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
@@ -221,7 +221,7 @@ jobs:
         with:
           target: x86_64
           args: --release --out dist -i ${{ matrix.py.i }}
-          sccache: "true"
+          sccache: "false"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
