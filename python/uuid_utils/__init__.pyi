@@ -123,6 +123,17 @@ class UUID:
     def __ge__(self, other: UUID) -> bool: ...
 
 def getnode() -> int: ...
+def reseed_rng() -> None:
+    """
+    Reseeds the underlying rng.
+    This is useful in cases where you fork, as without reseeding the
+    generated uuids may be identical. This can be called manually in the child process,
+    or automatically run after fork with:
+
+    os.register_at_fork(after_in_child=uuid_utils.reseed_rng)
+    """
+    ...
+
 def uuid1(node: int | None = None, clock_seq: int | None = None) -> UUID:
     """Generate a UUID from a host ID, sequence number, and the current time.
     If 'node' is not given, getnode() is used to obtain the hardware
