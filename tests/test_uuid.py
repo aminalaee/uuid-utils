@@ -211,6 +211,7 @@ def test_getnode() -> None:
     assert uuid_utils.getnode() == getnode()
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Does not run on Windows")
 def test_reseed_rng_with_fork() -> None:
     read_end, write_end = os.pipe()
     # forcibly generate uuid before fork to have rng state
