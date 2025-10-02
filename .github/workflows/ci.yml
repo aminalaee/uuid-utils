@@ -176,7 +176,7 @@ jobs:
             interpreter: "3.13"
           - target: aarch64
             py_arch: "arm64"
-            os: windows-latest
+            os: windows-11-arm
             interpreter: "3.13"
     steps:
       - uses: actions/checkout@v4
