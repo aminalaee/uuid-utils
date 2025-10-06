@@ -1,17 +1,16 @@
+use ahash::AHasher;
 use mac_address::get_mac_address;
 use pyo3::{
-    exceptions::{PyOSError, PyTypeError, PyValueError},
-    ffi,
-    prelude::*,
+    prelude::*, ffi,
+    exceptions::{PyTypeError, PyValueError},
     pyclass::CompareOp,
     types::{PyBytes, PyDict},
+    IntoPyObjectExt
 };
-use rand::RngCore;
-use std::{collections::hash_map::DefaultHasher, hash::Hash};
-use std::{hash::Hasher, sync::atomic::AtomicPtr};
 use std::{
+    hash::{Hash, Hasher},
     ptr::null_mut,
-    sync::atomic::{AtomicU64, Ordering},
+    sync::atomic::{AtomicPtr, AtomicU64, Ordering},
 };
 use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
 
@@ -73,7 +72,7 @@ impl UUID {
         };
 
         match version {
-            Some(v) => result.unwrap().set_version(v),
+            Some(v) => result?.set_version(v),
             None => result,
         }
     }
@@ -102,7 +101,7 @@ impl UUID {
     }
 
     fn __hash__(&self) -> PyResult<isize> {
-        let mut hasher = DefaultHasher::new();
+        let mut hasher = AHasher::default();
         self.uuid.hash(&mut hasher);
         Ok(hasher.finish() as isize)
     }
@@ -129,7 +128,7 @@ impl UUID {
     }
 
     #[allow(unused_variables)]
-    fn __setattr__(&self, name: &str, value: PyObject) -> PyResult<()> {
+    fn __setattr__(&self, name: &str, value: Py<PyAny>) -> PyResult<()> {
         Err(PyTypeError::new_err("UUID objects are immutable"))
     }
 
@@ -138,7 +137,7 @@ impl UUID {
     }
 
     pub fn __deepcopy__(&self, py: Python, _memo: &Bound<'_, PyDict>) -> Py<PyAny> {
-        self.clone().into_pyobject(py).unwrap().into_any().unbind()
+        self.clone().into_py_any(py).unwrap()
     }
 
     #[getter]
@@ -153,10 +152,12 @@ impl UUID {
 
     #[getter]
     fn bytes_le<'py>(&self, py: Python<'py>) -> Bound<'py, PyBytes> {
-        let bytes = *self.uuid.as_bytes();
-        let bytes = [
-            bytes[3], bytes[2], bytes[1], bytes[0], bytes[5], bytes[4], bytes[7], bytes[6],
-            bytes[8], bytes[9], bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15],
+        let b = self.uuid.as_bytes();
+        let bytes: [u8; 16] = [
+            b[3], b[2], b[1], b[0],
+            b[5], b[4],
+            b[7], b[6],
+            b[8], b[9], b[10], b[11], b[12], b[13], b[14], b[15],
         ];
         PyBytes::new(py, &bytes)
     }
@@ -219,15 +220,15 @@ impl UUID {
 
     #[getter]
     fn clock_seq(&self) -> u16 {
-        let high = (self.clock_seq_hi_variant()) as u16 & 0x3f;
-        high.wrapping_shl(8) | self.clock_seq_low() as u16
+        let high = self.clock_seq_hi_variant() as u16 & 0x3f;
+        high << 8 | self.clock_seq_low() as u16
     }
 
     #[getter]
     fn time(&self) -> u64 {
         let high = self.time_hi_version() as u64 & 0x0fff;
-        let mid = (self.time_mid()) as u64;
-        high.wrapping_shl(48) | mid.wrapping_shl(32) | self.time_low() as u64
+        let mid = self.time_mid() as u64;
+        high << 48 | mid << 32 | self.time_low() as u64
     }
 
     #[getter]
@@ -238,7 +239,7 @@ impl UUID {
                 Ok(secs * 1_000 + nanos as u64 / 1_000 / 1_000)
             }
             _ => {
-                return Err(PyErr::new::<PyValueError, &str>(
+                Err(PyErr::new::<PyValueError, &str>(
                     "UUID version should be one of (v1, v6 or v7).",
                 ))
             }
@@ -291,12 +292,12 @@ impl UUID {
         let clock_seq_hi_variant = fields.3 as u128;
         let clock_seq_low = fields.4 as u128;
         let node = fields.5 as u128;
-        let clock_seq = clock_seq_hi_variant.wrapping_shl(8) | clock_seq_low;
+        let clock_seq = clock_seq_hi_variant << 8 | clock_seq_low;
 
-        let value = time_low.wrapping_shl(96)
-            | time_mid.wrapping_shl(80)
-            | time_hi_version.wrapping_shl(64)
-            | clock_seq.wrapping_shl(48)
+        let value = time_low << 96
+            | time_mid << 80
+            | time_hi_version << 64
+            | clock_seq << 48
             | node;
 
         Ok(UUID {
@@ -313,7 +314,7 @@ impl UUID {
 
     #[getter]
     fn is_safe(&self) -> *mut ffi::PyObject {
-        return SAFE_UUID_UNKNOWN.load(Ordering::Relaxed);
+        SAFE_UUID_UNKNOWN.load(Ordering::Relaxed)
     }
 }
 
@@ -413,26 +414,27 @@ fn uuid8(bytes: &Bound<'_, PyBytes>) -> PyResult<UUID> {
 }
 
 fn _getnode() -> u64 {
-    let cached_node = NODE.load(Ordering::Relaxed);
-    if cached_node != 0 {
-        return cached_node;
+    let cached = NODE.load(Ordering::Relaxed);
+
+    if cached != 0 {
+        return cached;
     }
-    let bytes = match get_mac_address() {
-        Ok(Some(mac_address)) => mac_address.bytes(),
+
+    let bytes: [u8; 6] = match get_mac_address() {
+        Ok(Some(mac)) => mac.bytes(),
         _ => {
-            let mut bytes = [0u8; 6];
-            rand::rng().fill_bytes(&mut bytes);
-            bytes[0] = bytes[0] | 0x01;
+            let mut bytes = rand::random::<[u8; 6]>();
+            bytes[0] |= 0x01;
             bytes
         }
     };
 
-    let node = ((bytes[0] as u64).wrapping_shl(40))
-        + ((bytes[1] as u64).wrapping_shl(32))
-        + ((bytes[2] as u64).wrapping_shl(24))
-        + ((bytes[3] as u64).wrapping_shl(16))
-        + ((bytes[4] as u64).wrapping_shl(8))
-        + (bytes[5] as u64);
+    let node = ((bytes[0] as u64) << 40)
+        | ((bytes[1] as u64) << 32)
+        | ((bytes[2] as u64) << 24)
+        | ((bytes[3] as u64) << 16)
+        | ((bytes[4] as u64) << 8)
+        | (bytes[5] as u64);
 
     NODE.store(node, Ordering::Relaxed);
     node
@@ -455,7 +457,7 @@ fn reseed_rng() -> PyResult<()> {
 
 #[pymodule]
 fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    let safe_uuid_unknown = Python::with_gil(|py| {
+    let safe_uuid_unknown = Python::attach(|py| {
         return PyModule::import(py, "uuid")
             .unwrap()
             .getattr("SafeUUID")
