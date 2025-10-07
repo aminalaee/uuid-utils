@@ -2,7 +2,7 @@ use ahash::AHasher;
 use mac_address::get_mac_address;
 use pyo3::{
     prelude::*, ffi,
-    exceptions::{PyTypeError, PyValueError},
+    exceptions::{PyOSError, PyTypeError, PyValueError},
     pyclass::CompareOp,
     types::{PyBytes, PyDict},
     IntoPyObjectExt
