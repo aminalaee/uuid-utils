@@ -104,7 +104,6 @@ jobs:
         target:
           - x86_64-unknown-linux-musl
           - i686-unknown-linux-musl
-          - armv7l-unknown-linux-musl
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -143,6 +142,8 @@ jobs:
         platform:
           - target: aarch64-unknown-linux-musl
             arch: aarch64
+          - target: armv7-unknown-linux-musleabihf
+            arch: armv7
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
