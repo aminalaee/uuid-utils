@@ -33,7 +33,7 @@ jobs:
     strategy:
       matrix:
         target: [x86_64, i686]
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -43,7 +43,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.9 pypy3.10
           sccache: "true"
           manylinux: auto
       - name: Install and test
@@ -75,7 +75,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.9 pypy3.10
       - uses: uraimo/run-on-arch-action@v2.8.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
@@ -116,7 +116,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
       - name: Install built wheel
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: addnab/docker-run-action@v3
@@ -155,7 +155,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -210,8 +210,8 @@ jobs:
     strategy:
       matrix:
         py:
-          - { i: "3.9 3.10 3.11 3.12 3.13", py: "3.9" }
-          - { i: "pypy3.9 pypy3.10", py: "pypy3.10" }
+          - { i: "3.9 3.10 3.11 3.12 3.13 3.14", py: "3.9" }
+          - { i: "pypy3.9 pypy3.10 3.11 3.12 3.13 3.14", py: "pypy3.10" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
