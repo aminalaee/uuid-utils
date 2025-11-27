@@ -2,7 +2,7 @@ use ahash::AHasher;
 use mac_address::get_mac_address;
 use pyo3::{
     prelude::*, ffi,
-    exceptions::{PyTypeError, PyValueError},
+    exceptions::{PyOSError, PyTypeError, PyValueError},
     pyclass::CompareOp,
     types::{PyBytes, PyDict},
     IntoPyObjectExt
@@ -448,6 +448,13 @@ fn getnode() -> PyResult<u64> {
     Ok(_getnode())
 }
 
+#[pyfunction]
+fn reseed_rng() -> PyResult<()> {
+    rand::rng()
+        .reseed()
+        .map_err(|err| PyOSError::new_err(err.to_string()))
+}
+
 #[pymodule]
 fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
     let safe_uuid_unknown = Python::attach(|py| {
@@ -472,6 +479,7 @@ fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(uuid7, m)?)?;
     m.add_function(wrap_pyfunction!(uuid8, m)?)?;
     m.add_function(wrap_pyfunction!(getnode, m)?)?;
+    m.add_function(wrap_pyfunction!(reseed_rng, m)?)?;
     m.add("NAMESPACE_DNS", UUID::NAMESPACE_DNS)?;
     m.add("NAMESPACE_URL", UUID::NAMESPACE_URL)?;
     m.add("NAMESPACE_OID", UUID::NAMESPACE_OID)?;
