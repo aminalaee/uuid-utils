@@ -74,6 +74,12 @@ in comparison with the `uuid_utils` default behaviour, but is still faster than 
 UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 ```
 
+## Interaction with Fork
+
+The underlying rng of this library is not guaranteed to be reset when you fork this process. This would mean that `uuid_utils` calls post fork could result in the same value across processes.
+
+If you plan to use this library alongside forking you will want to explicitly redeed the rng post fork. Either by calling `reseed_rng` manually or registering it in `os.register_at_fork`.
+
 ## Benchmarks
 
 |        Benchmark | Min     | Max     | Mean    | Min (+)         | Max (+)         | Mean (+)        |
