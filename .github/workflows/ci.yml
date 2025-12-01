@@ -43,7 +43,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.9 pypy3.10
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
           sccache: "true"
           manylinux: auto
       - name: Install and test
@@ -75,7 +75,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.9 pypy3.10
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
       - uses: uraimo/run-on-arch-action@v2.8.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
@@ -211,7 +211,7 @@ jobs:
       matrix:
         py:
           - { i: "3.9 3.10 3.11 3.12 3.13 3.14", py: "3.9" }
-          - { i: "pypy3.9 pypy3.10 3.11 3.12 3.13 3.14", py: "pypy3.10" }
+          - { i: "pypy3.11 pypy3.11 3.11 3.12 3.13 3.14", py: "pypy3.11" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
