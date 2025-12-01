@@ -211,7 +211,7 @@ jobs:
       matrix:
         py:
           - { i: "3.9 3.10 3.11 3.12 3.13 3.14", py: "3.9" }
-          - { i: "pypy3.9 pypy3.10 pypy3.11 3.11 3.12 3.13 3.14", py: "pypy3.11" }
+          - { i: "pypy3.11 pypy3.11 3.11 3.12 3.13 3.14", py: "pypy3.11" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
