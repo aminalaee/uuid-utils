@@ -6,6 +6,7 @@
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058)](https://pypi.org/project/uuid-utils)
 
 </div>
+
 ---
 
 Python UUID implementation using Rust's UUID library.
