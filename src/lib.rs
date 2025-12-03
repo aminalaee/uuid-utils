@@ -90,14 +90,7 @@ impl UUID {
     }
 
     fn __richcmp__(&self, other: UUID, op: CompareOp) -> PyResult<bool> {
-        match op {
-            CompareOp::Lt => Ok(self.uuid < other.uuid),
-            CompareOp::Le => Ok(self.uuid <= other.uuid),
-            CompareOp::Eq => Ok(self.uuid == other.uuid),
-            CompareOp::Ne => Ok(self.uuid != other.uuid),
-            CompareOp::Gt => Ok(self.uuid > other.uuid),
-            CompareOp::Ge => Ok(self.uuid >= other.uuid),
-        }
+        Ok(op.matches(self.uuid.cmp(&other.uuid)))
     }
 
     fn __hash__(&self) -> PyResult<isize> {
