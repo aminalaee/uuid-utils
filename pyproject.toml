@@ -4,6 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "uuid_utils"
+readme = "README.md"
 description = "Drop-in replacement for Python UUID with bindings in Rust"
 authors = [{ name = "Amin Alaee", email = "me@aminalaee.dev" }]
 keywords = ["rust", "uuid"]
