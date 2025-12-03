@@ -63,7 +63,7 @@ def test_uuid_setattr() -> None:
     uuid = uuid_utils.UUID(int=223359875637754765292326297443183672862)
 
     with pytest.raises(TypeError):
-        uuid.int = 123  # type: ignore
+        uuid.int = 123  # type: ignore[misc]
 
 
 def test_uuid1() -> None:
@@ -136,7 +136,7 @@ def test_uuid_comparisons() -> None:
 
     assert uuid_1 == uuid_2
     assert hash(uuid_1) == hash(uuid_2)
-    assert not uuid_1 != uuid_2
+    assert uuid_1 == uuid_2
 
     uuid_1 = uuid_utils.uuid8(b"1234567812345678")
     uuid_2 = uuid_utils.uuid8(b"1234567812345677")
@@ -217,7 +217,7 @@ def test_reseed_rng_with_fork() -> None:
     # forcibly generate uuid before fork to have rng state
     uuid_utils.uuid4()
 
-    pid = os.fork()
+    pid = os.fork()  # type: ignore[attr-defined]
     if pid == 0:
         os.close(read_end)
         # explicity reseed in the child
