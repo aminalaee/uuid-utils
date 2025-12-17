@@ -34,7 +34,6 @@ Issues = "https://github.com/aminalaee/uuid-utils/issues"
 Source = "https://github.com/aminalaee/uuid-utils"
 
 [tool.maturin]
-features = ["pyo3/extension-module"]
 python-source = "python"
 module-name = "uuid_utils._uuid_utils"
 
