@@ -1,18 +1,18 @@
 # Python UUID Utils
 
-<p align="center">
-<a href="https://pypi.org/project/uuid-utils/">
-    <img src="https://badge.fury.io/py/uuid-utils.svg" alt="Package version">
-</a>
-<a href="https://pypi.org/project/uuid-utils" target="_blank">
-    <img src="https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058" alt="Supported Python versions">
-</a>
-</p>
+<div align="center">
+
+[![Package version](https://badge.fury.io/py/uuid-utils.svg)](https://pypi.org/project/uuid-utils/)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058)](https://pypi.org/project/uuid-utils)
+
+</div>
 
 ---
 
 Python UUID implementation using Rust's UUID library.
 This will make `uuid4` function around 10x faster.
+
+This package can be a drop-in replacement to the standard library UUID.
 
 Avaialble UUID versions:
 
@@ -57,7 +57,7 @@ UUID('886313e1-3b8a-5372-9b90-0c9aee199e5d')
 UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 ```
 
-## Compatibility
+## Compatibility with Python UUID
 
 In some cases, for example if you are using `Django`, you might need `UUID` instances to be returned
 from the standrad-library `uuid`, not a custom `UUID` class.
@@ -72,14 +72,34 @@ in comparison with the `uuid_utils` default behaviour, but is still faster than 
 UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 ```
 
+## Fork processes
+
+The underlying Rust library for generating random values is not guaranteed to reseed when you fork the process. This would mean that after forking, the `uuid_utils` calls can return the same value for a few calls, and then it reseeds.
+
+If you plan to use this library alongside forking you will want to explicitly reseed post-fork. You can do this with:
+
+```py
+import os
+
+import uuid_utils
+
+# Calling it manually when forking
+uuid_utils.reseed_rng()
+
+# Or registering it to be called when forking
+os.register_at_fork(uuid_utils.reseed_rng)
+```
+
 ## Benchmarks
 
 |        Benchmark | Min     | Max     | Mean    | Min (+)         | Max (+)         | Mean (+)        |
 |------------------|---------|---------|---------|-----------------|-----------------|-----------------|
 |          UUID v1 | 0.061   | 0.299   | 0.194   | 0.019 (3.3x)    | 0.019 (15.4x)   | 0.019 (10.1x)   |
 |          UUID v3 | 0.267   | 0.307   | 0.293   | 0.035 (7.6x)    | 0.041 (7.5x)    | 0.039 (7.5x)    |
-|          UUID v4 | 0.145   | 0.301   | 0.249   | 0.004 (38.5x)   | 0.005 (54.8x)   | 0.005 (53.0x)   |
+|          UUID v4 | 0.073   | 0.119   | 0.083   | 0.005 (15.2x)   | 0.005 (24.6x)   | 0.005 (17.1x)   |
 |          UUID v5 | 0.058   | 0.189   | 0.146   | 0.008 (7.6x)    | 0.038 (5.0x)    | 0.016 (9.0x)    |
+|          UUID v6 | 0.056   | 0.056   | 0.056   | 0.005 (10.9x)   | 0.005 (10.4x)   | 0.005 (10.7x)   |
+|          UUID v7 | 0.088   | 0.091   | 0.089   | 0.007 (13.1x)   | 0.007 (13.2x)   | 0.007 (13.1x)   |
 |    UUID from hex | 0.128   | 0.139   | 0.135   | 0.016 (8.2x)    | 0.017 (8.0x)    | 0.016 (8.3x)    |
 |  UUID from bytes | 0.031   | 0.135   | 0.093   | 0.016 (2.0x)    | 0.016 (8.6x)    | 0.016 (5.9x)    |
 |    UUID from int | 0.027   | 0.102   | 0.043   | 0.003 (8.3x)    | 0.004 (25.0x)   | 0.003 (12.4x)   |
