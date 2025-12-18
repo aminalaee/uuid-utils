@@ -57,7 +57,7 @@ UUID('886313e1-3b8a-5372-9b90-0c9aee199e5d')
 UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 ```
 
-## Compatibility
+## Compatibility with Python UUID
 
 In some cases, for example if you are using `Django`, you might need `UUID` instances to be returned
 from the standrad-library `uuid`, not a custom `UUID` class.
@@ -72,11 +72,23 @@ in comparison with the `uuid_utils` default behaviour, but is still faster than 
 UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 ```
 
-## Interaction with Fork
+## Fork processes
 
-The underlying rng of this library is not guaranteed to be reset when you fork this process. This would mean that `uuid_utils` calls post fork could result in the same value across processes.
+The underlying Rust library for generating random values is not guaranteed to reseed when you fork the process. This would mean that after forking, the `uuid_utils` calls can return the same value for a few calls, and then it reseeds.
 
-If you plan to use this library alongside forking you will want to explicitly redeed the rng post fork. Either by calling `reseed_rng` manually or registering it in `os.register_at_fork`.
+If you plan to use this library alongside forking you will want to explicitly reseed post-fork. You can do this with:
+
+```py
+import os
+
+import uuid_utils
+
+# Calling it manually when forking
+uuid_utils.reseed_rng()
+
+# Or registering it to be called when forking
+os.register_at_fork(uuid_utils.reseed_rng)
+```
 
 ## Benchmarks
 
