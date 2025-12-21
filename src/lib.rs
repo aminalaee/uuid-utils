@@ -1,11 +1,12 @@
 use ahash::AHasher;
 use mac_address::get_mac_address;
 use pyo3::{
-    prelude::*, ffi,
     exceptions::{PyOSError, PyTypeError, PyValueError},
+    ffi,
+    prelude::*,
     pyclass::CompareOp,
     types::{PyBytes, PyDict},
-    IntoPyObjectExt
+    IntoPyObjectExt,
 };
 use std::{
     hash::{Hash, Hasher},
@@ -147,10 +148,8 @@ impl UUID {
     fn bytes_le<'py>(&self, py: Python<'py>) -> Bound<'py, PyBytes> {
         let b = self.uuid.as_bytes();
         let bytes: [u8; 16] = [
-            b[3], b[2], b[1], b[0],
-            b[5], b[4],
-            b[7], b[6],
-            b[8], b[9], b[10], b[11], b[12], b[13], b[14], b[15],
+            b[3], b[2], b[1], b[0], b[5], b[4], b[7], b[6], b[8], b[9], b[10], b[11], b[12], b[13],
+            b[14], b[15],
         ];
         PyBytes::new(py, &bytes)
     }
@@ -231,11 +230,9 @@ impl UUID {
                 let (secs, nanos) = timestamp.to_unix();
                 Ok(secs * 1_000 + nanos as u64 / 1_000 / 1_000)
             }
-            _ => {
-                Err(PyErr::new::<PyValueError, &str>(
-                    "UUID version should be one of (v1, v6 or v7).",
-                ))
-            }
+            _ => Err(PyErr::new::<PyValueError, &str>(
+                "UUID version should be one of (v1, v6 or v7).",
+            )),
         }
     }
 
@@ -287,11 +284,8 @@ impl UUID {
         let node = fields.5 as u128;
         let clock_seq = clock_seq_hi_variant << 8 | clock_seq_low;
 
-        let value = time_low << 96
-            | time_mid << 80
-            | time_hi_version << 64
-            | clock_seq << 48
-            | node;
+        let value =
+            time_low << 96 | time_mid << 80 | time_hi_version << 64 | clock_seq << 48 | node;
 
         Ok(UUID {
             uuid: Uuid::from_u128(value),

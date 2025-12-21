@@ -130,19 +130,15 @@ def test_uuid_comparisons() -> None:
 
     assert uuid_1 < uuid_2
     assert uuid_1 <= uuid_2
+    assert uuid_1 != uuid_2
+    assert uuid_2 > uuid_1
+    assert uuid_2 >= uuid_1
 
     uuid_1 = uuid_utils.uuid8(b"1234567812345678")
     uuid_2 = uuid_utils.uuid8(b"1234567812345678")
 
     assert uuid_1 == uuid_2
     assert hash(uuid_1) == hash(uuid_2)
-    assert uuid_1 == uuid_2
-
-    uuid_1 = uuid_utils.uuid8(b"1234567812345678")
-    uuid_2 = uuid_utils.uuid8(b"1234567812345677")
-
-    assert uuid_1 > uuid_2
-    assert uuid_1 >= uuid_2
 
 
 @pytest.mark.parametrize("version", [1, 2, 3, 4, 5, 7, 8])
