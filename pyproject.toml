@@ -40,7 +40,6 @@ module-name = "uuid_utils._uuid_utils"
 [tool.mypy]
 disallow_untyped_defs = true
 ignore_missing_imports = true
-show_error_codes = true
 no_implicit_optional = true
 
 [tool.ruff.lint]
