@@ -6,8 +6,8 @@ build:
 
 .PHONY: format
 format:
-	ruff check --fix python/ tests/
 	ruff format python/ tests/
+	ruff check --fix python/ tests/
 	cargo fmt
 
 .PHONY: lint
