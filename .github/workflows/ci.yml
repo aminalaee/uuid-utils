@@ -86,9 +86,9 @@ jobs:
           install: |
             apt-get update
             apt-get install -y --no-install-recommends python3 python3-pip
-            pip install pytest pytest-codspeed
+            pip install pytest
           run: |
-            pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall
+            pip install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v4
