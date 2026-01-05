@@ -50,7 +50,7 @@ jobs:
         if: matrix.target == 'x86_64'
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
-          pip install pytest
+          pip install -r requirements.txt
           pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -196,7 +196,7 @@ jobs:
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
-          pip install pytest
+          pip install -r requirements.txt
           pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -232,7 +232,7 @@ jobs:
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
-          pip install pytest
+          pip install -r requirements.txt
           pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -260,7 +260,17 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     if: "startsWith(github.ref, 'refs/tags/')"
-    needs: [lint, linux, linux-cross, musllinux, musllinux-cross, windows, macos, sdist]
+    needs:
+      [
+        lint,
+        linux,
+        linux-cross,
+        musllinux,
+        musllinux-cross,
+        windows,
+        macos,
+        sdist,
+      ]
     steps:
       - uses: actions/download-artifact@v4.1.8
         with:
