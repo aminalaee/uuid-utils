@@ -4,6 +4,7 @@
 
 [![Package version](https://badge.fury.io/py/uuid-utils.svg)](https://pypi.org/project/uuid-utils/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058)](https://pypi.org/project/uuid-utils)
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/aminalaee/uuid-utils?utm_source=badge)
 
 </div>
 
@@ -93,7 +94,7 @@ os.register_at_fork(uuid_utils.reseed_rng)
 ## Benchmarks
 
 |        Benchmark | Min     | Max     | Mean    | Min (+)         | Max (+)         | Mean (+)        |
-|------------------|---------|---------|---------|-----------------|-----------------|-----------------|
+|------------------|---------|---------|---------|-----------------|-----------------|--------------------|
 |          UUID v1 | 0.061   | 0.299   | 0.194   | 0.019 (3.3x)    | 0.019 (15.4x)   | 0.019 (10.1x)   |
 |          UUID v3 | 0.267   | 0.307   | 0.293   | 0.035 (7.6x)    | 0.041 (7.5x)    | 0.039 (7.5x)    |
 |          UUID v4 | 0.073   | 0.119   | 0.083   | 0.005 (15.2x)   | 0.005 (24.6x)   | 0.005 (17.1x)   |
