@@ -1,0 +1,39 @@
+name: CodSpeed
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  RUSTFLAGS: "--cfg uuid_unstable"
+
+jobs:
+  codspeed:
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build Python package with maturin
+        uses: PyO3/maturin-action@v1
+        with:
+          args: --release --out dist
+      - name: Install uuid_utils
+        run: pip install uuid_utils --no-index --find-links dist --force-reinstall
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v4.5.2
+        with:
+          mode: simulation
+          run: pytest tests/test_benchmarks.py --codspeed

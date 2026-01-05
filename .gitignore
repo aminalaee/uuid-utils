@@ -71,3 +71,4 @@ docs/_build/
 
 .ruff_cache
 .mypy_cache
+.codspeed/
