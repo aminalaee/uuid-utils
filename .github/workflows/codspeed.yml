@@ -20,21 +20,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
+      - name: Install dependencies
+        run: pip install -r requirements.txt
       - name: Build Python package with maturin
         uses: PyO3/maturin-action@v1
         with:
-          command: develop
           args: --release
-
-      - name: Install test dependencies
-        run: pip install -r requirements.txt
-
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v4.5.2
         with:
