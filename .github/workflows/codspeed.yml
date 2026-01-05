@@ -30,6 +30,8 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           args: --release
+      - name: Install uuid_utils
+        run: pip install uuid_utils --no-index --find-links dist --force-reinstall
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v4.5.2
         with:

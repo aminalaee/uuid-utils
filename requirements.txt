@@ -1,6 +1,6 @@
 mkdocs==1.6.1
 mkdocs-material==9.5.34
 mypy==1.19.0
-pytest==8.4.2
+pytest==9.0.1
 pytest-codspeed==4.2.0
 ruff==0.14.7

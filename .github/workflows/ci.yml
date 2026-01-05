@@ -50,7 +50,7 @@ jobs:
         if: matrix.target == 'x86_64'
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
-          pip install -r requirements.txt
+          pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -86,7 +86,7 @@ jobs:
           install: |
             apt-get update
             apt-get install -y --no-install-recommends python3 python3-pip
-            pip3 install -U pip pytest
+            pip install pip pytest pytest-codspeed
           run: |
             pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
@@ -196,7 +196,7 @@ jobs:
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
-          pip install -r requirements.txt
+          pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -232,7 +232,7 @@ jobs:
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
-          pip install -r requirements.txt
+          pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
         uses: actions/upload-artifact@v4
