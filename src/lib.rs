@@ -1,12 +1,12 @@
 use ahash::AHasher;
 use mac_address::get_mac_address;
 use pyo3::{
+    IntoPyObjectExt,
     exceptions::{PyOSError, PyTypeError, PyValueError},
     ffi,
     prelude::*,
     pyclass::CompareOp,
     types::{PyBytes, PyDict},
-    IntoPyObjectExt,
 };
 use std::{
     hash::{Hash, Hasher},
