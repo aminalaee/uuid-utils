@@ -1,10 +1,12 @@
 from uuid import SafeUUID
 
 from ._uuid_utils import (
+    MAX,
     NAMESPACE_DNS,
     NAMESPACE_OID,
     NAMESPACE_URL,
     NAMESPACE_X500,
+    NIL,
     RESERVED_FUTURE,
     RESERVED_MICROSOFT,
     RESERVED_NCS,
@@ -23,10 +25,12 @@ from ._uuid_utils import (
 )
 
 __all__ = [
+    "MAX",
     "NAMESPACE_DNS",
     "NAMESPACE_OID",
     "NAMESPACE_URL",
     "NAMESPACE_X500",
+    "NIL",
     "RESERVED_FUTURE",
     "RESERVED_MICROSOFT",
     "RESERVED_NCS",

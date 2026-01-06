@@ -1,4 +1,5 @@
 import sys
+from typing import Final
 from uuid import (
     NAMESPACE_DNS,
     NAMESPACE_OID,
@@ -14,20 +15,6 @@ from uuid import (
 )
 
 from typing_extensions import TypeAlias
-
-__all__ = [
-    "NAMESPACE_DNS",
-    "NAMESPACE_OID",
-    "NAMESPACE_URL",
-    "NAMESPACE_X500",
-    "RESERVED_FUTURE",
-    "RESERVED_MICROSOFT",
-    "RESERVED_NCS",
-    "RFC_4122",
-    "UUID",
-    "SafeUUID",
-    "getnode",
-]
 
 # Because UUID has properties called int and bytes we need to rename these temporarily.
 _Int: TypeAlias = int
@@ -77,3 +64,22 @@ def uuid7(timestamp: _Int | None = None, nanos: _Int | None = None) -> UUID:
 def uuid8(bytes: _Bytes) -> UUID:
     """Generate a custom UUID comprised almost entirely of user-supplied bytes.."""
     ...
+
+NIL: Final[UUID]
+MAX: Final[UUID]
+
+__all__ = [
+    "MAX",
+    "NAMESPACE_DNS",
+    "NAMESPACE_OID",
+    "NAMESPACE_URL",
+    "NAMESPACE_X500",
+    "NIL",
+    "RESERVED_FUTURE",
+    "RESERVED_MICROSOFT",
+    "RESERVED_NCS",
+    "RFC_4122",
+    "UUID",
+    "SafeUUID",
+    "getnode",
+]
