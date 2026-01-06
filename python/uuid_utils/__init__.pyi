@@ -1,5 +1,6 @@
 import builtins
 import sys
+from typing import Final
 from uuid import SafeUUID
 
 from typing_extensions import TypeAlias
@@ -189,12 +190,16 @@ RESERVED_NCS: str
 RFC_4122: str
 RESERVED_MICROSOFT: str
 RESERVED_FUTURE: str
+NIL: Final[UUID]
+MAX: Final[UUID]
 
 __all__ = [
+    "MAX",
     "NAMESPACE_DNS",
     "NAMESPACE_OID",
     "NAMESPACE_URL",
     "NAMESPACE_X500",
+    "NIL",
     "RESERVED_FUTURE",
     "RESERVED_MICROSOFT",
     "RESERVED_NCS",
@@ -203,6 +208,7 @@ __all__ = [
     "SafeUUID",
     "__version__",
     "getnode",
+    "reseed_rng",
     "uuid1",
     "uuid3",
     "uuid4",

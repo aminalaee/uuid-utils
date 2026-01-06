@@ -231,3 +231,8 @@ def test_reseed_rng_with_fork() -> None:
 
     # the uuids should be different because we reseeded
     assert next_parent_uuid != uuid_from_pipe
+
+
+def test_max_and_nil() -> None:
+    assert uuid_utils.UUID("ffffffff-ffff-ffff-ffff-ffffffffffff") == uuid_utils.MAX
+    assert uuid_utils.UUID("00000000-0000-0000-0000-000000000000") == uuid_utils.NIL
