@@ -4,15 +4,13 @@
 
 [![Package version](https://badge.fury.io/py/uuid-utils.svg)](https://pypi.org/project/uuid-utils/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058)](https://pypi.org/project/uuid-utils)
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/aminalaee/uuid-utils?utm_source=badge)
 
 </div>
 
 ---
 
-Python UUID implementation using Rust's UUID library.
-This will make `uuid4` function around 10x faster.
-
-This package can be a drop-in replacement to the standard library UUID.
+Fast, drop-in replacement for Python's uuid module, powered by Rust.
 
 Avaialble UUID versions:
 
