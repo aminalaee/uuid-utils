@@ -3,7 +3,7 @@ import sys
 from typing import Final
 from uuid import SafeUUID
 
-from typing_extensions import TypeAlias
+from typing_extensions import LiteralString, TypeAlias
 
 # Because UUID has properties called int and bytes we need to rename these temporarily.
 _FieldsType: TypeAlias = tuple[int, int, int, int, int, int]
@@ -65,6 +65,9 @@ class UUID:
                     otherwise raises ValueError.
     """
 
+    is_safe: Final[SafeUUID]
+    int: Final[builtins.int]
+
     def __init__(
         self,
         hex: str | None = None,
@@ -76,8 +79,6 @@ class UUID:
         *,
         is_safe: SafeUUID = ...,
     ) -> None: ...
-    @property
-    def is_safe(self) -> SafeUUID: ...
     @property
     def bytes(self) -> builtins.bytes: ...
     @property
@@ -92,8 +93,6 @@ class UUID:
     def fields(self) -> _FieldsType: ...
     @property
     def hex(self) -> str: ...
-    @property
-    def int(self) -> builtins.int: ...
     @property
     def node(self) -> builtins.int: ...
     @property
@@ -182,14 +181,14 @@ def uuid8(bytes: bytes) -> UUID:
     """Generate a custom UUID comprised almost entirely of user-supplied bytes."""
     ...
 
-NAMESPACE_DNS: UUID
-NAMESPACE_URL: UUID
-NAMESPACE_OID: UUID
-NAMESPACE_X500: UUID
-RESERVED_NCS: str
-RFC_4122: str
-RESERVED_MICROSOFT: str
-RESERVED_FUTURE: str
+NAMESPACE_DNS: Final[UUID]
+NAMESPACE_URL: Final[UUID]
+NAMESPACE_OID: Final[UUID]
+NAMESPACE_X500: Final[UUID]
+RESERVED_NCS: Final[LiteralString]
+RFC_4122: Final[LiteralString]
+RESERVED_MICROSOFT: Final[LiteralString]
+RESERVED_FUTURE: Final[LiteralString]
 NIL: Final[UUID]
 MAX: Final[UUID]
 
