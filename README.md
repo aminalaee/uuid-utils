@@ -10,10 +10,7 @@
 
 ---
 
-Python UUID implementation using Rust's UUID library.
-This will make `uuid4` function around 10x faster.
-
-This package can be a drop-in replacement to the standard library UUID.
+Fast, drop-in replacement for Python's uuid module, powered by Rust.
 
 Avaialble UUID versions:
 
