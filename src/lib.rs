@@ -436,7 +436,7 @@ fn getnode() -> PyResult<u64> {
 }
 
 #[pyfunction]
-fn reseed_rng() -> PyResult<()> {
+fn reseed() -> PyResult<()> {
     rand::rng()
         .reseed()
         .map_err(|err| PyOSError::new_err(err.to_string()))
@@ -466,7 +466,7 @@ fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(uuid7, m)?)?;
     m.add_function(wrap_pyfunction!(uuid8, m)?)?;
     m.add_function(wrap_pyfunction!(getnode, m)?)?;
-    m.add_function(wrap_pyfunction!(reseed_rng, m)?)?;
+    m.add_function(wrap_pyfunction!(reseed, m)?)?;
     m.add("NAMESPACE_DNS", UUID::NAMESPACE_DNS)?;
     m.add("NAMESPACE_URL", UUID::NAMESPACE_URL)?;
     m.add("NAMESPACE_OID", UUID::NAMESPACE_OID)?;

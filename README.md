@@ -70,24 +70,6 @@ in comparison with the `uuid_utils` default behaviour, but is still faster than 
 UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 ```
 
-## Fork processes
-
-The underlying Rust library for generating random values is not guaranteed to reseed when you fork the process. This would mean that after forking, the `uuid_utils` calls can return the same value for a few calls, and then it reseeds.
-
-If you plan to use this library alongside forking you will want to explicitly reseed post-fork. You can do this with:
-
-```py
-import os
-
-import uuid_utils
-
-# Calling it manually when forking
-uuid_utils.reseed_rng()
-
-# Or registering it to be called when forking
-os.register_at_fork(uuid_utils.reseed_rng)
-```
-
 ## Benchmarks
 
 | Benchmark        | Min   | Max   | Mean  | Min (+)       | Max (+)       | Mean (+)      |
