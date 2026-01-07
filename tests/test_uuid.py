@@ -208,7 +208,7 @@ def test_getnode() -> None:
 
 
 @pytest.mark.skipif(sys.platform == "win32", reason="Does not run on Windows")
-def test_reseed_rng_is_called_with_fork() -> None:
+def test_reseed_is_called_when_forking() -> None:
     read_end, write_end = os.pipe()
     uuid_utils.uuid4()
 
