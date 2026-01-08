@@ -42,7 +42,10 @@ jobs:
         with:
           repository: langchain-ai/langchain
           path: langchain
-          sparse-checkout: libs/core
+          sparse-checkout: |
+            libs/core
+            libs/standard-tests
+            libs/text-splitters
           sparse-checkout-cone-mode: false
 
       - name: Install uv
@@ -51,7 +54,7 @@ jobs:
       - name: Run langchain-core tests
         run: |
           cd langchain/libs/core
-          make tests || echo "Some tests failed, but continuing to report results"
+          make tests
 
   langsmith-sdk:
     name: Test langsmith SDK
@@ -91,4 +94,4 @@ jobs:
       - name: Run langsmith-sdk tests
         run: |
           cd langsmith-sdk/python
-          make tests || echo "Some tests failed, but continuing to report results"
+          make tests
