@@ -2,44 +2,46 @@ import uuid
 
 import uuid_utils
 
+ITERATIONS = 10_000
+
 
 def uuid_from_hex() -> None:
-    for _ in range(10_000):
+    for _ in range(ITERATIONS):
         uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
 def uuid_utils_from_hex() -> None:
-    for _ in range(10_000):
+    for _ in range(ITERATIONS):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
 def uuid_from_bytes() -> None:
-    for _ in range(10_000):
+    for _ in range(ITERATIONS):
         uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
 def uuid_utils_from_bytes() -> None:
-    for _ in range(10_000):
+    for _ in range(ITERATIONS):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
 def uuid_from_int() -> None:
-    for _ in range(10_000):
+    for _ in range(ITERATIONS):
         uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
 def uuid_utils_from_int() -> None:
-    for _ in range(10_000):
+    for _ in range(ITERATIONS):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
 
 
 def uuid_from_fields() -> None:
-    for _ in range(10_000):
+    for _ in range(ITERATIONS):
         uuid.UUID(fields=(2819197978, 63598, 4570, 189, 26, 73622928926))
 
 
 def uuid_utils_from_fields() -> None:
-    for _ in range(10_000):
+    for _ in range(ITERATIONS):
         uuid_utils.UUID(fields=(2819197978, 63598, 4570, 189, 26, 73622928926))
 
 
