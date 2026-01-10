@@ -1,5 +1,5 @@
 site_name: UUID-Utils
-site_description: Python bindings to Rust UUID
+site_description: Fast, drop-in replacement for Python's uuid module, powered by Rust.
 site_url: https://aminalaee.github.io/uuid-utils
 
 theme:
@@ -39,7 +39,5 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/aminalaee
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/aminalaee
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/amin-alaee

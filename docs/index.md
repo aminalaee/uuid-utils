@@ -2,9 +2,15 @@
 
 <div align="center">
 
-[![Package version](https://badge.fury.io/py/uuid-utils.svg)](https://pypi.org/project/uuid-utils/)
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058)](https://pypi.org/project/uuid-utils)
-[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/aminalaee/uuid-utils?utm_source=badge)
+<a href="https://pypi.org/project/uuid-utils/" target="_blank">>
+    <img src="https://badge.fury.io/py/uuid-utils.svg" alt="Package version">
+</a>
+<a href="https://pypi.org/project/uuid-utils" target="_blank">
+    <img src="https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058" alt="Supported Python versions">
+</a>
+<a href="https://codspeed.io/aminalaee/uuid-utils?utm_source=badge" target="_blank">
+    <img src="https://img.shields.io/endpoint?url=https://codspeed.io/badge.json" alt="Codspeed">
+</a>
 
 </div>
 
