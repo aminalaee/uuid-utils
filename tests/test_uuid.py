@@ -208,16 +208,13 @@ def test_getnode() -> None:
 
 
 @pytest.mark.skipif(sys.platform == "win32", reason="Does not run on Windows")
-def test_reseed_rng_with_fork() -> None:
+def test_reseed_is_called_when_forking() -> None:
     read_end, write_end = os.pipe()
-    # forcibly generate uuid before fork to have rng state
     uuid_utils.uuid4()
 
-    pid = os.fork()  # type: ignore[attr-defined]
+    pid = os.fork()
     if pid == 0:
         os.close(read_end)
-        # explicity reseed in the child
-        uuid_utils.reseed_rng()
         next_uuid_child = str(uuid_utils.uuid4())
         with os.fdopen(write_end, "w") as write_pipe:
             write_pipe.write(next_uuid_child)
@@ -229,7 +226,6 @@ def test_reseed_rng_with_fork() -> None:
     with os.fdopen(read_end) as read_pipe:
         uuid_from_pipe = uuid_utils.UUID(read_pipe.read())
 
-    # the uuids should be different because we reseeded
     assert next_parent_uuid != uuid_from_pipe
 
 
