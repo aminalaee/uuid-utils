@@ -87,7 +87,7 @@ impl UUID {
     }
 
     fn __repr__(&self) -> String {
-        format!("UUID('{}')", self.__str__())
+        format!("UUID('{}')", self.uuid.hyphenated())
     }
 
     fn __richcmp__(&self, other: UUID, op: CompareOp) -> PyResult<bool> {
@@ -135,8 +135,8 @@ impl UUID {
     }
 
     #[getter]
-    fn hex(&self) -> PyResult<String> {
-        Ok(self.uuid.simple().to_string())
+    fn hex(&self) -> String {
+        self.uuid.simple().to_string()
     }
 
     #[getter]
@@ -146,12 +146,7 @@ impl UUID {
 
     #[getter]
     fn bytes_le<'py>(&self, py: Python<'py>) -> Bound<'py, PyBytes> {
-        let b = self.uuid.as_bytes();
-        let bytes: [u8; 16] = [
-            b[3], b[2], b[1], b[0], b[5], b[4], b[7], b[6], b[8], b[9], b[10], b[11], b[12], b[13],
-            b[14], b[15],
-        ];
-        PyBytes::new(py, &bytes)
+        PyBytes::new(py, &self.uuid.to_bytes_le())
     }
 
     #[getter]
@@ -160,8 +155,8 @@ impl UUID {
     }
 
     #[getter]
-    fn urn(&self) -> PyResult<String> {
-        Ok(self.uuid.urn().to_string())
+    fn urn(&self) -> String {
+        self.uuid.urn().to_string()
     }
 
     #[getter]
@@ -237,15 +232,16 @@ impl UUID {
     }
 
     #[getter]
-    fn fields(&self) -> PyResult<(u32, u16, u16, u8, u8, u64)> {
-        Ok((
-            self.time_low(),
-            self.time_mid(),
-            self.time_hi_version(),
-            self.clock_seq_hi_variant(),
-            self.clock_seq_low(),
-            self.node(),
-        ))
+    fn fields(&self) -> (u32, u16, u16, u8, u8, u64) {
+        let int = self.uuid.as_u128();
+        (
+            int.wrapping_shr(96) as u32,              // time_low
+            ((int.wrapping_shr(80)) & 0xffff) as u16, // time_mid
+            ((int.wrapping_shr(64)) & 0xffff) as u16, // time_hi_version
+            ((int.wrapping_shr(56)) & 0xff) as u8,    // clock_seq_hi_variant
+            ((int.wrapping_shr(48)) & 0xff) as u8,    // clock_seq_low
+            (int & 0xffffffffffff) as u64,            // node
+        )
     }
 
     #[staticmethod]
@@ -415,14 +411,9 @@ fn _getnode() -> u64 {
             bytes
         }
     };
-
-    let node = ((bytes[0] as u64) << 40)
-        | ((bytes[1] as u64) << 32)
-        | ((bytes[2] as u64) << 24)
-        | ((bytes[3] as u64) << 16)
-        | ((bytes[4] as u64) << 8)
-        | (bytes[5] as u64);
-
+    let node = u64::from_be_bytes([
+        0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
+    ]);
     NODE.store(node, Ordering::Relaxed);
     node
 }
