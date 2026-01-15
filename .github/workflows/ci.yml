@@ -272,17 +272,15 @@ jobs:
         sdist,
       ]
     steps:
-      - uses: actions/download-artifact@v4.1.8
+      - uses: actions/download-artifact@v6
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
         with:
-          pattern: wheels-*
-          merge-multiple: true
+          subject-path: 'wheels-*/*'
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
       - name: Publish to PyPI
-        uses: PyO3/maturin-action@v1
-        env:
-          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        with:
-          command: upload
-          args: --skip-existing *
+        run: uv publish 'wheels-*/*'
 
   docs:
     name: Publish docs
