@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<a href="https://pypi.org/project/uuid-utils/" target="_blank">>
+<a href="https://pypi.org/project/uuid-utils/" target="_blank">
     <img src="https://badge.fury.io/py/uuid-utils.svg" alt="Package version">
 </a>
 <a href="https://pypi.org/project/uuid-utils" target="_blank">
