@@ -260,6 +260,10 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     if: "startsWith(github.ref, 'refs/tags/')"
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
     needs:
       [
         lint,
