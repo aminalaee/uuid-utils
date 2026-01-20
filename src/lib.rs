@@ -1,5 +1,5 @@
 use ahash::AHasher;
-use mac_address::get_mac_address;
+use mac_address::MacAddressIterator;
 use pyo3::{
     IntoPyObjectExt,
     exceptions::{PyOSError, PyTypeError, PyValueError},
@@ -403,17 +403,39 @@ fn _getnode() -> u64 {
         return cached;
     }
 
-    let bytes: [u8; 6] = match get_mac_address() {
-        Ok(Some(mac)) => mac.bytes(),
-        _ => {
-            let mut bytes = rand::random::<[u8; 6]>();
-            bytes[0] |= 0x01;
-            bytes
+    fn _is_universal(mac: u64) -> bool {
+        (mac & (1 << 41)) == 0
+    }
+
+    let mut first_local_mac: Option<u64> = None;
+    if let Ok(iter) = MacAddressIterator::new() {
+        for mac in iter {
+            let bytes = mac.bytes();
+            let node = u64::from_be_bytes([
+                0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
+            ]);
+
+            if node == 0 {
+                continue;
+            }
+
+            if _is_universal(node) {
+                NODE.store(node, Ordering::Relaxed);
+                return node;
+            } else if first_local_mac.is_none() {
+                first_local_mac = Some(node);
+            }
         }
-    };
-    let node = u64::from_be_bytes([
-        0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
-    ]);
+    }
+
+    let node = first_local_mac.unwrap_or_else(|| {
+        let mut bytes = rand::random::<[u8; 6]>();
+        bytes[0] |= 0x01;
+        u64::from_be_bytes([
+            0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
+        ])
+    });
+
     NODE.store(node, Ordering::Relaxed);
     node
 }

@@ -202,7 +202,6 @@ def test_is_safe() -> None:
     assert uuid_utils.uuid4().is_safe is SafeUUID.unknown
 
 
-@pytest.mark.xfail(sys.platform == "linux", reason="Might fail in Github Actions")
 def test_getnode() -> None:
     assert uuid_utils.getnode() == getnode()
 
