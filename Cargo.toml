@@ -7,10 +7,6 @@ edition = "2024"
 name = "uuid_utils"
 crate-type = ["cdylib"]
 
-[features]
-default = []
-abi3 = ["pyo3/abi3-py39"]
-
 [dependencies]
 mac_address = "1.1.8"
 pyo3 = { version = "0.27.2", features = [
