@@ -42,7 +42,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.10 pypy3.11
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
           sccache: "true"
           manylinux: auto
       - name: Install and test
@@ -74,7 +74,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.10 pypy3.11
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
       - uses: uraimo/run-on-arch-action@v2.8.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
@@ -170,7 +170,7 @@ jobs:
           - target: x64
             os: windows-latest
             py_arch: "x64"
-            interpreter: 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.10 pypy3.11
+            interpreter: 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
           - target: x86
             py_arch: "x86"
             os: windows-latest
@@ -228,7 +228,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist -i 3.14t
+          args: --release --out dist -i ${{ matrix.platform.interpreter }}
           sccache: "true"
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -249,13 +249,13 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.10 pypy3.11
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.10 pypy3.11
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
