@@ -455,7 +455,7 @@ fn reseed() -> PyResult<()> {
         .map_err(|err| PyOSError::new_err(err.to_string()))
 }
 
-#[pymodule]
+#[pymodule(gil_used = false)]
 fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
     let safe_uuid_unknown = Python::attach(|py| {
         return PyModule::import(py, "uuid")

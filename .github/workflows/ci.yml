@@ -43,7 +43,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11 --features abi3
           sccache: "true"
           manylinux: auto
       - name: Install and test
@@ -56,6 +56,36 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wheels-linux-${{ strategy.job-index }}
+          path: dist
+
+  linux-freethreaded:
+    name: "Linux free-threaded: ${{ matrix.target }}"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [x86_64, i686]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13t"
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist -i 3.13t 3.14t
+          sccache: "true"
+          manylinux: auto
+      - name: Install and test
+        if: matrix.target == 'x86_64'
+        run: |
+          pip install uuid_utils --no-index --find-links dist --force-reinstall
+          pip install pytest pytest-codspeed
+          pytest -v .
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-linux-freethreaded-${{ strategy.job-index }}
           path: dist
 
   linux-cross:
@@ -75,7 +105,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11 --features abi3
       - uses: uraimo/run-on-arch-action@v2.8.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
@@ -116,7 +146,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 --features abi3
       - name: Install built wheel
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: addnab/docker-run-action@v3
@@ -155,7 +185,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 --features abi3
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -191,7 +221,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist -i ${{ matrix.platform.interpreter }}
+          args: --release --out dist -i ${{ matrix.platform.interpreter }} --features abi3
           sccache: "true"
       - name: Install and test uuid_utils
         run: |
@@ -202,6 +232,45 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wheels-windows-${{ strategy.job-index }}
+          path: dist
+
+  windows-freethreaded:
+    name: "Windows free-threaded: ${{ matrix.platform.target }}"
+    runs-on: "${{ matrix.platform.os }}"
+    strategy:
+      matrix:
+        platform:
+          - target: x64
+            os: windows-latest
+            py_arch: "x64"
+          - target: x86
+            py_arch: "x86"
+            os: windows-latest
+          - target: aarch64
+            py_arch: "arm64"
+            os: windows-11-arm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13t"
+          architecture: ${{ matrix.platform.py_arch }}
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.platform.target }}
+          args: --release --out dist -i 3.13t 3.14t
+          sccache: "true"
+      - name: Install and test uuid_utils
+        run: |
+          pip install uuid_utils --no-index --find-links dist --force-reinstall
+          pip install pytest pytest-codspeed
+          pytest -v .
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-windows-freethreaded-${{ strategy.job-index }}
           path: dist
 
   macos:
@@ -222,13 +291,13 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i ${{ matrix.py.i }}
+          args: --release --out dist -i ${{ matrix.py.i }} --features abi3
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release --out dist -i ${{ matrix.py.i }}
+          args: --release --out dist -i ${{ matrix.py.i }} --features abi3
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
@@ -238,6 +307,37 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wheels-macos-${{ strategy.job-index }}
+          path: dist
+
+  macos-freethreaded:
+    name: "MacOS free-threaded"
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13t"
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build wheels - x86_64
+        uses: PyO3/maturin-action@v1
+        with:
+          target: x86_64
+          args: --release --out dist -i 3.13t 3.14t
+          sccache: "true"
+      - name: Build wheels - universal2
+        uses: PyO3/maturin-action@v1
+        with:
+          target: universal2-apple-darwin
+          args: --release --out dist -i 3.13t 3.14t
+      - name: Install and test uuid_utils
+        run: |
+          pip install uuid_utils --no-index --find-links dist --force-reinstall
+          pip install pytest pytest-codspeed
+          pytest -v .
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-macos-freethreaded
           path: dist
 
   sdist:
@@ -268,11 +368,14 @@ jobs:
       [
         lint,
         linux,
+        linux-freethreaded,
         linux-cross,
         musllinux,
         musllinux-cross,
         windows,
+        windows-freethreaded,
         macos,
+        macos-freethreaded,
         sdist,
       ]
     steps:
