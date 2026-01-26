@@ -206,22 +206,29 @@ jobs:
 
   # https://github.com/python/cpython/issues/127294
   windows-freethreaded:
-    name: "Windows free-threaded: ${{ matrix.platform.target }}"
+    name: "Windows (${{ matrix.python-version }}): ${{ matrix.platform.target }}"
     runs-on: "${{ matrix.platform.os }}"
     strategy:
       matrix:
         platform:
           - target: x64
             os: windows-latest
+            py_arch: "x64"
           - target: x86
             os: windows-latest
+            py_arch: "x86"
+          # - target: aarch64
+          #   py_arch: "arm64"
+          #   os: windows-11-arm
         python-version: ["3.13t", "3.14t"]
+
     steps:
       - uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-      - name: Install Python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.platform.py_arch }}
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels
         uses: PyO3/maturin-action@v1
@@ -229,6 +236,12 @@ jobs:
           target: ${{ matrix.platform.target }}
           args: --release --out dist -i ${{ matrix.python-version }}
           sccache: "true"
+      - name: Install and test uuid_utils
+        run: |
+          pip install uuid_utils --no-index --find-links dist --force-reinstall
+          pip install pytest
+          pytest -v .
+
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
