@@ -16,8 +16,8 @@ jobs:
     name: Check code quality
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install dependencies
@@ -28,22 +28,21 @@ jobs:
         run: make docs_build
 
   linux:
-    name: "Linux: ${{ matrix.target }} Python ${{ matrix.python-version }}"
+    name: "Linux: ${{ matrix.target }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         target: [x86_64, i686]
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "${{ matrix.python-version }}"
+          python-version: "3.x"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
           sccache: "true"
           manylinux: auto
       - name: Install and test
@@ -65,17 +64,17 @@ jobs:
       matrix:
         target: [aarch64, armv7, ppc64le]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: "3.x"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
       - uses: uraimo/run-on-arch-action@v2.8.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
@@ -105,10 +104,10 @@ jobs:
           - x86_64-unknown-linux-musl
           - i686-unknown-linux-musl
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: "3.x"
           architecture: x64
       - name: Build wheels
         uses: PyO3/maturin-action@v1
@@ -116,7 +115,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t
       - name: Install built wheel
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: addnab/docker-run-action@v3
@@ -145,17 +144,17 @@ jobs:
           - target: armv7-unknown-linux-musleabihf
             arch: armv7
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: "3.x"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           rust-toolchain: stable
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -171,20 +170,20 @@ jobs:
           - target: x64
             os: windows-latest
             py_arch: "x64"
-            interpreter: "3.13"
+            interpreter: 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
           - target: x86
             py_arch: "x86"
             os: windows-latest
-            interpreter: "3.13"
+            interpreter: 3.9 3.10 3.11 3.12 3.13 3.14
           - target: aarch64
             py_arch: "arm64"
             os: windows-11-arm
-            interpreter: "3.13"
+            interpreter: "3.11 3.12 3.13 3.14"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "${{ matrix.platform.interpreter }}"
+          python-version: "3.x"
           architecture: ${{ matrix.platform.py_arch }}
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels
@@ -204,31 +203,64 @@ jobs:
           name: wheels-windows-${{ strategy.job-index }}
           path: dist
 
+  # https://github.com/python/cpython/issues/127294
+  windows-freethreading:
+    name: "Windows: free-threading ${{ matrix.platform.target }}"
+    runs-on: "${{ matrix.platform.os }}"
+    strategy:
+      matrix:
+        platform:
+          - target: x64
+            os: windows-latest
+            py_arch: "x64"
+          - target: x86
+            os: windows-latest
+            py_arch: "x86"
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python 3.13t
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13t"
+          architecture: ${{ matrix.platform.py_arch }}
+      - name: Set up Python 3.14t
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14t"
+          architecture: ${{ matrix.platform.py_arch }}
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.platform.target }}
+          args: --release --out dist -i 3.13t 3.14t
+          sccache: "true"
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-windows-freethreaded-${{ strategy.job-index }}
+          path: dist
+
   macos:
     name: "MacOS"
     runs-on: macos-latest
-    strategy:
-      matrix:
-        py:
-          - { i: "3.9 3.10 3.11 3.12 3.13 3.14", py: "3.9" }
-          - { i: "pypy3.11 pypy3.11 3.11 3.12 3.13 3.14", py: "pypy3.11" }
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "${{ matrix.py.py }}"
+          python-version: "3.x"
       - uses: dtolnay/rust-toolchain@stable
       - name: Build wheels - x86_64
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i ${{ matrix.py.i }}
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release --out dist -i ${{ matrix.py.i }}
+          args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall
@@ -244,7 +276,7 @@ jobs:
     name: Source Distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:
@@ -272,6 +304,7 @@ jobs:
         musllinux,
         musllinux-cross,
         windows,
+        windows-freethreading,
         macos,
         sdist,
       ]
@@ -280,7 +313,7 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
-          subject-path: 'wheels-*/*'
+          subject-path: "wheels-*/*"
       - name: Install uv
         uses: astral-sh/setup-uv@v7
       - name: Publish to PyPI
@@ -292,7 +325,7 @@ jobs:
     if: "startsWith(github.ref, 'refs/tags/')"
     needs: [release]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build and publish docs
         run: |
           pip install -r requirements.txt
