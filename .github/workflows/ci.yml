@@ -16,7 +16,7 @@ jobs:
     name: Check code quality
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -35,7 +35,7 @@ jobs:
         target: [x86_64, i686]
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
@@ -53,7 +53,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wheels-linux-${{ strategy.job-index }}
           path: dist
@@ -65,7 +65,7 @@ jobs:
       matrix:
         target: [aarch64, armv7, ppc64le]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -91,7 +91,7 @@ jobs:
             pip install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wheels-linux-cross-${{ strategy.job-index }}
           path: dist
@@ -105,7 +105,7 @@ jobs:
           - x86_64-unknown-linux-musl
           - i686-unknown-linux-musl
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -129,7 +129,7 @@ jobs:
             pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall --break-system-packages
             python3 -c "import uuid_utils"
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wheels-musllinux-${{ strategy.job-index }}
           path: dist
@@ -145,7 +145,7 @@ jobs:
           - target: armv7-unknown-linux-musleabihf
             arch: armv7
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -157,7 +157,7 @@ jobs:
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wheels-musllinux-cross-${{ strategy.job-index }}
           path: dist
@@ -181,7 +181,7 @@ jobs:
             os: windows-11-arm
             interpreter: "3.13"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.platform.interpreter }}"
@@ -199,7 +199,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wheels-windows-${{ strategy.job-index }}
           path: dist
@@ -213,7 +213,7 @@ jobs:
           - { i: "3.9 3.10 3.11 3.12 3.13 3.14", py: "3.9" }
           - { i: "pypy3.11 pypy3.11 3.11 3.12 3.13 3.14", py: "pypy3.11" }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.py.py }}"
@@ -235,7 +235,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wheels-macos-${{ strategy.job-index }}
           path: dist
@@ -244,14 +244,14 @@ jobs:
     name: Source Distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:
           command: sdist
           args: --out dist
       - name: Upload sdist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wheels-sdist
           path: dist
@@ -276,7 +276,7 @@ jobs:
         sdist,
       ]
     steps:
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
@@ -292,7 +292,7 @@ jobs:
     if: "startsWith(github.ref, 'refs/tags/')"
     needs: [release]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build and publish docs
         run: |
           pip install -r requirements.txt

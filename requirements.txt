@@ -1,7 +1,7 @@
 mkdocs==1.6.1
-mkdocs-material==9.5.34
-mypy==1.19.0
+mkdocs-material==9.7.1
+mypy==1.19.1
 pytest==9.0.1
 pytest-codspeed==4.2.0
-ruff==0.14.7
+ruff==0.14.14
 richbench==1.0.3
