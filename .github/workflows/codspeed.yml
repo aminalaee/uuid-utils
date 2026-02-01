@@ -33,7 +33,7 @@ jobs:
       - name: Install uuid_utils
         run: pip install uuid_utils --no-index --find-links dist --force-reinstall
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@v4.8.2
+        uses: CodSpeedHQ/action@v4.10.2
         with:
           mode: simulation
           run: pytest tests/test_benchmarks.py --codspeed
