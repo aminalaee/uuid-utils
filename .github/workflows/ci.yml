@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install dependencies
@@ -36,7 +36,7 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "${{ matrix.python-version }}"
       - name: Build wheels
@@ -66,7 +66,7 @@ jobs:
         target: [aarch64, armv7, ppc64le]
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Build wheels
@@ -106,7 +106,7 @@ jobs:
           - i686-unknown-linux-musl
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           architecture: x64
@@ -146,7 +146,7 @@ jobs:
             arch: armv7
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Build wheels
@@ -182,7 +182,7 @@ jobs:
             interpreter: "3.13"
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "${{ matrix.platform.interpreter }}"
           architecture: ${{ matrix.platform.py_arch }}
@@ -214,7 +214,7 @@ jobs:
           - { i: "pypy3.11 pypy3.11 3.11 3.12 3.13 3.14", py: "pypy3.11" }
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "${{ matrix.py.py }}"
       - uses: dtolnay/rust-toolchain@stable
