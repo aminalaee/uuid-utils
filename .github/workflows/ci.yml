@@ -76,7 +76,7 @@ jobs:
           target: ${{ matrix.target }}
           manylinux: auto
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14 pypy3.11
-      - uses: uraimo/run-on-arch-action@v2.8.1
+      - uses: uraimo/run-on-arch-action@v3.0.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
         with:
