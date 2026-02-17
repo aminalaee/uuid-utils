@@ -11,9 +11,6 @@ permissions:
   contents: read
   id-token: write
 
-env:
-  RUSTFLAGS: "--cfg uuid_unstable"
-
 jobs:
   codspeed:
     name: Run benchmarks

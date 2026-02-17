@@ -8,9 +8,6 @@ on:
       - "*"
   pull_request:
 
-env:
-  RUSTFLAGS: "--cfg uuid_unstable"
-
 jobs:
   lint:
     name: Check code quality

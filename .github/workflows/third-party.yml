@@ -9,9 +9,6 @@ on:
       - labeled
       - synchronize
 
-env:
-  RUSTFLAGS: "--cfg uuid_unstable"
-
 jobs:
   langchain-core:
     name: Test langchain-core
