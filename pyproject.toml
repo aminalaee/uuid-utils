@@ -7,7 +7,7 @@ name = "uuid_utils"
 readme = "README.md"
 description = "Fast, drop-in replacement for Python's uuid module, powered by Rust."
 authors = [{ name = "Amin Alaee", email = "mohammadamin.alaee@gmail.com" }]
-keywords = ["rust", "uuid"]
+keywords = ["rust", "uuid", "pyo3"]
 requires-python = ">=3.9"
 classifiers = [
   "Development Status :: 4 - Beta",
