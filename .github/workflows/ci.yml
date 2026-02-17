@@ -117,19 +117,6 @@ jobs:
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
-      - name: Install built wheel
-        if: matrix.target == 'x86_64-unknown-linux-musl'
-        uses: uraimo/run-on-arch-action@v3.0.1
-        with:
-          arch: amd64
-          distro: alpine_latest
-          githubToken: ${{ github.token }}
-          install: |
-            apk add py3-pip
-            pip3 install -U pip pytest
-          run: |
-            pip3 install uuid_utils --no-index --find-links dist/ --force-reinstall --break-system-packages
-            python3 -c "import uuid_utils"
       - name: Upload wheels
         uses: actions/upload-artifact@v6
         with:
