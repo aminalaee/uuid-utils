@@ -315,9 +315,9 @@ fn uuid1(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
             let dur = SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
                 .unwrap();
-            let ts =
+            let timestamp =
                 Timestamp::from_unix_time(dur.as_secs(), dur.subsec_nanos(), clock_seq as u128, 14);
-            Uuid::new_v1(ts, node)
+            Uuid::new_v1(timestamp, node)
         }
         None => Uuid::now_v1(node),
     };
@@ -366,9 +366,10 @@ fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyRes
 
     let uuid = match timestamp {
         Some(timestamp) => {
-            let ts = Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
+            let timestamp =
+                Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
             return Ok(UUID {
-                uuid: Uuid::new_v6(ts, node),
+                uuid: Uuid::new_v6(timestamp, node),
             });
         }
         None => Uuid::now_v6(node),
