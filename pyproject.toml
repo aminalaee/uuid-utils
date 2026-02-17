@@ -26,8 +26,7 @@ classifiers = [
 ]
 license = "BSD-3-Clause"
 license-files = ["LICENSE.md"]
-
-dynamic = ["license", "version"]
+dynamic = ["version"]
 
 [project.urls]
 Documentation = "https://github.com/aminalaee/uuid-utils"
