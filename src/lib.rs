@@ -12,6 +12,7 @@ use std::{
     hash::{Hash, Hasher},
     ptr::null_mut,
     sync::atomic::{AtomicPtr, AtomicU64, Ordering},
+    time::SystemTime,
 };
 use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
 
@@ -305,14 +306,18 @@ impl UUID {
 #[pyo3(signature = (node=None, clock_seq=None))]
 fn uuid1(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
     let node = match node {
-        Some(node) => node.to_ne_bytes(),
-        None => _getnode().to_ne_bytes(),
+        Some(node) => node.to_be_bytes(),
+        None => _getnode().to_be_bytes(),
     };
-    let node = &[node[0], node[1], node[2], node[3], node[4], node[5]];
+    let node: &[u8; 6] = node[2..8].try_into().unwrap();
     let uuid = match clock_seq {
         Some(clock_seq) => {
-            let ts = Timestamp::from_unix(&Context::new_random(), clock_seq, 0);
-            Uuid::new_v1(ts, node)
+            let dur = SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .unwrap();
+            let timestamp =
+                Timestamp::from_unix_time(dur.as_secs(), dur.subsec_nanos(), clock_seq as u128, 14);
+            Uuid::new_v1(timestamp, node)
         }
         None => Uuid::now_v1(node),
     };
@@ -354,10 +359,10 @@ fn uuid5(namespace: &UUID, name: StringOrBytes) -> PyResult<UUID> {
 #[pyo3(signature = (node=None, timestamp=None, nanos=None))]
 fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
     let node = match node {
-        Some(node) => node.to_ne_bytes(),
-        None => _getnode().to_ne_bytes(),
+        Some(node) => node.to_be_bytes(),
+        None => _getnode().to_be_bytes(),
     };
-    let node = &[node[0], node[1], node[2], node[3], node[4], node[5]];
+    let node: &[u8; 6] = node[2..8].try_into().unwrap();
 
     let uuid = match timestamp {
         Some(timestamp) => {
