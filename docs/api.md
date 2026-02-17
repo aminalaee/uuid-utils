@@ -25,6 +25,8 @@
 | `uuid7`   | Generate a version 7 UUID using a time value and random bytes.                                                                                                                                                                                                       |
 | `uuid8`   | Generate a custom UUID comprised almost entirely of user-supplied bytes.                                                                                                                                                                                             |
 | `getnode` | Get the hardware address as a 48-bit positive integer.                                                                                                                                                                                                               |
+| `NIL`     | The nil UUID with all 128 bits set to zero.                                                                                                                                                                                                                          |
+| `MAX`     | The max UUID with all 128 bits set to one.                                                                                                                                                                                                                           |
 
 ### `function` **`uuid1(node: int = None, clock_seq: int = None)`**
 Port of `uuid.uuid1()`. Generates a UUID from a host ID, sequence number, and the current time. Superceded by `uuid6()`.

@@ -18,7 +18,7 @@
 
 Fast, drop-in replacement for Python's uuid module, powered by Rust.
 
-Avaialble UUID versions:
+Available UUID versions:
 
 - `uuid1` - Version 1 UUIDs using a timestamp and monotonic counter.
 - `uuid3` - Version 3 UUIDs based on the MD5 hash of some data.
@@ -64,7 +64,7 @@ UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 ## Compatibility with Python UUID
 
 In some cases, for example if you are using `Django`, you might need `UUID` instances to be returned
-from the standrad-library `uuid`, not a custom `UUID` class.
+from the standard-library `uuid`, not a custom `UUID` class.
 In that case you can use the `uuid_utils.compat` which comes with a performance penalty
 in comparison with the `uuid_utils` default behaviour, but is still faster than the standard-library.
 
@@ -103,5 +103,5 @@ $ make test
 Or:
 
 ```shell
-$ RUSTFLAGS="--cfg uuid_unstable" maturin develop --release
+$ maturin develop --release
 ```
