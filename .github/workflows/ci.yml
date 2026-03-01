@@ -50,7 +50,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-linux-${{ strategy.job-index }}
           path: dist
@@ -88,7 +88,7 @@ jobs:
             pip install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-linux-cross-${{ strategy.job-index }}
           path: dist
@@ -115,7 +115,7 @@ jobs:
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
       - name: Upload wheels
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-musllinux-${{ strategy.job-index }}
           path: dist
@@ -143,7 +143,7 @@ jobs:
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.14
       - name: Upload wheels
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-musllinux-cross-${{ strategy.job-index }}
           path: dist
@@ -185,7 +185,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-windows-${{ strategy.job-index }}
           path: dist
@@ -221,7 +221,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-macos-${{ strategy.job-index }}
           path: dist
@@ -237,7 +237,7 @@ jobs:
           command: sdist
           args: --out dist
       - name: Upload sdist
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-sdist
           path: dist
