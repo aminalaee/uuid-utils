@@ -3,8 +3,10 @@
 <div align="center">
 
 [![Package version](https://badge.fury.io/py/uuid-utils.svg)](https://pypi.org/project/uuid-utils/)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/uuid-utils)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058)](https://pypi.org/project/uuid-utils)
 [![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/aminalaee/uuid-utils?utm_source=badge)
+
 
 </div>
 
