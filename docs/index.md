@@ -5,6 +5,9 @@
 <a href="https://pypi.org/project/uuid-utils/" target="_blank">
     <img src="https://badge.fury.io/py/uuid-utils.svg" alt="Package version">
 </a>
+<a href="https://pypi.org/project/uuid-utils/" target="_blank">
+    <img src="https://img.shields.io/pypi/dm/uuid-utils.svg" alt="Downloads">
+</a>
 <a href="https://pypi.org/project/uuid-utils" target="_blank">
     <img src="https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058" alt="Supported Python versions">
 </a>
