@@ -26,12 +26,12 @@ Available UUID versions:
 ## Installation
 Using `pip`:
 ```shell
-$ pip install uuid-utils
+pip install uuid-utils
 ```
 or, using `conda`:
 
 ```shell
-$ conda install -c conda-forge uuid-utils
+conda install -c conda-forge uuid-utils
 ```
 
 ## Example
@@ -91,12 +91,12 @@ UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 ## How to develop locally
 
 ```shell
-$ make build
-$ make test
+make build
+make test
 ```
 
 Or:
 
 ```shell
-$ maturin develop --release
+maturin develop --release
 ```
