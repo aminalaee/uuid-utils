@@ -14,7 +14,7 @@ use std::{
     sync::atomic::{AtomicPtr, AtomicU64, Ordering},
     time::SystemTime,
 };
-use uuid::{Builder, Bytes, Context, Timestamp, Uuid, Variant, Version};
+use uuid::{Builder, Bytes, ContextV1, Timestamp, Uuid, Variant, Version};
 
 static NODE: AtomicU64 = AtomicU64::new(0);
 
@@ -31,7 +31,7 @@ enum StringOrBytes {
     Bytes(Vec<u8>),
 }
 
-#[pyclass(subclass, module = "uuid_utils")]
+#[pyclass(subclass, module = "uuid_utils", from_py_object)]
 #[derive(Clone, Debug)]
 struct UUID {
     uuid: Uuid,
@@ -367,7 +367,7 @@ fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyRes
     let uuid = match timestamp {
         Some(timestamp) => {
             let timestamp =
-                Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
+                Timestamp::from_unix(&ContextV1::new_random(), timestamp, nanos.unwrap_or(0));
             return Ok(UUID {
                 uuid: Uuid::new_v6(timestamp, node),
             });
@@ -383,7 +383,7 @@ fn uuid7(timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
     let uuid = match timestamp {
         Some(timestamp) => {
             let timestamp =
-                Timestamp::from_unix(&Context::new_random(), timestamp, nanos.unwrap_or(0));
+                Timestamp::from_unix(&ContextV1::new_random(), timestamp, nanos.unwrap_or(0));
             return Ok(UUID {
                 uuid: Uuid::new_v7(timestamp),
             });
