@@ -70,8 +70,10 @@ def test_uuid1() -> None:
     uuid = uuid_utils.uuid1()
     assert isinstance(uuid, uuid_utils.UUID)
 
-    uuid = uuid_utils.uuid1(node=8155362240700, clock_seq=123)
+    uuid = uuid_utils.uuid1(node=getnode(), clock_seq=123)
     assert isinstance(uuid, uuid_utils.UUID)
+    assert uuid.node == getnode()
+    assert uuid.clock_seq == 123
 
 
 @pytest.mark.parametrize("name", ["python.org", b"python.org"])
@@ -94,9 +96,11 @@ def test_uuid5(name: str) -> None:
 def test_uuid6() -> None:
     uuid = uuid_utils.uuid6(getnode(), 1679665408)
     assert isinstance(uuid, uuid_utils.UUID)
+    assert uuid.node == getnode()
 
     uuid = uuid_utils.uuid6(getnode(), 1679665408, 123)
     assert isinstance(uuid, uuid_utils.UUID)
+    assert uuid.node == getnode()
 
     uuid = uuid_utils.uuid6()
     assert isinstance(uuid, uuid_utils.UUID)
@@ -150,6 +154,8 @@ def test_uuid_version(version: int) -> None:
 def test_uuid_illegal_version() -> None:
     with pytest.raises(ValueError):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=0)
+
+    with pytest.raises(ValueError):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=9)
 
 

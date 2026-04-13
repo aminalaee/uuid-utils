@@ -2,7 +2,7 @@
 
 .PHONY: build
 build:
-	RUSTFLAGS="--cfg uuid_unstable" maturin develop --release
+	maturin develop --release
 
 .PHONY: format
 format:

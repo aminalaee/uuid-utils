@@ -56,7 +56,7 @@ def uuid7(timestamp: int | None = None, nanos: int | None = None) -> UUID:
     ...
 
 def uuid8(bytes: bytes) -> UUID:
-    """Generate a custom UUID comprised almost entirely of user-supplied bytes.."""
+    """Generate a custom UUID comprised almost entirely of user-supplied bytes."""
     ...
 
 NIL: Final[UUID]

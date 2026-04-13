@@ -8,9 +8,6 @@ on:
       - "*"
   pull_request:
 
-env:
-  RUSTFLAGS: "--cfg uuid_unstable"
-
 jobs:
   lint:
     name: Check code quality
@@ -52,7 +49,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-linux-${{ strategy.job-index }}
           path: dist
@@ -75,7 +72,7 @@ jobs:
           target: ${{ matrix.target }}
           manylinux: auto
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
-      - uses: uraimo/run-on-arch-action@v2.8.1
+      - uses: uraimo/run-on-arch-action@v3.0.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
         with:
@@ -90,7 +87,7 @@ jobs:
             pip install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-linux-cross-${{ strategy.job-index }}
           path: dist
@@ -128,7 +125,7 @@ jobs:
             pip3 install uuid_utils --no-index --find-links /io/dist/ --force-reinstall --break-system-packages
             python3 -c "import uuid_utils"
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-musllinux-${{ strategy.job-index }}
           path: dist
@@ -156,7 +153,7 @@ jobs:
           manylinux: musllinux_1_2
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-musllinux-cross-${{ strategy.job-index }}
           path: dist
@@ -198,7 +195,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-windows-${{ strategy.job-index }}
           path: dist
@@ -267,7 +264,7 @@ jobs:
           pip install pytest pytest-codspeed
           pytest -v .
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-macos-${{ strategy.job-index }}
           path: dist
@@ -283,7 +280,7 @@ jobs:
           command: sdist
           args: --out dist
       - name: Upload sdist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-sdist
           path: dist
@@ -309,9 +306,9 @@ jobs:
         sdist,
       ]
     steps:
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
       - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: "wheels-*/*"
       - name: Install uv

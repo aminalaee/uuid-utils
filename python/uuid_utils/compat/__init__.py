@@ -56,7 +56,7 @@ def uuid7(timestamp=None, nanos=None):
 
 
 def uuid8(bytes):
-    """Generate a custom UUID comprised almost entirely of user-supplied bytes.."""
+    """Generate a custom UUID comprised almost entirely of user-supplied bytes."""
     return UUID(bytes=uuid_utils.uuid8(bytes).bytes)
 
 

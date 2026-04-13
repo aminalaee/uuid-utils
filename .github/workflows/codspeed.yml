@@ -11,17 +11,14 @@ permissions:
   contents: read
   id-token: write
 
-env:
-  RUSTFLAGS: "--cfg uuid_unstable"
-
 jobs:
   codspeed:
     name: Run benchmarks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install dependencies
@@ -33,7 +30,7 @@ jobs:
       - name: Install uuid_utils
         run: pip install uuid_utils --no-index --find-links dist --force-reinstall
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@v4.5.2
+        uses: CodSpeedHQ/action@v4.13.0
         with:
           mode: simulation
           run: pytest tests/test_benchmarks.py --codspeed

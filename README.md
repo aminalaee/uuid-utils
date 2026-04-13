@@ -3,6 +3,7 @@
 <div align="center">
 
 [![Package version](https://badge.fury.io/py/uuid-utils.svg)](https://pypi.org/project/uuid-utils/)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/uuid-utils)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/uuid-utils.svg?color=%2334D058)](https://pypi.org/project/uuid-utils)
 [![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/aminalaee/uuid-utils?utm_source=badge)
 
@@ -12,7 +13,7 @@
 
 Fast, drop-in replacement for Python's uuid module, powered by Rust.
 
-Avaialble UUID versions:
+Available UUID versions:
 
 - `uuid1` - Version 1 UUIDs using a timestamp and monotonic counter.
 - `uuid3` - Version 3 UUIDs based on the MD5 hash of some data.
@@ -25,12 +26,12 @@ Avaialble UUID versions:
 ## Installation
 Using `pip`:
 ```shell
-$ pip install uuid-utils
+pip install uuid-utils
 ```
 or, using `conda`:
 
 ```shell
-$ conda install -c conda-forge uuid-utils
+conda install -c conda-forge uuid-utils
 ```
 
 ## Example
@@ -58,7 +59,7 @@ UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 ## Compatibility with Python UUID
 
 In some cases, for example if you are using `Django`, you might need `UUID` instances to be returned
-from the standrad-library `uuid`, not a custom `UUID` class.
+from the standard-library `uuid`, not a custom `UUID` class.
 In that case you can use the `uuid_utils.compat` which comes with a performance penalty
 in comparison with the `uuid_utils` default behaviour, but is still faster than the standard-library.
 
@@ -90,12 +91,12 @@ UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 ## How to develop locally
 
 ```shell
-$ make build
-$ make test
+make build
+make test
 ```
 
 Or:
 
 ```shell
-$ RUSTFLAGS="--cfg uuid_unstable" maturin develop --release
+maturin develop --release
 ```
