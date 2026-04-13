@@ -210,12 +210,19 @@ jobs:
           - target: x64
             os: windows-latest
             py_arch: "x64"
+            interpreter: 3.13t 3.14t
           - target: x86
             os: windows-latest
             py_arch: "x86"
+            interpreter: 3.13t 3.14t
+          - target: aarch64
+            os: windows-11-arm
+            py_arch: "arm64"
+            interpreter: 3.14t
     steps:
       - uses: actions/checkout@v6
       - name: Set up Python 3.13t
+        if: matrix.platform.target != 'aarch64'
         uses: actions/setup-python@v6
         with:
           python-version: "3.13t"
@@ -230,7 +237,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist -i 3.13t 3.14t
+          args: --release --out dist -i ${{ matrix.platform.interpreter }}
           sccache: "true"
       - name: Upload wheels
         uses: actions/upload-artifact@v4
