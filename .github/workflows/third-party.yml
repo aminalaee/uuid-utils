@@ -25,14 +25,6 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Build uuid-utils wheel
-        run: |
-          pip install maturin
-          maturin build --release --out dist
-
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
@@ -51,8 +43,7 @@ jobs:
         run: |
           cd langchain/libs/core
           uv sync --all-groups
-          WHEEL_FILE=$(ls $GITHUB_WORKSPACE/dist/uuid_utils-*.whl)
-          UV_NO_SYNC=1 uv pip install --force-reinstall $WHEEL_FILE
+          UV_NO_SYNC=1 uv pip install --force-reinstall --pre uuid-utils
           UV_NO_SYNC=1 make test
 
   langsmith-sdk:
@@ -73,14 +64,6 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Build uuid-utils wheel
-        run: |
-          uv pip install --system maturin
-          maturin build --release --out dist
-
       - name: Checkout langsmith-sdk
         uses: actions/checkout@v6
         with:
@@ -93,6 +76,5 @@ jobs:
         run: |
           cd langsmith-sdk/python
           uv sync --all-groups
-          WHEEL_FILE=$(ls $GITHUB_WORKSPACE/dist/uuid_utils-*.whl)
-          UV_NO_SYNC=1 uv pip install --force-reinstall $WHEEL_FILE
+          UV_NO_SYNC=1 uv pip install --force-reinstall --pre uuid-utils
           UV_NO_SYNC=1 make test
