@@ -6,6 +6,7 @@ on:
     branches:
       - main
     types:
+      - opened
       - labeled
       - synchronize
 
@@ -14,7 +15,7 @@ jobs:
     name: Test langchain-core
     runs-on: ubuntu-latest
     if: >
-      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'third-party-tests')) ||
+      github.event_name == 'pull_request' ||
       github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout uuid-utils
@@ -50,7 +51,7 @@ jobs:
     name: Test langsmith SDK
     runs-on: ubuntu-latest
     if: >
-      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'third-party-tests')) ||
+      github.event_name == 'pull_request' ||
       github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout uuid-utils
