@@ -212,7 +212,10 @@ def test_getnode() -> None:
     assert uuid_utils.getnode() == getnode()
 
 
-@pytest.mark.skipif(sys.platform == "win32", reason="Does not run on Windows")
+@pytest.mark.skipif(
+    sys.platform in ("win32", "emscripten", "wasi"),
+    reason="Does not run on Windows or WASM",
+)
 def test_reseed_is_called_when_forking() -> None:
     read_end, write_end = os.pipe()
     uuid_utils.uuid4()

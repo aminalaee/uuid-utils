@@ -8,7 +8,6 @@ name = "uuid_utils"
 crate-type = ["cdylib"]
 
 [dependencies]
-mac_address = "1.1.8"
 pyo3 = { version = "0.28.3", features = [
     "extension-module",
     "generate-import-lib",
@@ -25,3 +24,6 @@ uuid = { version  = "1.23.0", features = [
     "fast-rng",
 ]}
 ahash = "0.8.12"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+mac_address = "1.1.8"

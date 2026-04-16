@@ -1,4 +1,5 @@
 use ahash::AHasher;
+#[cfg(not(target_arch = "wasm32"))]
 use mac_address::MacAddressIterator;
 use pyo3::{
     IntoPyObjectExt,
@@ -412,34 +413,39 @@ fn _getnode() -> u64 {
         (mac & (1 << 41)) == 0
     }
 
-    let mut first_local_mac: Option<u64> = None;
-    if let Ok(iter) = MacAddressIterator::new() {
-        for mac in iter {
-            let bytes = mac.bytes();
-            let node = u64::from_be_bytes([
-                0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
-            ]);
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        let mut first_local_mac: Option<u64> = None;
+        if let Ok(iter) = MacAddressIterator::new() {
+            for mac in iter {
+                let bytes = mac.bytes();
+                let node = u64::from_be_bytes([
+                    0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
+                ]);
 
-            if node == 0 {
-                continue;
-            }
+                if node == 0 {
+                    continue;
+                }
 
-            if _is_universal(node) {
-                NODE.store(node, Ordering::Relaxed);
-                return node;
-            } else if first_local_mac.is_none() {
-                first_local_mac = Some(node);
+                if _is_universal(node) {
+                    NODE.store(node, Ordering::Relaxed);
+                    return node;
+                } else if first_local_mac.is_none() {
+                    first_local_mac = Some(node);
+                }
             }
+        }
+        if let Some(node) = first_local_mac {
+            NODE.store(node, Ordering::Relaxed);
+            return node;
         }
     }
 
-    let node = first_local_mac.unwrap_or_else(|| {
-        let mut bytes = rand::random::<[u8; 6]>();
-        bytes[0] |= 0x01;
-        u64::from_be_bytes([
-            0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
-        ])
-    });
+    let mut bytes = rand::random::<[u8; 6]>();
+    bytes[0] |= 0x01;
+    let node = u64::from_be_bytes([
+        0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
+    ]);
 
     NODE.store(node, Ordering::Relaxed);
     node
