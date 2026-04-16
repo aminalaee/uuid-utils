@@ -1,6 +1,6 @@
 [package]
 name = "uuid-utils"
-version = "0.15.0-alpha.1"
+version = "0.15.0-alpha.2"
 edition = "2024"
 
 [lib]
