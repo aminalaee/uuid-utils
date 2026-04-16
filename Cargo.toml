@@ -13,7 +13,7 @@ pyo3 = { version = "0.28.3", features = [
     "extension-module",
     "generate-import-lib",
 ]}
-rand = "0.10.0"
+rand = "0.10.1"
 uuid = { version  = "1.23.0", features = [
     "v1",
     "v3",
