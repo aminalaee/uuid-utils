@@ -292,6 +292,49 @@ jobs:
           name: wheels-sdist
           path: dist
 
+  pyodide:
+    name: Pyodide
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly-2025-02-17
+          components: rust-src
+          targets: wasm32-unknown-emscripten
+
+      - uses: Swatinem/rust-cache@v2
+
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: "3.1.58"
+          actions-cache-folder: emsdk-cache
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Build WASM wheel
+        run: |
+          uv tool install maturin
+          PYO3_CROSS_PYTHON_VERSION=3.12 maturin build --release --target wasm32-unknown-emscripten --out dist -i 3.12
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install Node deps
+        run: npm install
+
+      - name: Run Pyodide tests
+        run: node tests/emscripten_runner.js
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: wheels-wasm
+          path: dist
+
   release:
     name: Release
     runs-on: ubuntu-latest
@@ -311,6 +354,7 @@ jobs:
         windows-freethreading,
         macos,
         sdist,
+        pyodide,
       ]
     steps:
       - uses: actions/download-artifact@v8
