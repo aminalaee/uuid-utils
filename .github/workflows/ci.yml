@@ -320,7 +320,7 @@ jobs:
           uv tool install maturin
           PYO3_CROSS_PYTHON_VERSION=3.12 maturin build --release --target wasm32-unknown-emscripten --out dist -i 3.12
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "18"
 
@@ -329,11 +329,6 @@ jobs:
 
       - name: Run Pyodide tests
         run: node tests/emscripten_runner.js
-
-      - uses: actions/upload-artifact@v7
-        with:
-          name: wheels-wasm
-          path: dist
 
   release:
     name: Release
@@ -354,7 +349,6 @@ jobs:
         windows-freethreading,
         macos,
         sdist,
-        pyodide,
       ]
     steps:
       - uses: actions/download-artifact@v8
