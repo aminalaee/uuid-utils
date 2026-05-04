@@ -72,7 +72,7 @@ jobs:
           target: ${{ matrix.target }}
           manylinux: auto
           args: --release --out dist -i 3.9 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
-      - uses: uraimo/run-on-arch-action@v3.0.1
+      - uses: uraimo/run-on-arch-action@v3.1.0
         if: matrix.target != 'ppc64'
         name: Install built wheel
         with:
@@ -240,7 +240,7 @@ jobs:
           args: --release --out dist -i ${{ matrix.platform.interpreter }}
           sccache: "true"
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wheels-windows-freethreaded-${{ strategy.job-index }}
           path: dist
@@ -307,7 +307,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - uses: mymindstorm/setup-emsdk@v14
+      - uses: mymindstorm/setup-emsdk@v16
         with:
           version: "3.1.58"
           actions-cache-folder: emsdk-cache
