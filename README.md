@@ -73,20 +73,26 @@ UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 
 ## Benchmarks
 
-| Benchmark        | Min   | Max   | Mean  | Min (+)       | Max (+)       | Mean (+)      |
-| ---------------- | ----- | ----- | ----- | ------------- | ------------- | ------------- |
-| UUID v1          | 0.061 | 0.299 | 0.194 | 0.019 (3.3x)  | 0.019 (15.4x) | 0.019 (10.1x) |
-| UUID v3          | 0.267 | 0.307 | 0.293 | 0.035 (7.6x)  | 0.041 (7.5x)  | 0.039 (7.5x)  |
-| UUID v4          | 0.073 | 0.119 | 0.083 | 0.005 (15.2x) | 0.005 (24.6x) | 0.005 (17.1x) |
-| UUID v5          | 0.058 | 0.189 | 0.146 | 0.008 (7.6x)  | 0.038 (5.0x)  | 0.016 (9.0x)  |
-| UUID v6          | 0.032 | 0.033 | 0.032 | 0.003 (10.1x) | 0.003 (10.3x) | 0.003 (10.1x) |
-| UUID v7          | 0.063 | 0.063 | 0.063 | 0.004 (16.1x) | 0.004 (16.0x) | 0.004 (16.1x) |
-| UUID from hex    | 0.128 | 0.139 | 0.135 | 0.016 (8.2x)  | 0.017 (8.0x)  | 0.016 (8.3x)  |
-| UUID from bytes  | 0.031 | 0.135 | 0.093 | 0.016 (2.0x)  | 0.016 (8.6x)  | 0.016 (5.9x)  |
-| UUID from int    | 0.027 | 0.102 | 0.043 | 0.003 (8.3x)  | 0.004 (25.0x) | 0.003 (12.4x) |
-| UUID from fields | 0.031 | 0.162 | 0.077 | 0.005 (6.0x)  | 0.005 (30.6x) | 0.005 (14.7x) |
+| Benchmark              |        Min |     Median |        Max |       × |
+| :--------------------- | ---------: | ---------: | ---------: | ------: |
+| **uuid4()**            |            |            |            |         |
+| stdlib_uuid4           | 1163.498ns | 1214.832ns | 1270.172ns | 22.528x |
+| compat_uuid4           |  380.432ns |  382.615ns |  388.044ns |  7.095x |
+| uuid_utils_uuid4       |   53.499ns |   53.924ns |   55.577ns |  1.000x |
+| **uuid7()**            |            |            |            |         |
+| stdlib_uuid7           | 1417.852ns | 1466.774ns | 1706.159ns | 17.417x |
+| compat_uuid7           |  461.170ns |  466.757ns |  651.171ns |  5.542x |
+| uuid_utils_uuid7       |   83.197ns |   84.216ns |   92.744ns |  1.000x |
+| **UUID from hex**      |            |            |            |         |
+| stdlib_from_hex        |  416.020ns |  423.380ns |  428.571ns |  5.679x |
+| uuid_utils_from_hex    |   73.406ns |   74.549ns |   76.518ns |  1.000x |
+| **UUID from bytes**    |            |            |            |         |
+| stdlib_from_bytes      |  357.460ns |  362.705ns |  369.997ns |  3.716x |
+| uuid_utils_from_bytes  |   97.227ns |   97.603ns |   98.170ns |  1.000x |
 
-<sup>Benchmark results might vary in different environments, but in most cases the uuid_utils should outperform stdlib uuid.</sup><br>
+*times in nanoseconds, lower is better*
+
+Python 3.14.2 · macOS-26.3.1 · Apple M3 Pro · 10 × 100,000 rounds · 2026-05-08 10:34:14
 
 ## How to develop locally
 

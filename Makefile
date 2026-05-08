@@ -21,7 +21,7 @@ test:
 
 .PHONY: bench
 bench:
-	richbench benchmarks/
+	benchdiff benchmarks/ --repeat 10 --times 100000
 
 .PHONY: docs_build
 docs_build:
