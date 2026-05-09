@@ -71,26 +71,36 @@ UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 
 ## Benchmarks
 
-| Benchmark             |    Min     |   Median   |    Max     |    ×    |
-| :-------------------- | :--------: | :--------: | :--------: | :-----: |
-| **uuid4()**           |            |            |            |         |
-| stdlib_uuid4          | 1207.988ns | 1245.685ns | 1858.940ns | 21.916x |
-| compat_uuid4          |  394.893ns |  402.400ns |  428.825ns |  7.080x |
-| uuid_utils_uuid4      |   55.966ns |   56.839ns |   58.002ns |  1.000x |
-| **uuid7()**           |            |            |            |         |
-| stdlib_uuid7          | 1374.710ns | 1389.047ns | 1424.699ns | 16.680x |
-| compat_uuid7          |  414.879ns |  430.362ns |  507.907ns |  5.168x |
-| uuid_utils_uuid7      |   82.275ns |   83.277ns |   84.009ns |  1.000x |
-| **UUID from hex**     |            |            |            |         |
-| stdlib_from_hex       |  407.829ns |  421.818ns |  698.335ns |  5.282x |
-| uuid_utils_from_hex   |   76.947ns |   79.863ns |   84.505ns |  1.000x |
-| **UUID from bytes**   |            |            |            |         |
-| stdlib_from_bytes     |  370.876ns |  393.131ns |  559.383ns |  3.888x |
-| uuid_utils_from_bytes |   98.012ns |  101.120ns |  106.267ns |  1.000x |
+![Benchmarks](docs/benchmarks.svg)
 
-*times in nanoseconds, lower is better*
-
-Python 3.14.2 · macOS-26.3.1 · Apple M3 Pro · 10 × 100,000 rounds · 2026-05-08 11:24:30
+```
+╭──────────────────────────────────── benchdiff ─────────────────────────────────────╮
+│                                                                                    │
+│   Benchmark                     Min           Median          Max           ×      │
+│  ────────────────────────────────────────────────────────────────────────────────  │
+│   uuid4()                                                                          │
+│     stdlib_uuid4             1249.762ns     1294.023ns     1325.939ns    22.589x   │
+│     compat_uuid4             409.614ns      417.891ns      437.917ns     7.295x    │
+│     uuid_utils_uuid4          55.411ns       57.285ns       58.973ns     1.000x    │
+│   uuid7()                                                                          │
+│     stdlib_uuid7             1396.391ns     1451.147ns     1564.087ns    17.400x   │
+│     compat_uuid7             427.337ns      432.519ns      436.724ns     5.186x    │
+│     uuid_utils_uuid7          82.539ns       83.397ns      102.663ns     1.000x    │
+│   UUID from hex                                                                    │
+│     stdlib_from_hex          423.353ns      431.943ns      621.810ns     5.769x    │
+│     uuid_utils_from_hex       74.149ns       74.868ns       75.613ns     1.000x    │
+│   UUID from bytes                                                                  │
+│     stdlib_from_bytes        370.027ns      373.883ns      383.646ns     3.772x    │
+│     uuid_utils_from_bytes     97.189ns       99.132ns      102.382ns     1.000x    │
+│                                                                                    │
+│ ────────────────────────────────────────────────────────────────────────────────── │
+│   Python      3.14.2                                                               │
+│   Platform    macOS-26.3.1                                                         │
+│   CPU         Apple M3 Pro                                                         │
+│   Rounds      10 × 100,000 calls                                                   │
+│   Date        2026-05-09 12:38:51                                                  │
+╰────────────────────────────────────────────────────────────────────────────────────╯
+```
 
 ## How to develop locally
 
