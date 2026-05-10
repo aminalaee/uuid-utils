@@ -58,35 +58,49 @@ UUID('6fa459ea-ee8a-3ca4-894e-db77e160355e')
 
 ## Compatibility with Python UUID
 
-In some cases, for example if you are using `Django`, you might need `UUID` instances to be returned
-from the standard-library `uuid`, not a custom `UUID` class.
-In that case you can use the `uuid_utils.compat` which comes with a performance penalty
-in comparison with the `uuid_utils` default behaviour, but is still faster than the standard-library.
+Some frameworks (e.g. Django) require `UUID` instances from the standard-library `uuid` module,
+not a custom subclass. Use `uuid_utils.compat` for a drop-in replacement that returns stdlib
+`uuid.UUID` instances while still outperforming the standard library.
 
 ```py
 >>> import uuid_utils.compat as uuid
 
->>> # make a random UUID
 >>> uuid.uuid4()
 UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 ```
 
 ## Benchmarks
 
-| Benchmark        | Min   | Max   | Mean  | Min (+)       | Max (+)       | Mean (+)      |
-| ---------------- | ----- | ----- | ----- | ------------- | ------------- | ------------- |
-| UUID v1          | 0.061 | 0.299 | 0.194 | 0.019 (3.3x)  | 0.019 (15.4x) | 0.019 (10.1x) |
-| UUID v3          | 0.267 | 0.307 | 0.293 | 0.035 (7.6x)  | 0.041 (7.5x)  | 0.039 (7.5x)  |
-| UUID v4          | 0.073 | 0.119 | 0.083 | 0.005 (15.2x) | 0.005 (24.6x) | 0.005 (17.1x) |
-| UUID v5          | 0.058 | 0.189 | 0.146 | 0.008 (7.6x)  | 0.038 (5.0x)  | 0.016 (9.0x)  |
-| UUID v6          | 0.032 | 0.033 | 0.032 | 0.003 (10.1x) | 0.003 (10.3x) | 0.003 (10.1x) |
-| UUID v7          | 0.063 | 0.063 | 0.063 | 0.004 (16.1x) | 0.004 (16.0x) | 0.004 (16.1x) |
-| UUID from hex    | 0.128 | 0.139 | 0.135 | 0.016 (8.2x)  | 0.017 (8.0x)  | 0.016 (8.3x)  |
-| UUID from bytes  | 0.031 | 0.135 | 0.093 | 0.016 (2.0x)  | 0.016 (8.6x)  | 0.016 (5.9x)  |
-| UUID from int    | 0.027 | 0.102 | 0.043 | 0.003 (8.3x)  | 0.004 (25.0x) | 0.003 (12.4x) |
-| UUID from fields | 0.031 | 0.162 | 0.077 | 0.005 (6.0x)  | 0.005 (30.6x) | 0.005 (14.7x) |
+![Benchmarks](docs/benchmarks.svg)
 
-<sup>Benchmark results might vary in different environments, but in most cases the uuid_utils should outperform stdlib uuid.</sup><br>
+```
+╭──────────────────────────────────── benchdiff ─────────────────────────────────────╮
+│                                                                                    │
+│   Benchmark                     Min           Median          Max           ×      │
+│  ────────────────────────────────────────────────────────────────────────────────  │
+│   uuid4()                                                                          │
+│     stdlib_uuid4             1249.762ns     1294.023ns     1325.939ns    22.589x   │
+│     compat_uuid4             409.614ns      417.891ns      437.917ns     7.295x    │
+│     uuid_utils_uuid4          55.411ns       57.285ns       58.973ns     1.000x    │
+│   uuid7()                                                                          │
+│     stdlib_uuid7             1396.391ns     1451.147ns     1564.087ns    17.400x   │
+│     compat_uuid7             427.337ns      432.519ns      436.724ns     5.186x    │
+│     uuid_utils_uuid7          82.539ns       83.397ns      102.663ns     1.000x    │
+│   UUID from hex                                                                    │
+│     stdlib_from_hex          423.353ns      431.943ns      621.810ns     5.769x    │
+│     uuid_utils_from_hex       74.149ns       74.868ns       75.613ns     1.000x    │
+│   UUID from bytes                                                                  │
+│     stdlib_from_bytes        370.027ns      373.883ns      383.646ns     3.772x    │
+│     uuid_utils_from_bytes     97.189ns       99.132ns      102.382ns     1.000x    │
+│                                                                                    │
+│ ────────────────────────────────────────────────────────────────────────────────── │
+│   Python      3.14.2                                                               │
+│   Platform    macOS-26.3.1                                                         │
+│   CPU         Apple M3 Pro                                                         │
+│   Rounds      10 × 100,000 calls                                                   │
+│   Date        2026-05-09 12:38:51                                                  │
+╰────────────────────────────────────────────────────────────────────────────────────╯
+```
 
 ## How to develop locally
 

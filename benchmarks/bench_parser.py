@@ -2,52 +2,47 @@ import uuid
 
 import uuid_utils
 
-ITERATIONS = 10_000
+HEX = "a8098c1a-f86e-11da-bd1a-00112444be1e"
+BYTES = uuid.UUID(HEX).bytes
+INT = uuid.UUID(HEX).int
+FIELDS = (2819197978, 63598, 4570, 189, 26, 73622928926)
 
 
-def uuid_from_hex() -> None:
-    for _ in range(ITERATIONS):
-        uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+def stdlib_from_hex() -> None:
+    uuid.UUID(HEX)
 
 
 def uuid_utils_from_hex() -> None:
-    for _ in range(ITERATIONS):
-        uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+    uuid_utils.UUID(HEX)
 
 
-def uuid_from_bytes() -> None:
-    for _ in range(ITERATIONS):
-        uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+def stdlib_from_bytes() -> None:
+    uuid.UUID(bytes=BYTES)
 
 
 def uuid_utils_from_bytes() -> None:
-    for _ in range(ITERATIONS):
-        uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+    uuid_utils.UUID(bytes=BYTES)
 
 
-def uuid_from_int() -> None:
-    for _ in range(ITERATIONS):
-        uuid.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+def stdlib_from_int() -> None:
+    uuid.UUID(int=INT)
 
 
 def uuid_utils_from_int() -> None:
-    for _ in range(ITERATIONS):
-        uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e")
+    uuid_utils.UUID(int=INT)
 
 
-def uuid_from_fields() -> None:
-    for _ in range(ITERATIONS):
-        uuid.UUID(fields=(2819197978, 63598, 4570, 189, 26, 73622928926))
+def stdlib_from_fields() -> None:
+    uuid.UUID(fields=FIELDS)
 
 
 def uuid_utils_from_fields() -> None:
-    for _ in range(ITERATIONS):
-        uuid_utils.UUID(fields=(2819197978, 63598, 4570, 189, 26, 73622928926))
+    uuid_utils.UUID(fields=FIELDS)
 
 
 __benchmarks__ = [
-    (uuid_from_hex, uuid_utils_from_hex, "UUID from hex"),
-    (uuid_from_bytes, uuid_utils_from_bytes, "UUID from bytes"),
-    (uuid_from_int, uuid_utils_from_int, "UUID from int"),
-    (uuid_from_fields, uuid_utils_from_fields, "UUID from fields"),
+    ("UUID from hex", [stdlib_from_hex, uuid_utils_from_hex]),
+    ("UUID from bytes", [stdlib_from_bytes, uuid_utils_from_bytes]),
+    ("UUID from int", [stdlib_from_int, uuid_utils_from_int]),
+    ("UUID from fields", [stdlib_from_fields, uuid_utils_from_fields]),
 ]

@@ -21,7 +21,12 @@ test:
 
 .PHONY: bench
 bench:
-	richbench benchmarks/
+	benchdiff benchmarks/ --repeat 10 --times 100000
+
+.PHONY: bench-report
+bench-report:
+	benchdiff benchmarks/bench_report.py --repeat 10 --times 100000 --svg docs/benchmarks.svg
+	benchdiff benchmarks/bench_report.py --repeat 10 --times 100000
 
 .PHONY: docs_build
 docs_build:
