@@ -6,6 +6,6 @@
     "test": "node tests/emscripten_runner.js"
   },
   "dependencies": {
-    "pyodide": "^0.27.7"
+    "pyodide": "^0.29.0"
   }
 }
