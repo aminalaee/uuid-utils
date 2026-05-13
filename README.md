@@ -74,32 +74,32 @@ UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 ![Benchmarks](docs/benchmarks.svg)
 
 ```
-╭──────────────────────────────────── benchdiff ─────────────────────────────────────╮
-│                                                                                    │
-│   Benchmark                     Min           Median          Max           ×      │
-│  ────────────────────────────────────────────────────────────────────────────────  │
-│   uuid4()                                                                          │
-│     stdlib_uuid4             1249.762ns     1294.023ns     1325.939ns    22.589x   │
-│     compat_uuid4             409.614ns      417.891ns      437.917ns     7.295x    │
-│     uuid_utils_uuid4          55.411ns       57.285ns       58.973ns     1.000x    │
-│   uuid7()                                                                          │
-│     stdlib_uuid7             1396.391ns     1451.147ns     1564.087ns    17.400x   │
-│     compat_uuid7             427.337ns      432.519ns      436.724ns     5.186x    │
-│     uuid_utils_uuid7          82.539ns       83.397ns      102.663ns     1.000x    │
-│   UUID from hex                                                                    │
-│     stdlib_from_hex          423.353ns      431.943ns      621.810ns     5.769x    │
-│     uuid_utils_from_hex       74.149ns       74.868ns       75.613ns     1.000x    │
-│   UUID from bytes                                                                  │
-│     stdlib_from_bytes        370.027ns      373.883ns      383.646ns     3.772x    │
-│     uuid_utils_from_bytes     97.189ns       99.132ns      102.382ns     1.000x    │
-│                                                                                    │
-│ ────────────────────────────────────────────────────────────────────────────────── │
-│   Python      3.14.2                                                               │
-│   Platform    macOS-26.3.1                                                         │
-│   CPU         Apple M3 Pro                                                         │
-│   Rounds      10 × 100,000 calls                                                   │
-│   Date        2026-05-09 12:38:51                                                  │
-╰────────────────────────────────────────────────────────────────────────────────────╯
+╭───────────────────────────────── benchdiff ──────────────────────────────────╮
+│                                                                              │
+│   Benchmark                    Min           Median          Max           × │
+│  ─────────────────────────────────────────────────────────────────────────── │
+│   uuid4()                                                                    │
+│     stdlib_uuid4            1178.260ns     1189.167ns     1260.025ns    19.2 │
+│     compat_uuid4            248.325ns      251.257ns      271.325ns     4.07 │
+│     uuid_utils_uuid4         60.212ns       61.642ns       62.068ns     1.00 │
+│   uuid7()                                                                    │
+│     stdlib_uuid7            1327.365ns     1336.479ns     1615.529ns    15.7 │
+│     compat_uuid7            277.427ns      279.572ns      286.819ns     3.30 │
+│     uuid_utils_uuid7         83.582ns       84.654ns       93.588ns     1.00 │
+│   UUID from hex                                                              │
+│     stdlib_from_hex         443.457ns      463.514ns      472.753ns     5.47 │
+│     uuid_utils_from_hex      84.256ns       84.639ns       85.301ns     1.00 │
+│   UUID from bytes                                                            │
+│     stdlib_from_bytes       398.878ns      400.830ns      403.030ns     3.80 │
+│     uuid_utils_from_byt…    103.698ns      105.417ns      106.426ns     1.00 │
+│                                                                              │
+│ ──────────────────────────────────────────────────────────────────────────── │
+│   Python      3.14.4                                                         │
+│   Platform    macOS-26.3.1                                                   │
+│   CPU         Apple M3 Pro                                                   │
+│   Rounds      10 × 100,000 calls                                             │
+│   Date        2026-05-13 21:24:22                                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## How to develop locally

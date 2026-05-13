@@ -24,6 +24,12 @@ from ._uuid_utils import (
     uuid8,
 )
 from ._uuid_utils import (
+    _uuid4_int as _uuid4_int,
+)
+from ._uuid_utils import (
+    _uuid7_int as _uuid7_int,
+)
+from ._uuid_utils import (
     reseed as reseed_rng,
 )
 
