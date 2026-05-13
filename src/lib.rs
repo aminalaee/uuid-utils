@@ -279,6 +279,11 @@ impl UUID {
         let time_hi_version = fields.2 as u128;
         let clock_seq_hi_variant = fields.3 as u128;
         let clock_seq_low = fields.4 as u128;
+        if fields.5 >= (1 << 48) {
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "field 6 out of range (need a 48-bit value)",
+            ));
+        }
         let node = fields.5 as u128;
         let clock_seq = clock_seq_hi_variant << 8 | clock_seq_low;
 
