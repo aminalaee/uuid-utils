@@ -162,8 +162,8 @@ impl UUID {
     }
 
     #[getter]
-    fn version(&self) -> usize {
-        self.uuid.get_version_num()
+    fn version(&self) -> Option<usize> {
+        (self.uuid.get_variant() == Variant::RFC4122).then(|| self.uuid.get_version_num())
     }
 
     #[getter]

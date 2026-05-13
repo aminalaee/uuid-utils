@@ -151,6 +151,11 @@ def test_uuid_version(version: int) -> None:
     assert uuid.version == version
 
 
+def test_uuid_version_none_for_non_rfc4122() -> None:
+    uuid = uuid_utils.UUID(int=0)
+    assert uuid.version is None
+
+
 def test_uuid_illegal_version() -> None:
     with pytest.raises(ValueError):
         uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=0)
