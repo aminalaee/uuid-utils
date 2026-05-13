@@ -59,6 +59,11 @@ def test_uuid_from_fields() -> None:
     assert str(uuid) == "a8098c1a-f86e-11da-bd1a-00112444be1e"
 
 
+def test_uuid_from_fields_node_out_of_range() -> None:
+    with pytest.raises(ValueError, match="field 6 out of range"):
+        uuid_utils.UUID(fields=(0, 0, 0, 0, 0, 2**48))
+
+
 def test_uuid_setattr() -> None:
     uuid = uuid_utils.UUID(int=223359875637754765292326297443183672862)
 
