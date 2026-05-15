@@ -343,9 +343,15 @@ fn uuid3(namespace: UUID, name: StringOrBytes) -> PyResult<UUID> {
 }
 
 #[pyfunction]
+#[pyo3(name = "_uuid4_int")]
+fn uuid4_int() -> u128 {
+    Uuid::new_v4().as_u128()
+}
+
+#[pyfunction]
 fn uuid4() -> PyResult<UUID> {
     Ok(UUID {
-        uuid: Uuid::new_v4(),
+        uuid: Uuid::from_u128(uuid4_int()),
     })
 }
 
@@ -384,19 +390,26 @@ fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyRes
 }
 
 #[pyfunction]
+#[pyo3(name = "_uuid7_int")]
 #[pyo3(signature = (timestamp=None, nanos=None))]
-fn uuid7(timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
-    let uuid = match timestamp {
+fn uuid7_int(timestamp: Option<u64>, nanos: Option<u32>) -> u128 {
+    match timestamp {
         Some(timestamp) => {
             let timestamp =
                 Timestamp::from_unix(&ContextV1::new_random(), timestamp, nanos.unwrap_or(0));
-            return Ok(UUID {
-                uuid: Uuid::new_v7(timestamp),
-            });
+            Uuid::new_v7(timestamp)
         }
         None => Uuid::now_v7(),
-    };
-    Ok(UUID { uuid })
+    }
+    .as_u128()
+}
+
+#[pyfunction]
+#[pyo3(signature = (timestamp=None, nanos=None))]
+fn uuid7(timestamp: Option<u64>, nanos: Option<u32>) -> UUID {
+    UUID {
+        uuid: Uuid::from_u128(uuid7_int(timestamp, nanos)),
+    }
 }
 
 #[pyfunction]
@@ -489,10 +502,12 @@ fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<UUID>()?;
     m.add_function(wrap_pyfunction!(uuid1, m)?)?;
     m.add_function(wrap_pyfunction!(uuid3, m)?)?;
+    m.add_function(wrap_pyfunction!(uuid4_int, m)?)?;
     m.add_function(wrap_pyfunction!(uuid4, m)?)?;
     m.add_function(wrap_pyfunction!(uuid5, m)?)?;
     m.add_function(wrap_pyfunction!(uuid6, m)?)?;
     m.add_function(wrap_pyfunction!(uuid7, m)?)?;
+    m.add_function(wrap_pyfunction!(uuid7_int, m)?)?;
     m.add_function(wrap_pyfunction!(uuid8, m)?)?;
     m.add_function(wrap_pyfunction!(getnode, m)?)?;
     m.add_function(wrap_pyfunction!(reseed, m)?)?;
