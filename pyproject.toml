@@ -37,10 +37,8 @@ Source = "https://github.com/aminalaee/uuid-utils"
 python-source = "python"
 module-name = "uuid_utils._uuid_utils"
 
-[tool.mypy]
-disallow_untyped_defs = true
-ignore_missing_imports = true
-no_implicit_optional = true
+[tool.ty.rules]
+unresolved-import = "ignore"
 
 [tool.ruff.lint]
 select = [

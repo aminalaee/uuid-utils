@@ -14,7 +14,7 @@ format:
 lint:
 	ruff check python/ tests/
 	ruff format --check --diff python/ tests/
-	mypy python/ tests/
+	ty check python/ tests/
 .PHONY: test
 test:
 	pytest tests -vvv

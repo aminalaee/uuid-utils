@@ -68,7 +68,7 @@ def test_uuid_setattr() -> None:
     uuid = uuid_utils.UUID(int=223359875637754765292326297443183672862)
 
     with pytest.raises(TypeError):
-        uuid.int = 123  # type: ignore[misc]
+        uuid.int = 123  # type: ignore[misc]  # ty: ignore[invalid-assignment]
 
 
 def test_uuid1() -> None:

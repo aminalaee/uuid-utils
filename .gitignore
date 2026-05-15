@@ -70,5 +70,5 @@ docs/_build/
 .python-version
 
 .ruff_cache
-.mypy_cache
+.ty_cache
 .codspeed/
