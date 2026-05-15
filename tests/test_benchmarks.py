@@ -1,5 +1,6 @@
 import pytest
 import uuid_utils
+import uuid_utils.compat as uuid_compat
 
 pytest.importorskip("pytest_codspeed")
 
@@ -63,3 +64,13 @@ def test_uuid_from_int() -> None:
 @pytest.mark.benchmark
 def test_uuid_from_fields_utils() -> None:
     uuid_utils.UUID(fields=(2819197978, 63598, 4570, 189, 26, 73622928926))
+
+
+@pytest.mark.benchmark
+def test_compat_uuid4() -> None:
+    uuid_compat.uuid4()
+
+
+@pytest.mark.benchmark
+def test_compat_uuid7() -> None:
+    uuid_compat.uuid7()
