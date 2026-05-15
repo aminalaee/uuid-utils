@@ -71,7 +71,7 @@ UUID('ffe95fcc-b818-4aca-a350-e0a35b9de6ec')
 
 ## Benchmarks
 
-![Benchmarks](docs/benchmarks.svg)
+![Benchmarks](https://raw.githubusercontent.com/aminalaee/uuid-utils/main/docs/benchmarks.svg)
 
 ```
 ╭───────────────────────────────── benchdiff ──────────────────────────────────╮
