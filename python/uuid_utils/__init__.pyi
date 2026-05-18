@@ -1,9 +1,9 @@
 import builtins
 import sys
-from typing import Final
+from typing import Final, TypeAlias
 from uuid import SafeUUID
 
-from typing_extensions import LiteralString, TypeAlias
+from typing_extensions import LiteralString
 
 # Because UUID has properties called int and bytes we need to rename these temporarily.
 _FieldsType: TypeAlias = tuple[int, int, int, int, int, int]

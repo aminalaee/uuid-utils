@@ -14,6 +14,9 @@ theme:
         icon: lucide/moon
         name: Switch to light mode
 
+  icon:
+    repo: simple/github
+
 repo_name: aminalaee/uuid-utils
 repo_url: https://github.com/aminalaee/uuid-utils
 edit_uri: ""

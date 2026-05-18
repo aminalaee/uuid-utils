@@ -1,5 +1,5 @@
 import uuid
-from typing import Callable
+from collections.abc import Callable
 
 import pytest
 from uuid_utils.compat import uuid1, uuid3, uuid4, uuid5, uuid6, uuid7, uuid8
