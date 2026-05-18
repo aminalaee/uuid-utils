@@ -398,7 +398,12 @@ jobs:
     needs: [release]
     steps:
       - uses: actions/checkout@v6
-      - name: Build and publish docs
+      - name: Build docs
         run: |
           pip install -r requirements.txt
-          make docs_build && make docs_deploy
+          make docs_build
+      - name: Deploy docs
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site

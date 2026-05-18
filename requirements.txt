@@ -1,5 +1,4 @@
-mkdocs==1.6.1
-mkdocs-material==9.7.6
+zensical~=0.0.42
 ty==0.0.36
 pytest==9.0.3
 pytest-codspeed==4.5.0
