@@ -3,11 +3,16 @@ site_description: Fast, drop-in replacement for Python's uuid module, powered by
 site_url: https://aminalaee.github.io/uuid-utils
 
 theme:
-  name: "material"
+  name: "zensical"
   palette:
-    primary: white
-  features:
-    - content.code.copy
+    - scheme: default
+      toggle:
+        icon: lucide/sun
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: lucide/moon
+        name: Switch to light mode
 
 repo_name: aminalaee/uuid-utils
 repo_url: https://github.com/aminalaee/uuid-utils
