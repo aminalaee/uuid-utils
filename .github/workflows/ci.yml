@@ -382,14 +382,20 @@ jobs:
       ]
     steps:
       - uses: actions/download-artifact@v8
+        with:
+          path: release-dist
+          pattern: wheels-*
+          merge-multiple: true
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v4
         with:
-          subject-path: "wheels-*/*"
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
+          subject-path: "release-dist/*"
       - name: Publish to PyPI
-        run: uv publish 'wheels-*/*'
+        uses: pypa/gh-action-pypi-publish@v1.14.0
+        with:
+          packages-dir: release-dist
+          skip-existing: true
+          verbose: true
 
   docs:
     name: Publish docs
