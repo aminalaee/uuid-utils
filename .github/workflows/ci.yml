@@ -394,6 +394,8 @@ jobs:
         uses: pypa/gh-action-pypi-publish@v1.14.0
         with:
           packages-dir: release-dist
+          skip-existing: true
+          verbose: true
 
   docs:
     name: Publish docs
