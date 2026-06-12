@@ -61,6 +61,7 @@ def uuid8(bytes: bytes) -> UUID:
 
 NIL: Final[UUID]
 MAX: Final[UUID]
+__version__: str
 
 __all__ = [
     "MAX",
@@ -75,5 +76,13 @@ __all__ = [
     "RFC_4122",
     "UUID",
     "SafeUUID",
+    "__version__",
     "getnode",
+    "uuid1",
+    "uuid3",
+    "uuid4",
+    "uuid5",
+    "uuid6",
+    "uuid7",
+    "uuid8",
 ]
