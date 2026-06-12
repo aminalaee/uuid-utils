@@ -39,7 +39,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
+          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.14 3.14t pypy3.11
           sccache: "true"
           manylinux: auto
       - name: Install and test
@@ -71,7 +71,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
+          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.14 3.14t pypy3.11
       - uses: uraimo/run-on-arch-action@v3.1.0
         if: matrix.target != 'ppc64'
         name: Install built wheel
@@ -112,7 +112,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t
+          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.14 3.14t
       - name: Install built wheel
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: addnab/docker-run-action@v3
@@ -151,7 +151,7 @@ jobs:
           rust-toolchain: stable
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t
+          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.14 3.14t
       - name: Upload wheels
         uses: actions/upload-artifact@v7
         with:
@@ -210,23 +210,17 @@ jobs:
           - target: x64
             os: windows-latest
             py_arch: "x64"
-            interpreter: 3.13t 3.14t
+            interpreter: 3.14t
           - target: x86
             os: windows-latest
             py_arch: "x86"
-            interpreter: 3.13t 3.14t
+            interpreter: 3.14t
           - target: aarch64
             os: windows-11-arm
             py_arch: "arm64"
             interpreter: 3.14t
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python 3.13t
-        if: matrix.platform.target != 'aarch64'
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.13t"
-          architecture: ${{ matrix.platform.py_arch }}
       - name: Set up Python 3.14t
         uses: actions/setup-python@v6
         with:
@@ -258,13 +252,13 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
+          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.14 3.14t pypy3.11
           sccache: "true"
       - name: Build wheels - universal2
         uses: PyO3/maturin-action@v1
         with:
           target: universal2-apple-darwin
-          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.13t 3.14 3.14t pypy3.11
+          args: --release --out dist -i 3.10 3.11 3.12 3.13 3.14 3.14t pypy3.11
       - name: Install and test uuid_utils
         run: |
           pip install uuid_utils --no-index --find-links dist --force-reinstall

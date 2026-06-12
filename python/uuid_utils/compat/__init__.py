@@ -18,6 +18,8 @@ from uuid_utils import _uuid4_int, _uuid7_int
 NIL = UUID("00000000-0000-0000-0000-000000000000")
 MAX = UUID("ffffffff-ffff-ffff-ffff-ffffffffffff")
 
+__version__ = uuid_utils.__version__
+
 
 def _from_int(n: int) -> UUID:
     u = object.__new__(UUID)
@@ -81,6 +83,7 @@ __all__ = [
     "RESERVED_NCS",
     "RFC_4122",
     "UUID",
+    "__version__",
     "getnode",
     "uuid1",
     "uuid3",

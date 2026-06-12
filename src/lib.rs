@@ -121,8 +121,7 @@ impl UUID {
         })
     }
 
-    #[allow(unused_variables)]
-    fn __setattr__(&self, name: &str, value: Py<PyAny>) -> PyResult<()> {
+    fn __setattr__(&self, _name: &str, _value: Py<PyAny>) -> PyResult<()> {
         Err(PyTypeError::new_err("UUID objects are immutable"))
     }
 
