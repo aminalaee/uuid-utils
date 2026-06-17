@@ -15,6 +15,12 @@ use uuid::{Builder, Bytes, ContextV1, Timestamp, Uuid, Variant, Version};
 
 static NODE: AtomicU64 = AtomicU64::new(0);
 
+#[cfg(target_pointer_width = "64")]
+const HASH_MODULUS: u128 = (1u128 << 61) - 1;
+
+#[cfg(not(target_pointer_width = "64"))]
+const HASH_MODULUS: u128 = (1u128 << 31) - 1;
+
 pub const RESERVED_NCS: &str = "reserved for NCS compatibility";
 pub const RFC_4122: &str = "specified in RFC 4122";
 pub const RESERVED_MICROSOFT: &str = "reserved for Microsoft compatibility";
@@ -93,8 +99,7 @@ impl UUID {
     }
 
     fn __hash__(&self) -> PyResult<isize> {
-        let modulus = (1u128 << 61) - 1;
-        Ok((self.uuid.as_u128() % modulus) as isize)
+        Ok((self.uuid.as_u128() % HASH_MODULUS) as isize)
     }
 
     fn set_version(&self, version: u8) -> PyResult<UUID> {
