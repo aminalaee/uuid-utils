@@ -1,4 +1,3 @@
-use ahash::AHasher;
 #[cfg(not(target_arch = "wasm32"))]
 use mac_address::MacAddressIterator;
 use pyo3::{
@@ -9,13 +8,18 @@ use pyo3::{
     types::{PyBytes, PyDict},
 };
 use std::{
-    hash::{Hash, Hasher},
     sync::atomic::{AtomicU64, Ordering},
     time::SystemTime,
 };
 use uuid::{Builder, Bytes, ContextV1, Timestamp, Uuid, Variant, Version};
 
 static NODE: AtomicU64 = AtomicU64::new(0);
+
+#[cfg(target_pointer_width = "64")]
+const HASH_MODULUS: u128 = (1u128 << 61) - 1;
+
+#[cfg(not(target_pointer_width = "64"))]
+const HASH_MODULUS: u128 = (1u128 << 31) - 1;
 
 pub const RESERVED_NCS: &str = "reserved for NCS compatibility";
 pub const RFC_4122: &str = "specified in RFC 4122";
@@ -95,9 +99,7 @@ impl UUID {
     }
 
     fn __hash__(&self) -> PyResult<isize> {
-        let mut hasher = AHasher::default();
-        self.uuid.hash(&mut hasher);
-        Ok(hasher.finish() as isize)
+        Ok((self.uuid.as_u128() % HASH_MODULUS) as isize)
     }
 
     fn set_version(&self, version: u8) -> PyResult<UUID> {

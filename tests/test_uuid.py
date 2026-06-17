@@ -150,6 +150,13 @@ def test_uuid_comparisons() -> None:
     assert hash(uuid_1) == hash(uuid_2)
 
 
+def test_hash_matches_stdlib() -> None:
+    value = "a8098c1a-f86e-11da-bd1a-00112444be1e"
+    assert hash(uuid_utils.UUID(value)) == hash(UUID(value))
+    u = uuid_utils.UUID(value)
+    assert hash(u) == hash(u.int)
+
+
 @pytest.mark.parametrize("version", [1, 2, 3, 4, 5, 7, 8])
 def test_uuid_version(version: int) -> None:
     uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=version)
