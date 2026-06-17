@@ -1,4 +1,3 @@
-use ahash::AHasher;
 #[cfg(not(target_arch = "wasm32"))]
 use mac_address::MacAddressIterator;
 use pyo3::{
@@ -9,7 +8,6 @@ use pyo3::{
     types::{PyBytes, PyDict},
 };
 use std::{
-    hash::{Hash, Hasher},
     sync::atomic::{AtomicU64, Ordering},
     time::SystemTime,
 };
@@ -95,9 +93,8 @@ impl UUID {
     }
 
     fn __hash__(&self) -> PyResult<isize> {
-        let mut hasher = AHasher::default();
-        self.uuid.hash(&mut hasher);
-        Ok(hasher.finish() as isize)
+        let modulus = (1u128 << 61) - 1;
+        Ok((self.uuid.as_u128() % modulus) as isize)
     }
 
     fn set_version(&self, version: u8) -> PyResult<UUID> {

@@ -23,7 +23,5 @@ uuid = { version  = "1.23.3", features = [
     "v8",
     "fast-rng",
 ]}
-ahash = "0.8.12"
-
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 mac_address = "1.1.8"
