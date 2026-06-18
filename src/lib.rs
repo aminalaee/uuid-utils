@@ -214,9 +214,19 @@ impl UUID {
 
     #[getter]
     fn time(&self) -> u64 {
-        let high = self.time_hi_version() as u64 & 0x0fff;
-        let mid = self.time_mid() as u64;
-        high << 48 | mid << 32 | self.time_low() as u64
+        match self.version() {
+            Some(6) => {
+                let time_hi = self.int().wrapping_shr(96) as u64;
+                let time_lo = (self.int().wrapping_shr(64) & 0x0fff) as u64;
+                time_hi << 28 | (self.time_mid() as u64) << 12 | time_lo
+            }
+            Some(7) => self.int().wrapping_shr(80) as u64,
+            _ => {
+                let time_hi = self.time_hi_version() as u64 & 0x0fff;
+                let mid = self.time_mid() as u64;
+                time_hi << 48 | mid << 32 | self.time_low() as u64
+            }
+        }
     }
 
     #[getter]
