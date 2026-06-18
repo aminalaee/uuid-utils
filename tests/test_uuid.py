@@ -157,6 +157,30 @@ def test_hash_matches_stdlib() -> None:
     assert hash(u) == hash(u.int)
 
 
+TIME_CASES = [
+    ("a8098c1a-f86e-11da-bd1a-00112444be1e", 133692293110139930),  # v1
+    ("1ec9414c-232a-6b00-b3c8-9e6bdeced846", 138648505420000000),  # v6
+    ("017f22e2-79b0-7cc3-98c4-dc0c0c07398f", 1645557742000),  # v7
+    ("a8098c1a-f86e-41da-bd1a-00112444be1e", 133692293110139930),  # v4
+    ("017f22e2-79b0-7cc3-18c4-dc0c0c07398f", 919712545760027362),  # non-RFC4122
+    ("00000000-0000-0000-0000-000000000000", 0),  # nil
+]
+
+
+@pytest.mark.parametrize("value, expected", TIME_CASES)
+def test_time(value: str, expected: int) -> None:
+    assert uuid_utils.UUID(value).time == expected
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 14),
+    reason="version-aware UUID.time requires Python 3.14",
+)
+@pytest.mark.parametrize("value, expected", TIME_CASES)
+def test_time_matches_stdlib(value: str, expected: int) -> None:
+    assert uuid_utils.UUID(value).time == UUID(value).time
+
+
 @pytest.mark.parametrize("version", [1, 2, 3, 4, 5, 7, 8])
 def test_uuid_version(version: int) -> None:
     uuid = uuid_utils.UUID("a8098c1a-f86e-11da-bd1a-00112444be1e", version=version)
