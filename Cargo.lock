@@ -528,7 +528,7 @@ dependencies = [
 
 [[package]]
 name = "uuid-utils"
-version = "0.16.1"
+version = "0.16.2"
 dependencies = [
  "mac_address",
  "pyo3",
