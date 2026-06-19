@@ -53,12 +53,16 @@ def uuid5(namespace, name):
     return _from_int(uuid_utils.uuid5(namespace, name).int)
 
 
-def uuid6(node=None, timestamp=None):
-    """Generate a version 6 UUID using the given timestamp and a host ID.
-    This is similar to version 1 UUIDs,
-    except that it is lexicographically sortable by timestamp.
+def uuid6(node=None, clock_seq=None):
+    """Similar to `uuid1` but where fields are ordered differently
+    for improved DB locality.
+
+    More precisely, given a 60-bit timestamp value as specified for UUIDv1,
+    for UUIDv6 the first 48 most significant bits are stored first, followed
+    by the 4-bit version (same position), followed by the remaining 12 bits
+    of the original 60-bit timestamp.
     """
-    return _from_int(uuid_utils.uuid6(node, timestamp).int)
+    return _from_int(uuid_utils.uuid6(node, clock_seq).int)
 
 
 def uuid7(timestamp=None, nanos=None):

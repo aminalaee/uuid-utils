@@ -377,18 +377,21 @@ fn uuid5(namespace: &UUID, name: StringOrBytes) -> PyResult<UUID> {
 }
 
 #[pyfunction]
-#[pyo3(signature = (node=None, timestamp=None, nanos=None))]
-fn uuid6(node: Option<u64>, timestamp: Option<u64>, nanos: Option<u32>) -> PyResult<UUID> {
+#[pyo3(signature = (node=None, clock_seq=None))]
+fn uuid6(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
     let node = match node {
         Some(node) => node.to_be_bytes(),
         None => _getnode().to_be_bytes(),
     };
     let node: &[u8; 6] = node[2..8].try_into().unwrap();
 
-    let uuid = match timestamp {
-        Some(timestamp) => {
+    let uuid = match clock_seq {
+        Some(clock_seq) => {
+            let dur = SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .unwrap();
             let timestamp =
-                Timestamp::from_unix(&ContextV1::new_random(), timestamp, nanos.unwrap_or(0));
+                Timestamp::from_unix_time(dur.as_secs(), dur.subsec_nanos(), clock_seq as u128, 14);
             Uuid::new_v6(timestamp, node)
         }
         None => Uuid::now_v6(node),
