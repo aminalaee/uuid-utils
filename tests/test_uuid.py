@@ -99,16 +99,17 @@ def test_uuid5(name: str) -> None:
 
 
 def test_uuid6() -> None:
-    uuid = uuid_utils.uuid6(getnode(), 1679665408)
-    assert isinstance(uuid, uuid_utils.UUID)
-    assert uuid.node == getnode()
-
-    uuid = uuid_utils.uuid6(getnode(), 1679665408, 123)
-    assert isinstance(uuid, uuid_utils.UUID)
-    assert uuid.node == getnode()
-
     uuid = uuid_utils.uuid6()
     assert isinstance(uuid, uuid_utils.UUID)
+    assert uuid.version == 6
+
+    uuid = uuid_utils.uuid6(getnode())
+    assert isinstance(uuid, uuid_utils.UUID)
+    assert uuid.node == getnode()
+
+    uuid = uuid_utils.uuid6(getnode(), 1234)
+    assert uuid.node == getnode()
+    assert uuid.clock_seq == 1234
 
 
 def test_uuid7() -> None:
