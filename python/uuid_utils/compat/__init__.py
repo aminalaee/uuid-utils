@@ -73,9 +73,16 @@ def uuid7():
     return _from_int(_uuid7_int())
 
 
-def uuid8(bytes):
-    """Generate a custom UUID comprised almost entirely of user-supplied bytes."""
-    return _from_int(uuid_utils.uuid8(bytes).int)
+def uuid8(a=None, b=None, c=None):
+    """Generate a UUID from three custom blocks.
+
+    * 'a' is the first 48-bit chunk of the UUID (octets 0-5);
+    * 'b' is the mid 12-bit chunk (octets 6-7);
+    * 'c' is the last 62-bit chunk (octets 8-15).
+
+    When a value is not specified, a pseudo-random value is generated.
+    """
+    return _from_int(uuid_utils.uuid8(a, b, c).int)
 
 
 __all__ = [

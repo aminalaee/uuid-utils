@@ -119,3 +119,11 @@ def test_uuid7_shape_matches_stdlib() -> None:
     assert u.version == std.version == 7
     assert u.variant == std.variant
     assert abs(u.time - std.time) < 10_000
+
+
+@requires_stdlib_v6_v7_v8
+def test_uuid8_matches_stdlib() -> None:
+    a, b, c = 0x123456789ABC, 0xDEF, 0x3FFFFFFFFFFFFFFF
+    u = uuid_utils.uuid8(a, b, c)
+    std = uuid.uuid8(a, b, c)  # ty: ignore[unresolved-attribute]
+    assert u.int == std.int

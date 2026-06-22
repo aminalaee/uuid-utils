@@ -75,6 +75,9 @@ def test_uuid1() -> None:
     uuid = uuid_utils.uuid1()
     assert isinstance(uuid, uuid_utils.UUID)
 
+    uuid = uuid_utils.uuid1(node=getnode())
+    assert uuid.node == getnode()
+
     uuid = uuid_utils.uuid1(node=getnode(), clock_seq=123)
     assert isinstance(uuid, uuid_utils.UUID)
     assert uuid.node == getnode()
@@ -119,13 +122,23 @@ def test_uuid7() -> None:
 
 
 def test_uuid8() -> None:
-    uuid = uuid_utils.uuid8(b"1234567812345678")
+    uuid = uuid_utils.uuid8()
     assert isinstance(uuid, uuid_utils.UUID)
+    assert uuid.version == 8
+
+    uuid = uuid_utils.uuid8(0x123456789ABC)
+    assert uuid.version == 8
+
+    uuid = uuid_utils.uuid8(0x123456789ABC, 0xDEF)
+    assert uuid.version == 8
+
+    uuid = uuid_utils.uuid8(0x123456789ABC, 0xDEF, 0x3FFFFFFFFFFFFFFF)
+    assert uuid.version == 8
 
 
 def test_uuid_comparisons() -> None:
-    uuid_1 = uuid_utils.uuid8(b"1234567812345678")
-    uuid_2 = uuid_utils.uuid8(b"1234567812345679")
+    uuid_1 = uuid_utils.uuid8(0, 0, 1)
+    uuid_2 = uuid_utils.uuid8(0, 0, 2)
 
     assert uuid_1 < uuid_2
     assert uuid_1 <= uuid_2
@@ -133,8 +146,8 @@ def test_uuid_comparisons() -> None:
     assert uuid_2 > uuid_1
     assert uuid_2 >= uuid_1
 
-    uuid_1 = uuid_utils.uuid8(b"1234567812345678")
-    uuid_2 = uuid_utils.uuid8(b"1234567812345678")
+    uuid_1 = uuid_utils.uuid8(0, 0, 1)
+    uuid_2 = uuid_utils.uuid8(0, 0, 1)
 
     assert uuid_1 == uuid_2
     assert hash(uuid_1) == hash(uuid_2)
