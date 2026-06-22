@@ -11,7 +11,7 @@ use std::{
     sync::atomic::{AtomicU64, Ordering},
     time::SystemTime,
 };
-use uuid::{Builder, Bytes, ContextV1, Timestamp, Uuid, Variant, Version};
+use uuid::{Builder, Bytes, Timestamp, Uuid, Variant, Version};
 
 static NODE: AtomicU64 = AtomicU64::new(0);
 
@@ -401,24 +401,14 @@ fn uuid6(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
 
 #[pyfunction]
 #[pyo3(name = "_uuid7_int")]
-#[pyo3(signature = (timestamp=None, nanos=None))]
-fn uuid7_int(timestamp: Option<u64>, nanos: Option<u32>) -> u128 {
-    match timestamp {
-        Some(timestamp) => {
-            let timestamp =
-                Timestamp::from_unix(&ContextV1::new_random(), timestamp, nanos.unwrap_or(0));
-            Uuid::new_v7(timestamp)
-        }
-        None => Uuid::now_v7(),
-    }
-    .as_u128()
+fn uuid7_int() -> u128 {
+    Uuid::now_v7().as_u128()
 }
 
 #[pyfunction]
-#[pyo3(signature = (timestamp=None, nanos=None))]
-fn uuid7(timestamp: Option<u64>, nanos: Option<u32>) -> UUID {
+fn uuid7() -> UUID {
     UUID {
-        uuid: Uuid::from_u128(uuid7_int(timestamp, nanos)),
+        uuid: Uuid::from_u128(uuid7_int()),
     }
 }
 

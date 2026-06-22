@@ -175,8 +175,11 @@ def uuid6(node: int | None = None, clock_seq: int | None = None) -> UUID:
     """
     ...
 
-def uuid7(timestamp: int | None = None, nanos: int | None = None) -> UUID:
-    """Generate a version 7 UUID using a time value and random bytes."""
+def uuid7() -> UUID:
+    """Generate a UUID from a Unix timestamp in milliseconds and random bits.
+
+    UUIDv7 objects feature monotonicity within a millisecond.
+    """
     ...
 
 def uuid8(bytes: bytes) -> UUID:
