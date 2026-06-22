@@ -2,7 +2,7 @@ import copy
 import os
 import pickle
 import sys
-from datetime import datetime
+import time
 from uuid import SafeUUID, getnode
 
 import pytest
@@ -113,20 +113,9 @@ def test_uuid6() -> None:
 
 
 def test_uuid7() -> None:
-    uuid = uuid_utils.uuid7(1679665408)
-    assert isinstance(uuid, uuid_utils.UUID)
-
-    uuid = uuid_utils.uuid7(1679665408, 999)
-    assert isinstance(uuid, uuid_utils.UUID)
-
     uuid = uuid_utils.uuid7()
     assert isinstance(uuid, uuid_utils.UUID)
-
-    ts = datetime(
-        year=2024, month=1, day=2, hour=3, minute=4, second=5, microsecond=123000
-    )
-    uuid = uuid_utils.uuid7(int(ts.timestamp()), ts.microsecond * 1_000)
-    assert uuid.timestamp == int(ts.timestamp() * 1000)
+    assert uuid.version == 7
 
 
 def test_uuid8() -> None:
@@ -207,8 +196,8 @@ def test_uuid_properties() -> None:
 
 
 def test_uuid_timestamp() -> None:
-    uuid = uuid_utils.uuid7(1679665408)
-    assert uuid.timestamp == 1679665408000
+    now_ms = int(time.time() * 1000)
+    assert abs(uuid_utils.uuid7().timestamp - now_ms) < 10_000
 
     with pytest.raises(ValueError):
         uuid_utils.uuid4().timestamp

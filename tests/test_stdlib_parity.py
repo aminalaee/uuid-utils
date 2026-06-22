@@ -110,3 +110,12 @@ def test_uuid6_shape_matches_stdlib() -> None:
     std = uuid.uuid6(node, clock_seq)  # ty: ignore[unresolved-attribute]
     assert_fields_match(u, std)
     assert abs(u.time - std.time) < 10_000_000_000
+
+
+@requires_stdlib_v6_v7_v8
+def test_uuid7_shape_matches_stdlib() -> None:
+    u = uuid_utils.uuid7()
+    std = uuid.uuid7()  # ty: ignore[unresolved-attribute]
+    assert u.version == std.version == 7
+    assert u.variant == std.variant
+    assert abs(u.time - std.time) < 10_000
