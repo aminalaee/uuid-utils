@@ -73,4 +73,4 @@ def test_uuid7() -> None:
 
 
 def test_uuid8() -> None:
-    assert_stdlib_uuid(uuid8(b"1234567812345678"), 8)
+    assert_stdlib_uuid(uuid8(0x123456789ABC, 0xDEF, 0x3FFFFFFFFFFFFFFF), 8)

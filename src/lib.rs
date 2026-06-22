@@ -413,11 +413,15 @@ fn uuid7() -> UUID {
 }
 
 #[pyfunction]
-fn uuid8(bytes: &Bound<'_, PyBytes>) -> PyResult<UUID> {
-    let bytes: Bytes = bytes.extract()?;
-    Ok(UUID {
-        uuid: Uuid::new_v8(bytes),
-    })
+#[pyo3(signature = (a=None, b=None, c=None))]
+fn uuid8(a: Option<u64>, b: Option<u64>, c: Option<u64>) -> UUID {
+    let a = (a.unwrap_or_else(rand::random) as u128) & 0xffff_ffff_ffff;
+    let b = (b.unwrap_or_else(rand::random) as u128) & 0xfff;
+    let c = (c.unwrap_or_else(rand::random) as u128) & 0x3fff_ffff_ffff_ffff;
+    let int = a << 80 | b << 64 | c;
+    UUID {
+        uuid: Uuid::new_v8(int.to_be_bytes()),
+    }
 }
 
 fn _getnode() -> u64 {

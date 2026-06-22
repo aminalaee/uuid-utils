@@ -42,7 +42,7 @@ def test_uuid7() -> None:
 
 @pytest.mark.benchmark
 def test_uuid8() -> None:
-    uuid_utils.uuid8(bytes=b"\x00" * 16)
+    uuid_utils.uuid8(0x123456789ABC, 0xDEF, 0x3FFFFFFFFFFFFFFF)
 
 
 @pytest.mark.benchmark

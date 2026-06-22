@@ -62,8 +62,15 @@ def uuid7() -> UUID:
     """
     ...
 
-def uuid8(bytes: bytes) -> UUID:
-    """Generate a custom UUID comprised almost entirely of user-supplied bytes."""
+def uuid8(a: int | None = None, b: int | None = None, c: int | None = None) -> UUID:
+    """Generate a UUID from three custom blocks.
+
+    * 'a' is the first 48-bit chunk of the UUID (octets 0-5);
+    * 'b' is the mid 12-bit chunk (octets 6-7);
+    * 'c' is the last 62-bit chunk (octets 8-15).
+
+    When a value is not specified, a pseudo-random value is generated.
+    """
     ...
 
 NIL: Final[UUID]
