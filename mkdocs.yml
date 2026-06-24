@@ -41,6 +41,8 @@ plugins:
   - search
 
 extra:
+  version:
+    provider: mike
   analytics:
     provider: google
     property: G-MV427T1Z9X

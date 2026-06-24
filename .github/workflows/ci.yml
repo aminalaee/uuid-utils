@@ -396,14 +396,30 @@ jobs:
     runs-on: ubuntu-latest
     if: "startsWith(github.ref, 'refs/tags/')"
     needs: [release]
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
-      - name: Build docs
-        run: |
-          pip install -r requirements.txt
-          make docs_build
-      - name: Deploy docs
-        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Set git credentials
+        run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - name: Build and deploy versioned docs
+        run: |
+          VERSION=$(echo "${GITHUB_REF_NAME}" | sed -E 's/^v?([0-9]+\.[0-9]+).*/\1/')
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          if ! git merge-base --is-ancestor "${GITHUB_REF_NAME}" origin/main; then
+            mike deploy --push "$VERSION"
+          elif echo "${GITHUB_REF_NAME}" | grep -qE '^v?[0-9]+\.[0-9]+\.[0-9]+$'; then
+            mike deploy --push --update-aliases "$VERSION" latest
+            mike set-default --push latest
+          else
+            mike deploy --push "${MAJOR}.x-pre"
+          fi
