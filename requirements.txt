@@ -1,4 +1,5 @@
 zensical~=0.0.43
+git+https://github.com/squidfunk/mike.git
 ty==0.0.40
 pytest==9.0.3
 pytest-codspeed==5.0.3
