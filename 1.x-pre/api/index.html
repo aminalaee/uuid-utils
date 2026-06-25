@@ -398,10 +398,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-uuid6node-int-none-timestamp-int-none-nanos-int-none" class="md-nav__link">
+  <a href="#function-uuid6node-int-none-clock_seq-int-none" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        <code>function</code> <code>uuid6(node: int = None, timestamp: int = None, nanos: int = None)</code>
+        <code>function</code> <code>uuid6(node: int = None, clock_seq: int = None)</code>
       </span>
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-uuid7timestamp-int-none-nanos-int-none" class="md-nav__link">
+  <a href="#function-uuid7" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        <code>function</code> <strong><code>uuid7(timestamp: int = None, nanos: int = None)</code></strong>
+        <code>function</code> <strong><code>uuid7()</code></strong>
       </span>
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-uuid8bytes-bytes" class="md-nav__link">
+  <a href="#function-uuid8a-int-none-b-int-none-c-int-none" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        <code>function</code> <strong><code>uuid8(bytes: bytes)</code></strong>
+        <code>function</code> <strong><code>uuid8(a: int = None, b: int = None, c: int = None)</code></strong>
       </span>
     </span>
   </a>
@@ -547,10 +547,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-uuid6node-int-none-timestamp-int-none-nanos-int-none" class="md-nav__link">
+  <a href="#function-uuid6node-int-none-clock_seq-int-none" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        <code>function</code> <code>uuid6(node: int = None, timestamp: int = None, nanos: int = None)</code>
+        <code>function</code> <code>uuid6(node: int = None, clock_seq: int = None)</code>
       </span>
     </span>
   </a>
@@ -558,10 +558,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-uuid7timestamp-int-none-nanos-int-none" class="md-nav__link">
+  <a href="#function-uuid7" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        <code>function</code> <strong><code>uuid7(timestamp: int = None, nanos: int = None)</code></strong>
+        <code>function</code> <strong><code>uuid7()</code></strong>
       </span>
     </span>
   </a>
@@ -569,10 +569,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-uuid8bytes-bytes" class="md-nav__link">
+  <a href="#function-uuid8a-int-none-b-int-none-c-int-none" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        <code>function</code> <strong><code>uuid8(bytes: bytes)</code></strong>
+        <code>function</code> <strong><code>uuid8(a: int = None, b: int = None, c: int = None)</code></strong>
       </span>
     </span>
   </a>
@@ -682,15 +682,15 @@
 </tr>
 <tr>
 <td><code>uuid6</code></td>
-<td>Generate a version 6 UUID using the given timestamp and a host ID. This is similar to version 1 UUIDs, except that it is lexicographically sortable by timestamp.</td>
+<td>Similar to <code>uuid1</code> but where fields are ordered differently for improved DB locality.</td>
 </tr>
 <tr>
 <td><code>uuid7</code></td>
-<td>Generate a version 7 UUID using a time value and random bytes.</td>
+<td>Generate a UUID from a Unix timestamp in milliseconds and random bits.</td>
 </tr>
 <tr>
 <td><code>uuid8</code></td>
-<td>Generate a custom UUID comprised almost entirely of user-supplied bytes.</td>
+<td>Generate a UUID from three custom blocks.</td>
 </tr>
 <tr>
 <td><code>getnode</code></td>
@@ -707,7 +707,7 @@
 </tbody>
 </table>
 <h3 id="function-uuid1node-int-none-clock_seq-int-none"><code>function</code> <strong><code>uuid1(node: int = None, clock_seq: int = None)</code></strong></h3>
-<p>Port of <code>uuid.uuid1()</code>. Generates a UUID from a host ID, sequence number, and the current time. Superceded by <code>uuid6()</code>.</p>
+<p>Generate a UUID from a host ID, sequence number, and the current time. If <code>node</code> is not given, <code>getnode()</code> is used to obtain the hardware address.  If <code>clock_seq</code> is given, it is used as the sequence number; otherwise a random 14-bit sequence number is chosen.</p>
 <table>
 <thead>
 <tr>
@@ -730,7 +730,7 @@
 </tbody>
 </table>
 <h3 id="function-uuid3namespace-uuid-name-str-bytes"><code>function</code> <strong><code>uuid3(namespace: UUID, name: str | bytes)</code></strong></h3>
-<p>Port of <code>uuid.uuid3()</code>. Generates a UUID from the MD5 hash of a namespace UUID, and a name. Superceded by <code>uuid5()</code>. Both parameters must be met.</p>
+<p>Generate a UUID from the MD5 hash of a namespace UUID and a name.</p>
 <table>
 <thead>
 <tr>
@@ -753,9 +753,9 @@
 </tbody>
 </table>
 <h3 id="function-uuid4"><code>function</code> <code>uuid4()</code></h3>
-<p>Port of <code>uuid.uuid4()</code>. Generates an entirely random UUID.</p>
+<p>Generate a random UUID.</p>
 <h3 id="function-uuid5namespace-uuid-name-str-bytes"><code>function</code> <code>uuid5(namespace: UUID, name: str | bytes)</code></h3>
-<p>Port of <code>uuid.uuid5()</code>. Generates a UUID from the SHA-1 hash of a namespace UUID, and a name. Supercedes <code>uuid3()</code>. Both parameters must be met.</p>
+<p>Generate a UUID from the SHA-1 hash of a namespace UUID and a name.</p>
 <table>
 <thead>
 <tr>
@@ -777,8 +777,9 @@
 </tr>
 </tbody>
 </table>
-<h3 id="function-uuid6node-int-none-timestamp-int-none-nanos-int-none"><code>function</code> <code>uuid6(node: int = None, timestamp: int = None, nanos: int = None)</code></h3>
-<p>Generates a lexicographically sortable UUID from a host ID, and a timestamp. Supercedes <code>uuid1()</code>.</p>
+<h3 id="function-uuid6node-int-none-clock_seq-int-none"><code>function</code> <code>uuid6(node: int = None, clock_seq: int = None)</code></h3>
+<p>Similar to <code>uuid1</code> but where fields are ordered differently for improved DB locality.</p>
+<p>More precisely, given a 60-bit timestamp value as specified for UUIDv1, for UUIDv6 the first 48 most significant bits are stored first, followed by the 4-bit version (same position), followed by the remaining 12 bits of the original 60-bit timestamp.</p>
 <table>
 <thead>
 <tr>
@@ -794,58 +795,23 @@
 <td>Defines the host ID. If undefined, host ID will be derived from the result of <code>getnode()</code>.</td>
 </tr>
 <tr>
-<td><code>timestamp</code></td>
+<td><code>clock_seq</code></td>
 <td><code>int</code></td>
-<td>A 10-digit integer defining the seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.</td>
-</tr>
-<tr>
-<td><code>nanos</code></td>
-<td><code>int</code></td>
-<td>A 10-digit integer defining the sub-seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.</td>
+<td>Defines the 14-bit clock sequence. If undefined, a random value is used.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="function-uuid7timestamp-int-none-nanos-int-none"><code>function</code> <strong><code>uuid7(timestamp: int = None, nanos: int = None)</code></strong></h3>
-<p>Generates a lexicographically sortable random UUID from a timestamp.</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>timestamp</code></td>
-<td><code>int</code></td>
-<td>A 10-digit integer defining the seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.</td>
-</tr>
-<tr>
-<td><code>nanos</code></td>
-<td><code>int</code></td>
-<td>A 10-digit integer defining the sub-seconds elapsed since the UNIX epoch. If undefined, this will be derived from the system clock.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="function-uuid8bytes-bytes"><code>function</code> <strong><code>uuid8(bytes: bytes)</code></strong></h3>
-<p>Generates a UUID of a custom format from user-supplied bytes which may or may not be compliant to any specification.</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>bytes</code></td>
-<td><code>bytes</code></td>
-<td>16 bytes corresponding to the 48, 12, and 62 bit segments of a UUID</td>
-</tr>
-</tbody>
-</table>
+<h3 id="function-uuid7"><code>function</code> <strong><code>uuid7()</code></strong></h3>
+<p>Generate a UUID from a Unix timestamp in milliseconds and random bits.</p>
+<p>UUIDv7 objects feature monotonicity within a millisecond.</p>
+<h3 id="function-uuid8a-int-none-b-int-none-c-int-none"><code>function</code> <strong><code>uuid8(a: int = None, b: int = None, c: int = None)</code></strong></h3>
+<p>Generate a UUID from three custom blocks.</p>
+<ul>
+<li><code>a</code> is the first 48-bit chunk of the UUID (octets 0-5);</li>
+<li><code>b</code> is the mid 12-bit chunk (octets 6-7);</li>
+<li><code>c</code> is the last 62-bit chunk (octets 8-15).</li>
+</ul>
+<p>When a value is not specified, a pseudo-random value is generated.</p>
 
 
 
