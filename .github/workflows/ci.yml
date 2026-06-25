@@ -418,8 +418,9 @@ jobs:
           if ! git merge-base --is-ancestor "${GITHUB_REF_NAME}" origin/main; then
             mike deploy --push "$VERSION"
           elif echo "${GITHUB_REF_NAME}" | grep -qE '^v?[0-9]+\.[0-9]+\.[0-9]+$'; then
-            mike deploy --push --update-aliases "$VERSION" latest
-            mike set-default --push latest
+            mike deploy --update-aliases "$VERSION" latest
+            mike set-default latest
+            git push origin gh-pages
           else
             mike deploy --push "${MAJOR}.x-pre"
           fi
