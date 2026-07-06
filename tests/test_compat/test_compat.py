@@ -1,5 +1,6 @@
 import uuid
 
+import pytest
 from uuid_utils.compat import (
     MAX,
     NAMESPACE_DNS,
@@ -70,6 +71,15 @@ def test_uuid6_preserves_fields() -> None:
 
 def test_uuid7() -> None:
     assert_stdlib_uuid(uuid7(), 7)
+
+    result = uuid7(nanoseconds=1_645_557_742_123_456_789)
+    assert_stdlib_uuid(result, 7)
+    assert result.int >> 80 == 1_645_557_742_123
+
+
+def test_uuid7_rejects_positional_nanoseconds() -> None:
+    with pytest.raises(TypeError):
+        uuid7(1_645_557_742_123_456_789)  # type: ignore
 
 
 def test_uuid8() -> None:

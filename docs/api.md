@@ -22,7 +22,7 @@
 | `uuid4`   | Generate a random UUID.                                                                                                                                                                                                                                              |
 | `uuid5`   | Generate a UUID from the SHA-1 hash of a namespace UUID and a name.                                                                                                                                                                                                  |
 | `uuid6`   | Similar to `uuid1` but where fields are ordered differently for improved DB locality.                                                                                                                                                                                |
-| `uuid7`   | Generate a UUID from a Unix timestamp in milliseconds and random bits.                                                                                                                                                                                               |
+| `uuid7`   | Generate a UUID from a Unix timestamp in milliseconds and random bits. Accepts optional `nanoseconds` for explicit timestamp.                                                                                                                                        |
 | `uuid8`   | Generate a UUID from three custom blocks.                                                                                                                                                                                                                            |
 | `getnode` | Get the hardware address as a 48-bit positive integer.                                                                                                                                                                                                               |
 | `NIL`     | The nil UUID with all 128 bits set to zero.                                                                                                                                                                                                                          |
@@ -65,10 +65,14 @@ More precisely, given a 60-bit timestamp value as specified for UUIDv1, for UUID
 | `node`      | `int` | Defines the host ID. If undefined, host ID will be derived from the result of `getnode()`. |
 | `clock_seq` | `int` | Defines the 14-bit clock sequence. If undefined, a random value is used.                   |
 
-### `function` **`uuid7()`**
+### `function` **`uuid7(*, nanoseconds: int = None)`**
 Generate a UUID from a Unix timestamp in milliseconds and random bits.
 
 UUIDv7 objects feature monotonicity within a millisecond.
+
+| Parameter     | Type  | Description                                                                                                          |
+| ------------- | ----- | -------------------------------------------------------------------------------------------------------------------- |
+| `nanoseconds` | `int` | Unix timestamp in nanoseconds since epoch. If given, generates the UUID from this timestamp instead of current time. |
 
 ### `function` **`uuid8(a: int = None, b: int = None, c: int = None)`**
 Generate a UUID from three custom blocks.
