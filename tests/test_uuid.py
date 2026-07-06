@@ -120,6 +120,14 @@ def test_uuid7() -> None:
     assert isinstance(uuid, uuid_utils.UUID)
     assert uuid.version == 7
 
+    uuid = uuid_utils.uuid7(nanoseconds=1_645_557_742_123_456_789)
+    assert uuid.timestamp == 1_645_557_742_123
+
+
+def test_uuid7_rejects_positional_nanoseconds() -> None:
+    with pytest.raises(TypeError):
+        uuid_utils.uuid7(1_645_557_742_123_456_789)  # type: ignore
+
 
 def test_uuid8() -> None:
     uuid = uuid_utils.uuid8()

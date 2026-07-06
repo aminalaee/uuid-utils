@@ -65,12 +65,12 @@ def uuid6(node=None, clock_seq=None):
     return _from_int(uuid_utils.uuid6(node, clock_seq).int)
 
 
-def uuid7():
+def uuid7(*, nanoseconds=None):
     """Generate a UUID from a Unix timestamp in milliseconds and random bits.
 
     UUIDv7 objects feature monotonicity within a millisecond.
     """
-    return _from_int(_uuid7_int())
+    return _from_int(_uuid7_int(nanoseconds=nanoseconds))
 
 
 def uuid8(a=None, b=None, c=None):

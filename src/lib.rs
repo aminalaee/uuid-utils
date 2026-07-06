@@ -384,7 +384,6 @@ fn uuid6(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
         None => _getnode().to_be_bytes(),
     };
     let node: &[u8; 6] = node[2..8].try_into().unwrap();
-
     let uuid = match clock_seq {
         Some(clock_seq) => {
             let dur = SystemTime::now()
@@ -400,15 +399,25 @@ fn uuid6(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
 }
 
 #[pyfunction]
-#[pyo3(name = "_uuid7_int")]
-fn uuid7_int() -> u128 {
-    Uuid::now_v7().as_u128()
+#[pyo3(name = "_uuid7_int", signature = (*, nanoseconds=None))]
+fn uuid7_int(nanoseconds: Option<u128>) -> u128 {
+    match nanoseconds {
+        Some(ns) => {
+            let secs = (ns / 1_000_000_000) as u64;
+            let nanos = (ns % 1_000_000_000) as u32;
+            let timestamp = Timestamp::from_unix_time(secs, nanos, 0, 0);
+            Uuid::new_v7(timestamp)
+        }
+        None => Uuid::now_v7(),
+    }
+    .as_u128()
 }
 
 #[pyfunction]
-fn uuid7() -> UUID {
+#[pyo3(signature = (*, nanoseconds=None))]
+fn uuid7(nanoseconds: Option<u128>) -> UUID {
     UUID {
-        uuid: Uuid::from_u128(uuid7_int()),
+        uuid: Uuid::from_u128(uuid7_int(nanoseconds)),
     }
 }
 
