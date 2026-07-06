@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="zensical-0.0.46">
+      <meta name="generator" content="zensical-0.0.47">
     
     
       
@@ -32,7 +32,7 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.19d3147f.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.5e19f6ca.min.css">
       
         
           
@@ -409,10 +409,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-uuid7" class="md-nav__link">
+  <a href="#function-uuid7-nanoseconds-int-none" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        <code>function</code> <strong><code>uuid7()</code></strong>
+        <code>function</code> <strong><code>uuid7(*, nanoseconds: int = None)</code></strong>
       </span>
     </span>
   </a>
@@ -558,10 +558,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-uuid7" class="md-nav__link">
+  <a href="#function-uuid7-nanoseconds-int-none" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        <code>function</code> <strong><code>uuid7()</code></strong>
+        <code>function</code> <strong><code>uuid7(*, nanoseconds: int = None)</code></strong>
       </span>
     </span>
   </a>
@@ -686,7 +686,7 @@
 </tr>
 <tr>
 <td><code>uuid7</code></td>
-<td>Generate a UUID from a Unix timestamp in milliseconds and random bits.</td>
+<td>Generate a UUID from a Unix timestamp in milliseconds and random bits. Accepts optional <code>nanoseconds</code> for explicit timestamp.</td>
 </tr>
 <tr>
 <td><code>uuid8</code></td>
@@ -801,9 +801,25 @@
 </tr>
 </tbody>
 </table>
-<h3 id="function-uuid7"><code>function</code> <strong><code>uuid7()</code></strong></h3>
+<h3 id="function-uuid7-nanoseconds-int-none"><code>function</code> <strong><code>uuid7(*, nanoseconds: int = None)</code></strong></h3>
 <p>Generate a UUID from a Unix timestamp in milliseconds and random bits.</p>
 <p>UUIDv7 objects feature monotonicity within a millisecond.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nanoseconds</code></td>
+<td><code>int</code></td>
+<td>Unix timestamp in nanoseconds since epoch. If given, generates the UUID from this timestamp instead of current time.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="function-uuid8a-int-none-b-int-none-c-int-none"><code>function</code> <strong><code>uuid8(a: int = None, b: int = None, c: int = None)</code></strong></h3>
 <p>Generate a UUID from three custom blocks.</p>
 <ul>
@@ -895,7 +911,7 @@
       <script id="__config" type="application/json">{"annotate":null,"base":"..","features":[],"search":"../assets/javascripts/workers/search.b6b7e04f.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":{"provider":"mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.ee611ef6.min.js"></script>
+      <script src="../assets/javascripts/bundle.0df4f2d0.min.js"></script>
       
     
   </body>
