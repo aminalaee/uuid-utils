@@ -287,38 +287,33 @@ jobs:
           path: dist
 
   emscripten:
-    name: Emscripten
+    name: "Emscripten: Python ${{ matrix.python-version }}"
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        # pyodide-build derives the Emscripten and target Python versions
+        # from the host Python, so we build one wheel per host interpreter.
+        python-version: ["3.13", "3.14"]
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: ${{ matrix.python-version }}
 
       - run: pip install pyodide-build
-      - name: Get Emscripten and Python version info
+
+      - name: Get Emscripten and Pyodide version info
         shell: bash
         run: |
           echo EMSCRIPTEN_VERSION=$(pyodide config get emscripten_version) >> $GITHUB_ENV
-          echo PYTHON_VERSION=$(pyodide config get python_version | cut -d '.' -f 1-2) >> $GITHUB_ENV
-          if v=$(pyodide config get pyemscripten_platform_version 2>/dev/null); then
-            echo PYEMSCRIPTEN_PLATFORM_VERSION=$v >> $GITHUB_ENV
-          elif v=$(pyodide config get pyodide_abi_version 2>/dev/null); then
-            echo PYEMSCRIPTEN_PLATFORM_VERSION=$v >> $GITHUB_ENV
-          fi
-          pip uninstall -y pyodide-build
+          echo PYODIDE_VERSION=$(pyodide xbuildenv version) >> $GITHUB_ENV
 
       - uses: mymindstorm/setup-emsdk@v16
         with:
           version: ${{ env.EMSCRIPTEN_VERSION }}
           actions-cache-folder: emsdk-cache
-
-      - uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - run: pip install pyodide-build
 
       - name: Install Rust nightly
         uses: dtolnay/rust-toolchain@master
@@ -333,7 +328,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: wasm32-unknown-emscripten
-          args: --release --out dist -i ${{ env.PYTHON_VERSION }}
+          args: --release --out dist -i ${{ matrix.python-version }}
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
           rust-toolchain: nightly
 
@@ -342,7 +337,7 @@ jobs:
           node-version: "18"
 
       - name: Install Node deps
-        run: npm install
+        run: npm install pyodide@${{ env.PYODIDE_VERSION }}
 
       - name: Run Pyodide tests
         run: node tests/emscripten_runner.js
@@ -350,7 +345,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v7
         with:
-          name: wheels-emscripten
+          name: wheels-emscripten-${{ matrix.python-version }}
           path: dist
 
   release:
