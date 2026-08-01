@@ -1,7 +1,7 @@
-zensical~=0.0.46
+zensical~=0.0.51
 git+https://github.com/squidfunk/mike.git
-ty==0.0.55
+ty==0.0.64
 pytest==9.1.1
 pytest-codspeed==5.0.3
-ruff==0.15.20
+ruff==0.16.0
 benchdiff==0.3.0
