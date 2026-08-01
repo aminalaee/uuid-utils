@@ -332,7 +332,7 @@ jobs:
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
           rust-toolchain: nightly
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: "18"
 
