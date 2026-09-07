@@ -8,12 +8,12 @@ name = "uuid_utils"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.29.0", features = [
+pyo3 = { version = "0.29.2", features = [
     "extension-module",
     "generate-import-lib",
 ]}
 rand = "0.10.2"
-uuid = { version  = "1.24.0", features = [
+uuid = { version  = "1.26.0", features = [
     "v1",
     "v3",
     "v4",
