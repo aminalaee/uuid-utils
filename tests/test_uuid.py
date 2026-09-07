@@ -187,6 +187,19 @@ def test_uuid_version(version: int) -> None:
     assert uuid.version == version
 
 
+NON_RFC_VARIANT_HEX = "12345678123456781234567812345678"
+
+
+@pytest.mark.parametrize("version", [1, 2, 3, 4, 5])
+def test_uuid_version_sets_rfc_4122_variant(version: int) -> None:
+    uuid = uuid_utils.UUID(NON_RFC_VARIANT_HEX, version=version)
+    std = UUID(NON_RFC_VARIANT_HEX, version=version)
+
+    assert uuid.int == std.int
+    assert uuid.variant == std.variant == uuid_utils.RFC_4122
+    assert uuid.version == version
+
+
 def test_uuid_version_none_for_non_rfc4122() -> None:
     uuid = uuid_utils.UUID(int=0)
     assert uuid.version is None
