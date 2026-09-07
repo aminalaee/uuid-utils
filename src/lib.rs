@@ -116,6 +116,7 @@ impl UUID {
         };
 
         let mut builder = Builder::from_u128(self.uuid.as_u128());
+        builder.set_variant(Variant::RFC4122);
         builder.set_version(version);
 
         Ok(UUID {
