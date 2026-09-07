@@ -59,6 +59,28 @@ def test_constructor_inputs_match_stdlib(value: str) -> None:
     assert uuid_utils.UUID(int=std.int).int == std.int
 
 
+NON_RFC_VARIANT_HEX = "12345678123456781234567812345678"
+
+
+@pytest.mark.parametrize("version", [1, 2, 3, 4, 5])
+def test_version_argument_matches_stdlib(version: int) -> None:
+    u = uuid_utils.UUID(NON_RFC_VARIANT_HEX, version=version)
+    std = uuid.UUID(NON_RFC_VARIANT_HEX, version=version)
+
+    assert u.int == std.int
+    assert u.variant == std.variant == uuid_utils.RFC_4122
+
+
+@requires_stdlib_v6_v7_v8
+@pytest.mark.parametrize("version", [6, 7, 8])
+def test_version_argument_matches_stdlib_for_new_versions(version: int) -> None:
+    u = uuid_utils.UUID(NON_RFC_VARIANT_HEX, version=version)
+    std = uuid.UUID(NON_RFC_VARIANT_HEX, version=version)
+
+    assert u.int == std.int
+    assert u.variant == std.variant == uuid_utils.RFC_4122
+
+
 def test_hash_matches_stdlib() -> None:
     value = "a8098c1a-f86e-11da-bd1a-00112444be1e"
     assert hash(uuid_utils.UUID(value)) == hash(uuid.UUID(value))
