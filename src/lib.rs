@@ -322,6 +322,11 @@ impl UUID {
 #[pyo3(signature = (node=None, clock_seq=None))]
 fn uuid1(node: Option<u64>, clock_seq: Option<u64>) -> PyResult<UUID> {
     let node = match node {
+        Some(node) if node >= (1 << 48) => {
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "field 6 out of range (need a 48-bit value)",
+            ));
+        }
         Some(node) => node.to_be_bytes(),
         None => _getnode().to_be_bytes(),
     };
