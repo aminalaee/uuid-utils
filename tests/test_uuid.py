@@ -84,6 +84,14 @@ def test_uuid1() -> None:
     assert uuid.clock_seq == 123
 
 
+def test_uuid1_node_out_of_range() -> None:
+    uuid = uuid_utils.uuid1(node=2**48 - 1)
+    assert uuid.node == 2**48 - 1
+
+    with pytest.raises(ValueError, match="field 6 out of range"):
+        uuid_utils.uuid1(node=2**48 + 5)
+
+
 @pytest.mark.parametrize("name", ["python.org", b"python.org"])
 def test_uuid3(name: str) -> None:
     uuid = uuid_utils.uuid3(namespace=uuid_utils.NAMESPACE_DNS, name=name)
