@@ -26,10 +26,16 @@ jobs:
 
   linux:
     name: "Linux: ${{ matrix.target }}"
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        target: [x86_64, i686]
+        include:
+          - target: x86_64
+            os: ubuntu-latest
+          - target: i686
+            # Docker on Ubuntu 26.04 blocks networking in i386 glibc containers.
+            # See https://github.com/actions/runner-images/issues/14790.
+            os: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
