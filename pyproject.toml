@@ -38,7 +38,7 @@ python-source = "python"
 module-name = "uuid_utils._uuid_utils"
 
 [tool.ty.rules]
-unresolved-import = "ignore"
+import-not-found = "ignore"
 
 [tool.ruff.lint]
 select = [
