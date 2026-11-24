@@ -129,7 +129,7 @@ def test_uuid5_matches_stdlib() -> None:
 def test_uuid6_shape_matches_stdlib() -> None:
     node, clock_seq = uuid.getnode(), 1234
     u = uuid_utils.uuid6(node, clock_seq)
-    std = uuid.uuid6(node, clock_seq)  # ty: ignore[unresolved-attribute]
+    std = uuid.uuid6(node, clock_seq)  # ty: ignore[missing-attribute]
     assert_fields_match(u, std)
     assert abs(u.time - std.time) < 10_000_000_000
 
@@ -137,7 +137,7 @@ def test_uuid6_shape_matches_stdlib() -> None:
 @requires_stdlib_v6_v7_v8
 def test_uuid7_shape_matches_stdlib() -> None:
     u = uuid_utils.uuid7()
-    std = uuid.uuid7()  # ty: ignore[unresolved-attribute]
+    std = uuid.uuid7()  # ty: ignore[missing-attribute]
     assert u.version == std.version == 7
     assert u.variant == std.variant
     assert abs(u.time - std.time) < 10_000
@@ -147,5 +147,5 @@ def test_uuid7_shape_matches_stdlib() -> None:
 def test_uuid8_matches_stdlib() -> None:
     a, b, c = 0x123456789ABC, 0xDEF, 0x3FFFFFFFFFFFFFFF
     u = uuid_utils.uuid8(a, b, c)
-    std = uuid.uuid8(a, b, c)  # ty: ignore[unresolved-attribute]
+    std = uuid.uuid8(a, b, c)  # ty: ignore[missing-attribute]
     assert u.int == std.int
