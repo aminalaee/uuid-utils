@@ -155,6 +155,8 @@ def uuid4() -> UUID:
     """Generate a random UUID."""
     ...
 
+def _uuid4_int() -> int: ...
+
 if sys.version_info >= (3, 12):
     def uuid5(namespace: UUID, name: str | bytes) -> UUID:
         """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
@@ -182,6 +184,7 @@ def uuid7(*, nanoseconds: int | None = None) -> UUID:
     """
     ...
 
+def _uuid7_int(*, nanoseconds: int | None = None) -> int: ...
 def uuid8(a: int | None = None, b: int | None = None, c: int | None = None) -> UUID:
     """Generate a UUID from three custom blocks.
 
