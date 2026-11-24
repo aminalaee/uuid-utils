@@ -3,6 +3,7 @@ import os
 import pickle
 import sys
 import time
+import uuid as stdlib_uuid
 from uuid import SafeUUID, getnode
 
 import pytest
@@ -89,15 +90,21 @@ def test_uuid1_node_out_of_range() -> None:
         uuid_utils.uuid1(node=2**48)
 
 
+@pytest.mark.parametrize(
+    "namespace", [uuid_utils.NAMESPACE_DNS, stdlib_uuid.NAMESPACE_DNS]
+)
 @pytest.mark.parametrize("name", ["python.org", b"python.org"])
-def test_uuid3(name: str) -> None:
-    uuid = uuid_utils.uuid3(namespace=uuid_utils.NAMESPACE_DNS, name=name)
+def test_uuid3(
+    namespace: uuid_utils.UUID | stdlib_uuid.UUID, name: str | bytes
+) -> None:
+    uuid = uuid_utils.uuid3(namespace=namespace, name=name)  # ty: ignore[invalid-argument-type]
     assert isinstance(uuid, uuid_utils.UUID)
 
 
-def test_uuid3_rejects_invalid_namespace() -> None:
+@pytest.mark.parametrize("namespace", [None, 0, "not-a-uuid"])
+def test_uuid3_rejects_invalid_namespace(namespace: object) -> None:
     with pytest.raises(TypeError, match="namespace must be"):
-        uuid_utils.uuid3(namespace=object(), name="python.org")  # ty: ignore[invalid-argument-type]
+        uuid_utils.uuid3(namespace=namespace, name="python.org")  # ty: ignore[invalid-argument-type]
 
 
 def test_uuid4() -> None:
@@ -105,15 +112,21 @@ def test_uuid4() -> None:
     assert isinstance(uuid, uuid_utils.UUID)
 
 
+@pytest.mark.parametrize(
+    "namespace", [uuid_utils.NAMESPACE_DNS, stdlib_uuid.NAMESPACE_DNS]
+)
 @pytest.mark.parametrize("name", ["python.org", b"python.org"])
-def test_uuid5(name: str) -> None:
-    uuid = uuid_utils.uuid5(namespace=uuid_utils.NAMESPACE_DNS, name=name)
+def test_uuid5(
+    namespace: uuid_utils.UUID | stdlib_uuid.UUID, name: str | bytes
+) -> None:
+    uuid = uuid_utils.uuid5(namespace=namespace, name=name)  # ty: ignore[invalid-argument-type]
     assert isinstance(uuid, uuid_utils.UUID)
 
 
-def test_uuid5_rejects_invalid_namespace() -> None:
+@pytest.mark.parametrize("namespace", [None, 0, "not-a-uuid"])
+def test_uuid5_rejects_invalid_namespace(namespace: object) -> None:
     with pytest.raises(TypeError, match="namespace must be"):
-        uuid_utils.uuid5(namespace=object(), name="python.org")  # ty: ignore[invalid-argument-type]
+        uuid_utils.uuid5(namespace=namespace, name="python.org")  # ty: ignore[invalid-argument-type]
 
 
 def test_uuid6() -> None:
