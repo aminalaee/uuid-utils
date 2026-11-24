@@ -95,6 +95,11 @@ def test_uuid3(name: str) -> None:
     assert isinstance(uuid, uuid_utils.UUID)
 
 
+def test_uuid3_rejects_invalid_namespace() -> None:
+    with pytest.raises(TypeError, match="namespace must be"):
+        uuid_utils.uuid3(namespace=object(), name="python.org")  # ty: ignore[invalid-argument-type]
+
+
 def test_uuid4() -> None:
     uuid = uuid_utils.uuid4()
     assert isinstance(uuid, uuid_utils.UUID)
@@ -104,6 +109,11 @@ def test_uuid4() -> None:
 def test_uuid5(name: str) -> None:
     uuid = uuid_utils.uuid5(namespace=uuid_utils.NAMESPACE_DNS, name=name)
     assert isinstance(uuid, uuid_utils.UUID)
+
+
+def test_uuid5_rejects_invalid_namespace() -> None:
+    with pytest.raises(TypeError, match="namespace must be"):
+        uuid_utils.uuid5(namespace=object(), name="python.org")  # ty: ignore[invalid-argument-type]
 
 
 def test_uuid6() -> None:
