@@ -1,7 +1,7 @@
-zensical~=0.0.65
+zensical~=0.0.67
 git+https://github.com/squidfunk/mike.git
-ty==0.0.84
-pytest==9.1.1
-pytest-codspeed==5.0.3
-ruff==0.16.9
+ty==0.0.107
+pytest==9.2.0
+pytest-codspeed==5.0.4
+ruff==0.17.6
 benchdiff==0.3.0
