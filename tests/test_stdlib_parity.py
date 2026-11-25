@@ -107,7 +107,7 @@ def test_uuid1_shape_matches_stdlib() -> None:
 
 
 def test_uuid3_matches_stdlib() -> None:
-    u = uuid_utils.uuid3(uuid_utils.NAMESPACE_DNS, "python.org")
+    u = uuid_utils.uuid3(uuid.NAMESPACE_DNS, "python.org")
     std = uuid.uuid3(uuid.NAMESPACE_DNS, "python.org")
     assert u.int == std.int
 
@@ -120,7 +120,7 @@ def test_uuid4_shape_matches_stdlib() -> None:
 
 
 def test_uuid5_matches_stdlib() -> None:
-    u = uuid_utils.uuid5(uuid_utils.NAMESPACE_DNS, "python.org")
+    u = uuid_utils.uuid5(uuid.NAMESPACE_DNS, "python.org")
     std = uuid.uuid5(uuid.NAMESPACE_DNS, "python.org")
     assert u.int == std.int
 
