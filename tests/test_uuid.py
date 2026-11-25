@@ -2,6 +2,7 @@ import copy
 import os
 import pickle
 import sys
+import uuid as stdlib_uuid
 from datetime import datetime
 from uuid import UUID, SafeUUID, getnode
 
@@ -86,10 +87,26 @@ def test_uuid1_node_out_of_range() -> None:
         uuid_utils.uuid1(node=2**48)
 
 
+@pytest.mark.parametrize(
+    "namespace",
+    [
+        pytest.param(uuid_utils.NAMESPACE_DNS, id="uuid-utils"),
+        pytest.param(stdlib_uuid.NAMESPACE_DNS, id="stdlib"),
+    ],
+)
 @pytest.mark.parametrize("name", ["python.org", b"python.org"])
-def test_uuid3(name: str) -> None:
-    uuid = uuid_utils.uuid3(namespace=uuid_utils.NAMESPACE_DNS, name=name)
+def test_uuid3(
+    namespace: uuid_utils.UUID | stdlib_uuid.UUID, name: str | bytes
+) -> None:
+    uuid = uuid_utils.uuid3(namespace=namespace, name=name)  # ty: ignore[invalid-argument-type]
     assert isinstance(uuid, uuid_utils.UUID)
+    assert uuid.int == stdlib_uuid.uuid3(stdlib_uuid.NAMESPACE_DNS, "python.org").int
+
+
+@pytest.mark.parametrize("namespace", [None, 0, "not-a-uuid"])
+def test_uuid3_rejects_invalid_namespace(namespace: object) -> None:
+    with pytest.raises(TypeError, match="namespace must be"):
+        uuid_utils.uuid3(namespace=namespace, name="python.org")  # ty: ignore[invalid-argument-type]
 
 
 def test_uuid4() -> None:
@@ -97,10 +114,26 @@ def test_uuid4() -> None:
     assert isinstance(uuid, uuid_utils.UUID)
 
 
+@pytest.mark.parametrize(
+    "namespace",
+    [
+        pytest.param(uuid_utils.NAMESPACE_DNS, id="uuid-utils"),
+        pytest.param(stdlib_uuid.NAMESPACE_DNS, id="stdlib"),
+    ],
+)
 @pytest.mark.parametrize("name", ["python.org", b"python.org"])
-def test_uuid5(name: str) -> None:
-    uuid = uuid_utils.uuid5(namespace=uuid_utils.NAMESPACE_DNS, name=name)
+def test_uuid5(
+    namespace: uuid_utils.UUID | stdlib_uuid.UUID, name: str | bytes
+) -> None:
+    uuid = uuid_utils.uuid5(namespace=namespace, name=name)  # ty: ignore[invalid-argument-type]
     assert isinstance(uuid, uuid_utils.UUID)
+    assert uuid.int == stdlib_uuid.uuid5(stdlib_uuid.NAMESPACE_DNS, "python.org").int
+
+
+@pytest.mark.parametrize("namespace", [None, 0, "not-a-uuid"])
+def test_uuid5_rejects_invalid_namespace(namespace: object) -> None:
+    with pytest.raises(TypeError, match="namespace must be"):
+        uuid_utils.uuid5(namespace=namespace, name="python.org")  # ty: ignore[invalid-argument-type]
 
 
 def test_uuid6() -> None:
