@@ -66,6 +66,13 @@ jobs:
     strategy:
       matrix:
         target: [aarch64, armv7, ppc64le]
+        include:
+          - target: s390x
+            manylinux: "2_17"
+            interpreters: 3.10 3.14t 3.15t
+          - target: riscv64
+            manylinux: "2_31"
+            interpreters: 3.10 3.14t 3.15t
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -76,8 +83,8 @@ jobs:
         with:
           rust-toolchain: stable
           target: ${{ matrix.target }}
-          manylinux: auto
-          args: --release --out dist -i 3.10 3.14t 3.15t pypy3.11
+          manylinux: ${{ matrix.manylinux || 'auto' }}
+          args: --release --out dist -i ${{ matrix.interpreters || '3.10 3.14t 3.15t pypy3.11' }}
       - uses: uraimo/run-on-arch-action@v3.2.1
         if: matrix.target != 'ppc64'
         name: Install built wheel
