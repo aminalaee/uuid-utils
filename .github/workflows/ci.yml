@@ -99,7 +99,7 @@ jobs:
             if [ "$(uname -m)" = riscv64 ]; then
               python3 -m pip install --upgrade pip
             fi
-            pip install pytest
+            python3 -m pip install pytest
           run: |
             python3 -m pip install uuid_utils --no-index --find-links dist/ --force-reinstall
             pytest -v .
